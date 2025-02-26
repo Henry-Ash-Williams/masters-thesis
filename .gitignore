@@ -13,6 +13,9 @@ wheels/
 # Executables 
 *.exe
 
+# wandb 
+wandb/
+
 # LaTeX
 *-blx.bib
 *.aux 

@@ -1,0 +1,33 @@
+program: train-roberta.py
+name: roberta-sweep 
+project: opcode-roberta
+method: bayes 
+metric: 
+  goal: minimize
+  name: test_loss
+parameters: 
+  dataset-path: 
+    value: /Volumes/New Volume/malware-detection-dataset/opcodes/tokenized_sequences.json
+  tokenizer-path: 
+    value: /Users/henrywilliams/Documents/uni/masters-thesis/notebooks/classifiers/static/opcode-transformer/opcode_tokenizer.json
+  batch-size: 
+    min: 1
+    max: 128
+  learning-rate: 
+    min: 0.000001
+    max: 0.1
+  max-length: 
+    min: 64
+    max: 512
+  num-hidden: 
+    min: 1 
+    max: 10
+  intermediate-size: 
+    min: 1 
+    max: 4096
+  num-attention:
+    min: 1
+    max: 10
+  hidden-size: 
+    min: 1 
+    max: 100

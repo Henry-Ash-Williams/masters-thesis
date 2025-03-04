@@ -14,6 +14,8 @@ import pandas as pd
 
 import argparse
 
+from utils import devices
+
 argparser = argparse.ArgumentParser()
 argparser.add_argument(
     "--dataset-path",
@@ -53,6 +55,7 @@ argparser.add_argument(
 argparser.add_argument(
     "--epochs", default=20, help="Number of epochs to train for", type=int
 )
+argparser.add_argument("--device", default=devices.get_best_device(), help="Pytorch device to train on", type=str)
 args = argparser.parse_args(sys.argv[1:])
 
 tokenizer = PreTrainedTokenizerFast(tokenizer_file=args.tokenizer_path)
@@ -190,12 +193,14 @@ def post_train(model, test):
 
     table = wandb.Table(dataframe=df)
     wandb.log({"eval_sample": table})
-    wandb.log({"test_acc": np.mean(correct[:, 0] / correct[:, 1])})
+    run.summary["acc"] = np.mean(correct[:, 0] / correct[:, 1])
 
 
 if __name__ == "__main__":
     args.hidden_size = args.num_attention * args.hidden_size
-    wandb.init(
+    print(f"Config: {args.__dict__}")
+
+    run = wandb.init(
         project="opcode-roberta",
         config=args.__dict__,
     )
@@ -204,7 +209,7 @@ if __name__ == "__main__":
     data = json.load(open(args.dataset_path, "r"))
     print(f"done, took {time.time() - start_time:.2f}s")
 
-    device = torch.device("mps")
+    device = torch.device(args.device)
 
     start_time = time.time()
     print("Creating datasets... ", end="")
@@ -227,10 +232,11 @@ if __name__ == "__main__":
         hidden_size=args.hidden_size,
         intermediate_size=args.intermediate_size,
     )
-    print(config.max_position_embeddings)
-    print(config.vocab_size)
 
     model = RobertaForMaskedLM(config)
+    run.summary['num_params'] = sum(p.numel() for p in model.parameters())
+    run.summary['num_train_params'] = sum(p.numel() for p in model.parameters() if p.requires_grad)
+
     model = model.to(device)
     print(f"done, took {time.time() - start_time:.2f}s")
 

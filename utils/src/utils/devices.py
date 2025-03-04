@@ -11,7 +11,7 @@ def get_stats() -> list[int]:
     Requires `pynvml` (install via `pip install nvidia-ml-py`).
     """
     if not torch.cuda.is_available():
-        return []
+        return 'mps' if torch.backends.mps.is_available() else 'cpu'
 
     pynvml.nvmlInit()
     devices = []
@@ -29,6 +29,8 @@ def get_stats() -> list[int]:
 def get_best_device(stats: Optional[List[Tuple[int, int]]] = None):
     if stats is None:
         stats = get_stats()
+        if stats in ['mps', 'cpu']: 
+            return stats
 
     return f"cuda:{stats[0][0]}"
 

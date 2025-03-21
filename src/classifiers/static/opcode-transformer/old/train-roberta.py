@@ -269,4 +269,5 @@ if __name__ == "__main__":
                 f"Loss: {loss.item():.2f}, Last Test Loss: {test_losses[-1]:.2f}"
             )
             losses.append(loss.item())
+
     post_train(model, test)

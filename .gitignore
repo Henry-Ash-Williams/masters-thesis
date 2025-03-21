@@ -25,3 +25,5 @@ wandb/
 *.out 
 *.run.xml
 *.synctex.gz 
+
+*.npy 

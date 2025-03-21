@@ -13,53 +13,92 @@
 \usepackage{longtable} 
 \usepackage{subcaption} 
 \usepackage{booktabs}
+\usepackage{xcolor}
 \usepackage{multirow}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{cleveref}
+
+\lstdefinelanguage{YARA}{
+  keywords={rule, strings, condition, private, global, import, include, meta},
+  morekeywords=[2]{uint16, uint32, uint8, int16, int32, int8, filesize, entrypoint},
+  morekeywords=[3]{true, false, and, or, not, for, all, any, them, of, in},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  string=[b]",
+}
+
+\lstset{
+  language=YARA,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  keywordstyle=[2]\color{teal}\bfseries,
+  keywordstyle=[3]\color{purple}\bfseries,
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{red},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single, 
+  captionpos=b
+}
 
 \addbibresource{../references.bib}
 
 \begin{document}
 \section{Background}
 
-\begin{figure*}[ht]
+\begin{figure}[h!]
     \centering
-    \includegraphics[width=0.75\textwidth]{assets/malware-stats.pdf}
-    \caption{Cumulative number of malware samples seen by security researchers~\cite{instituteAVATLASMalwarePUA}}
+    \includegraphics[width=0.4\textwidth]{assets/malware-stats.pdf}
+    \caption{Number of malicious programs seen in the wild since 2008, data taken from~\cite{instituteAVATLASMalwarePUA}}
     \label{fig:malware-in-the-wild}
-\end{figure*}
+\end{figure}
 
 % What this literature review will cover 
-Malicious software, otherwise known as malware, are widely considered to be one of the most pervasive dangers faced by users in the current digital threat landscape~\cite{europeanunionagencyforcybersecurity.ENISAThreatLandscape2024}. In recent years, the prevelance of this form of software has been on the increase, with nearly 100 million samples seen since the start of 2024 alone~(Figure~\ref{fig:malware-in-the-wild}). In order to mitigate this risk, detection of these programs is of the utmost importance to security researchers, and has been an active area of research within the field~\cite{manirihoSystematicLiteratureReview2024}. 
+\noindent
+Malicious software, otherwise known as malware, are widely considered to be one of the most pervasive dangers faced by users in the current digital threat landscape~\cite{europeanunionagencyforcybersecurity.ENISAThreatLandscape2024}. In recent years, the prevelance of this form of software has been on the increase, with nearly 100 million occurances seen since the beginning of 2024 alone~(Figure~\ref{fig:malware-in-the-wild}). Mitigation of the risks posed by these programs is thus of the utmost importance to security researchers, and has been an active area of research in the field~\cite{manirihoSystematicLiteratureReview2024}.
 
-In this literature review, we explore some of the defining characteristics of malware, how threat actors evade detection, and a number of proposed approaches leveraging machine learning to detect these programs. 
+In this literature review, we explore the defining characteristics of malware, how threat actors evade detection by existing anti-malware services, and a number of proposed approaches that leverage machine learning to more reliably detect these programs. 
 
 \subsection{Malware}
 
-Malware are defined as programs which perform unwanted or harmful actions on a host system without the consent or knowledge of its user. 
+According to~\citeauthor{kramerGeneralDefinitionMalware2010a}~\cite{kramerGeneralDefinitionMalware2010a}, malware are defined as programs that cause other software to deviate from its intended behavior in a harmful way. More generally, they can be thought of as programs that perform detrimental, or unwanted actions on a host system, without the knowledge of its user. They are one of the most powerful tools available to threat actors, and are often designed to be as covert as possible in order to maximise the time before which their actions are noticed. This makes them a pervasive threat to digital infrastructure across the globe. For example, in 2017 the WannaCry ransomware infected the National Health Service, and led to the institution being unable to access critical healthcare infrastructure~\cite{nationalauditofficenaoInvestigationWannaCryCyber2017} for the attacks duration.
 
-The actions of these programs on an infected system vary, but they all have an adverse affect on the confidentiality, integrity, and availability of a system. These properties comprise the core tenet of information security, known as the CIA triad, which guide policy for ensuring the security of a computer systems. Violation of this principle can provide hostile actors access to sensitive information, the ability to modify data, or the disruption of regular operation, all without necessary authorisation. 
-
-Security researchers often classify these programs based on their propagation method and actions on its host. It is worth noting however, that the categories within this taxonomy are not mutually exclusive, and modern malware often exist in multiple categories at once. 
+Security researchers often categorise these programs based on how they spread between hosts, and their actions on a host system. It is worth noting that categories within the following taxonomy are not mutually exclusive, as modern malware often exist in multiple classes at once. 
 
 \begin{itemize}
-    \item \textbf{Worm} | Malicious software which propagate throughout a network of interconnected systems. 
-    \item \textbf{Virus} | Programs that modify other programs in order to replicate throughout an infected system.
-    \item \textbf{Trojans} | Malware that disguises itself as legitimate software in order to infect its host.
+    \item \textbf{Worm} | Malicious software that automatically propagate throughout a network. 
+    \item \textbf{Virus} | Programs that modify other programs to replicate itself throughout an infected host. 
+    \item \textbf{Trojans} | Malware that disguises itself as legitimate software to infect a host.
     \item \textbf{Backdoor} | Software that provide covert remote access to infected systems. 
     \item \textbf{Ransomware} | Malware that deny access to systems or information until a fee is paid.
-    \item \textbf{Information Stealer} | Malware which automatically extract information, such as credentials, and the activities of users. 
+    \item \textbf{Information Stealer} | Malware that extract information, such as credentials and user activity
     \item \textbf{Botnet} | Often part of a larger network of infected systems, controlled by a threat actor to perform large scale attacks against digital infrastructure.
     \item \textbf{Rootkit} | Malware providing privileged access to an infected system.
 \end{itemize}
 
 \subsection{Obfuscation}
 
+\begin{lstlisting}[xleftmargin=10pt, xrightmargin=10pt, caption={An example YARA rule}, label={lst:yara-example}]
+rule ExampleRule
+{
+    strings:
+        $a = "malicious string"
+        $b = { 6A 40 68 00 30 00 00 }
+    
+    condition:
+        $a or $b
+}
+\end{lstlisting}
+
 % Why do malware authors obfuscate their programs? 
-Commercial anti-malware services utilise a set of heuristics that are often indicative of malware. An example of such a heuristic could be the presence of a certain static string, or a series of bytes at a given offset. A large collection of these rules are maintained by security researchers, which provides an efficient and accurate means to detect malware. 
+\noindent
+In order to detect known malicious programs, existing anti-malware services make use of a set of rules governing sequences of bytes associated with known malicious programs. If an unknown program were to matche any of these rules, it is flagged as malicious. We provide an example of such a rule in \cref{lst:yara-example}, that matches programs with either a certain sequence of bytes, or a known string. These rules are maintained by a community of security researchers, and provide an efficient and effective means by which to detect frequently seen malware. 
 
-% What does obfuscation mean? 
-In order to evade detection by these heuristics, malware authors utilise a technique known as obfuscation that modify the structure of the program, while preserving its intended behaviour~\cite{youMalwareObfuscationTechniques2010}. By modifying the structure, it will not match these pre-defined rules, thereby avoiding detection. In addition to modifying the structure of a program, it is also possible to modify its characteristics to evade detection by other more sophisticated dynamic approaches~\cite{liAPIASONovelAPI2023}. 
+To degrade the effectiveness of these rules, malware developers will often modify their programs to avoid matching any of these rules in a technique known as obfuscation~\cite{youMalwareObfuscationTechniques2010}. This technique makes the program more challenging to understand to both security researchers, and automated detection systems, while preserving its original behavior. Obfuscation is a common feature of malicious programs, and a number of techniques for it exist, such as encryption~\cite{yaacoubiRiseEncryptedMalware2019}, self-modifying code, and code transposition. 
 
-As malware often feature some form of obfuscation, the datasets used to train machine learning models would likely consist of executables where malicious programs include some form of obfuscation, and benign programs that do not utilise this technique. The fitted models would likely not include 
+This poses a number of challenges to malware scanners, as more sophisticated techniques to reliably detect obfuscated malware are necessary. In addition to this, it also poses difficulties to machine learning-based approaches to detecting malicious programs, as the ubiquity of these techniques in malware may lead models to detect malware based on the presence of obfuscation. However, this technique is not exclusive to malicious programs. For example, a software developer may opt to obfuscate their code to protect their intellectual property from reverse engineering. This may lead to their program being flagged as malicious by an automated system, despite its benign nature. 
 
 % \subsubsection{Encrypted Malware}
 
@@ -87,13 +126,15 @@ A number of approaches to malware detection have been proposed in the literature
 
 \subsubsection{Static}
 
-Static detection methods leverage features derived from the structure of the program rather than its behaviour during execution. Much of the literature on static malware detection leverage features such as sequences of instructions executed by the CPU~\cite{attaluriProfileHiddenMarkov2009,runwalOpcodeGraphSimilarity2012}, printable strings~\cite{shijoIntegratedStaticDynamic2015}, the external functions and libraries used by a program~\cite{schultzDataMiningMethods2001a}, and the executables header~\cite{raviMultiViewAttentionbasedDeep2022}. This form of malware detection is known to be more efficient than dynamic methods, however it can be less robust to obfuscation.
+Static detection methods leverage features derived from the programs structure rather than its behaviour. We have seen a number of static features used to detect malware in the literature relating to this topic, such as instruction sequences~\cite{attaluriProfileHiddenMarkov2009,runwalOpcodeGraphSimilarity2012}, strings~\cite{shijoIntegratedStaticDynamic2015}, external functions~\cite{schultzDataMiningMethods2001a}, and the executable header~\cite{raviMultiViewAttentionbasedDeep2022}. 
 
-In~\cite{schultzDataMiningMethods2001a}, the authors propose making use of static features including printable strings, external functions, and byte sequences to train conventional machine learning algoriths to detect malware. In their evaluation, they found that the naive bayes algorithm, trained on the static strings of an executable gives the best performance, with 97\% classification accuracy. In addition to this, they also tested an inductive rule learner known as RIPPER, trained on information regarding the use of external functions in a program. This model was able to reliably detect malware approximately 90\% of the time, and we believe this to be a result of a high degree of overlap between the external functions used by malicious and benign programs. This indicates that these features may not be suitable for malware detection. Furthermore, the dataset used in their research was limited and unbalanced, with 3265 malicious, and only 1001 benign samples. This would likely have an adverse effect on the generalisability of their proposed approach. 
+In~\cite{schultzDataMiningMethods2001a}, the authors propose using static features such as  printable strings, and external API calls to train conventional machine learning algoriths for malware detection. In this investigation, the authors found that the naive bayes algorithm, trained on an executables strings gave the best performance, with 97\% classification accuracy. In addition to this, they also tested an inductive rule learning algorithm known as RIPPER. This algorithm was trained on information pertaining to what external functions and libraries are used by any given program. They found that this approach was sub-optimal, accurately classifying programs only approximately 90\% of the time, that we believe to be a result of the high degree of overlap between external methods used by malicious and benign programs, albeit for different purposes. Furthermore, in their experiments, the authors used a small unblanced dataset of only approximately 4000 samples, of which over two-thirds were malicious, which would likely have an adverse effect on the generalisability of their proposed models. 
 
-A great deal of previous research into static malware detection utilise Convolutional Neural Networks (CNNs), trained on the graphical representation of a program~\cite{suLightweightClassificationIoT2018,niMalwareIdentificationUsing2018,jainConvolutionalNeuralNetworks2020,manirihoSystematicLiteratureReview2024}. These have shown to be a promising approach to this problem, as CNNs are effective at learning a wide range of classification problems~\cite{habibiPerformanceEvaluationCNN2023,krizhevskyImageNetClassificationDeep2017}. However, these models require an image of fixed resolution. In the case that an executable is significantly larger than other samples in the dataset, it would be necessary to resize the image, which is a lossy operation. This may lead to important features being lost, and making it more challenging to accurately classify the program. 
+A great deal of previous research into static malware detection utilise Convolutional Neural Networks (CNNs)~\cite{suLightweightClassificationIoT2018,niMalwareIdentificationUsing2018,jainConvolutionalNeuralNetworks2020,manirihoSystematicLiteratureReview2024}. These approaches firstly convert programs to grayscale images, upon which a CNN is then trained on. They have been shown to be a promising approach to this problem, as CNNs are effective at learning a wide range of classification problems~\cite{habibiPerformanceEvaluationCNN2023,krizhevskyImageNetClassificationDeep2017}. However, as CNNs expect inputs of fixed size, it becomes necessary to resize the images to a fixed resolution before they can be trained or infered upon. Image resizing is a lossy operation, whereby important information may be lost, meaning that over datasets where there is significant variation in executable size, the trained models may struggle to accurately identify malicious programs. 
 
-Much of the literature that consider opcode sequences for malware detection focus on its use in traditional machine learning algorithms~\cite{attaluriProfileHiddenMarkov2009,runwalOpcodeGraphSimilarity2012}. These approaches both make use of Hidden Markov Models, and achieve promising results, indicating instruction sequences are a viable feature for detection. Extending upon this idea,~\citeauthor{demirciStaticMalwareDetection2022}~\cite{demirciStaticMalwareDetection2022} outline an approach in which they propose the use of stacked bidirectional Long-Short Term Memory (BiLSTM) and pre-trained language models including BERT~\cite{devlinBERTPretrainingDeep2019a}, and GPT-2~\cite{radfordLanguageModelsArea}. Their BiLSTM model was able to achieve 98\% classification accuracy whereas the pre-trained transformer models achieved only 77\%. As transformer models have been shown to be a capable method in sequence classification problems, this result is surprising. We believe this to be a result of the corpora used to pre-train the transformer models used in their investigation, which are comprised of mostly english texts. This would mean that these models would have a poor understanding of assembly instructions, making classification difficult. 
+Instruction sequences have also been explored as static features in malware detection. For example, in~\cite{attaluriProfileHiddenMarkov2009,runwalOpcodeGraphSimilarity2012}, the authors utilise hidden markov models and achieve promising results. As these models consider what actions are being performed by the host system without having to execute the program, they offer a solution that we believe to be more resiliant to obfuscation than other static approaches. 
+
+Extending upon the idea of utilising instruction sequences for malware detection,~\citeauthor{demirciStaticMalwareDetection2022}~\cite{demirciStaticMalwareDetection2022} outline an approach in which they propose the use of stacked bidirectional Long-Short Term Memory (BiLSTM) and pre-trained language models including BERT~\cite{devlinBERTPretrainingDeep2019a}, and GPT-2~\cite{radfordLanguageModelsArea}. In their investigation, the BiLSTM model was able to achieve 98\% classification accuracy whereas the pre-trained transformer models achieved only 77\%. Transformer models have been shown to be a capable method in sequence classification problems, and as such, this result is surprising. We believe this to be a result of the corpora used to pre-train the transformer models used in their investigation, which are comprised of mostly english texts. The understanding of these models would thus be limited to langauges similar to english, and may struggle to understand the introcases of assembly langauge, impacting their ability to reliably classify malware. 
 
 Previous research has also established the use of pre-trained language models in malware detection on the metadata of an executable. In~\cite{rahaliMalBERTMalwareDetection2021},~\citeauthor{rahaliMalBERTMalwareDetection2021} fine-tune BERT on text gathered from the manifest file found in android applications. This file contains information pertaining to the activities, background tasks, event listeners, and permissions granted to an application. Their model was able to achieve 97\% binary classification accuracy, in comparison to~\cite{demirciStaticMalwareDetection2022} which was only able to achieve 77\% with the same model, trained on instruction sequences. We believe this discrepancy to be a result of the language found in these manifest files being more closely related to the pre-training corpora of the BERT model. This would enable their model to better understand the information found in the manifest, and its use in distinguishing between benign and malicious executables. Their approach however, is limited to environments where a file containing metadata are required, such as mobile operating systems, making it unsuitable for desktop malware detection. 
 

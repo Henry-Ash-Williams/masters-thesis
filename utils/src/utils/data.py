@@ -3,7 +3,7 @@ from enum import Enum
 
 import pandas as pd
 
-DEFAULT_CSV_PATH = "/Users/henrywilliams/Documents/uni/masters-thesis/notebooks/data/malware-dataset.csv"
+DEFAULT_CSV_PATH = "/Users/henrywilliams/Documents/uni/masters-thesis/src/data/malware-dataset.csv"
 
 
 class Label(Enum):

@@ -1,0 +1,256 @@
+%!LW recipe=pdflatex ➞ bibtex ➞ pdflatex`×2
+
+\documentclass[twocolumn]{report}
+
+\usepackage[backend=bibtex]{biblatex} 
+\usepackage[margin=2cm]{geometry} 
+\usepackage{hyperref} 
+\usepackage{siunitx} 
+\usepackage{graphicx} 
+\usepackage[super]{nth} 
+\usepackage{tabularx} 
+\usepackage{ltablex} 
+\usepackage{longtable} 
+\usepackage{subcaption} 
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{cleveref}
+
+\lstdefinelanguage{YARA}{
+  keywords={rule, strings, condition, private, global, import, include, meta},
+  morekeywords=[2]{uint16, uint32, uint8, int16, int32, int8, filesize, entrypoint},
+  morekeywords=[3]{true, false, and, or, not, for, all, any, them, of, in},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  string=[b]",
+}
+
+\lstset{
+  language=YARA,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  keywordstyle=[2]\color{teal}\bfseries,
+  keywordstyle=[3]\color{purple}\bfseries,
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{red},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single, 
+  captionpos=b
+}
+
+\addbibresource{../references.bib}
+
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		\includegraphics[width=5cm]{../assets/uoslogo}\\[2cm]% \bigskip
+		%\vspace*{.05\textheight}
+		%\hrulefill
+		\textsc{\Large Masters Thesis}
+		%\hrulefill\\%[0.5cm] % Thesis type
+
+		\Huge \textbf{Placeholder title}\\[3cm] % Thesis title
+
+		\large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of Masters of Research}\\[0.5cm] % University 
+		\textit{in the}\\[0.5cm]
+		School of Engineering and Informatics\\ [1cm]
+	
+		\begin{minipage}{.45\linewidth}
+			\begin{flushleft} %\large
+			\emph{Author:}\\
+			Henry Williams% Author name - remove the \href bracket to remove the link
+			\end{flushleft}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{.45\linewidth}
+			\begin{flushright} %\large
+			\emph{Supervisor:} \\
+			%\href{http://www.sussex.ac.uk/profiles/168614}{\mySupervisor}%\\ % Supervisor name - remove the \href bracket to remove the link  
+			Jeff Mitchell% Supervisor name
+			\end{flushright}
+		\end{minipage}
+
+		\vfill
+		\large August 2025
+		 
+	\end{center}
+%\end{titlepage} 
+\end{titlepage}
+
+\chapter{Introduction}
+
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        \textbf{Word Count: 1000}
+
+        \begin{itemize}
+            \item What is malware? 
+            \item Why is detecting it important? 
+            \item How do we detect it? 
+            \item How does it evade detection? 
+            \item What are we doing? 
+        \end{itemize}
+    }%
+}
+
+\chapter{Literature Review}
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        \textbf{Word Count: 2000}
+
+        \begin{itemize}
+            \item Malware 
+            
+            \begin{itemize}
+                \item Definition
+                \item Forms of malicious software 
+                \item Common features (obfuscation, anti-debugging, etc)
+            \end{itemize}
+
+            \item Machine Learning (?)
+            \item Existing Approaches 
+            
+            \begin{itemize}
+                \item Differences between static/hybrid/dynamic approaches 
+                \item Compare differences between common static, and dynamic features
+                \item Compare differences in performance between static and dynamic approaches 
+                \item Introduce approach taken by commerical solutions 
+                \item Conclusion: \emph{``Despite being more accurate at detecting malware, dynamic approaches are limited by the need to execute suspicious programs in an isolated environment, leading to increased resource requirements. However, static approaches are more likely to be vulnerable to obfuscation.''}
+            \end{itemize}
+        \end{itemize}
+    }%
+}
+
+\chapter{Methodology}
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        \textbf{Word Count: 3000}
+
+        \begin{itemize}
+            \item What: \emph{``Do static malware detectors learn to detect malware based on the presence of obfuscation alone?''}
+
+            \item Why? 
+
+            \begin{itemize}
+                \item Develop a better understanding of the barriers to the success of static malware detectors 
+                \item Establish whether NLP techniques are well suited to modelling executable programs 
+            \end{itemize}
+
+            \item How?
+            
+            \begin{itemize}
+                \item Dataset \& analysis 
+                \item Baseline approaches 
+                \item Opcode sequence classifier based on RoBERTa 
+                \item Image classifier based on efficientnet 
+                \item Secondary dataset 
+                \item UPX obfuscation
+                \item Experiment set-up 
+            \end{itemize}
+        \end{itemize}
+    }%
+}
+
+\chapter{Results}
+
+\noindent\fbox{%
+    \parbox{\textwidth}{% 
+        \textbf{Word Count: 3000}
+
+        \begin{itemize}
+            \item Baseline results 
+            \item Opcode model 
+
+            \begin{itemize}
+                \item Is pretraining useful? 
+                \item How best to reduce sequence-level classification results to a file-level result? 
+            \end{itemize}
+
+            \item Image model 
+            
+            \begin{itemize}
+                \item Is increased classification accuracy a result of the difference between the distribution between the size of malicious and benign programs? 
+            \end{itemize}
+
+            \item Obfuscation Experiment
+            
+            \begin{itemize}
+                \item Opcode Model 
+
+                \begin{itemize}
+                    \item Baseline file-level classification accuracy on secondary dataset 
+                    \item When both classes of programs, or soley malicious programs are obfuscated, performance increases 
+                    \item When only benign programs are obfuscated, accuracy doesn't increase 
+                    \item Less pronounced in sequence level tasks 
+                    \item Certainty ($D_{KL}$) of classification increases as more programs are obfuscated
+                \end{itemize}
+
+                \item TODO: Image model
+            \end{itemize}
+        \end{itemize}
+    }%
+}
+
+\chapter{Discussion}
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        \textbf{Word Count: 4000}
+
+        \begin{itemize}
+            \item Are dynamic methods vulnerable to advanced obfuscation techniques? 
+            
+            \begin{itemize}
+                \item It's possible to hide API calls from standard API call hooking techniques 
+                \item Other redundant API calls may be made to obfuscate call sequences 
+                \item Advanced malware (i.e. Rootkits) are able to stealthily perform malicious actions on the host
+            \end{itemize}
+
+            \item Are opcode sequences suitable features for NLP based malware detection? 
+            
+            \begin{itemize}
+                \item Full disassembly may offer provide better information for transformer architectures 
+                \item Was not tested due to time/compute limitations 
+                \item Byte-level modelling may work, but the presence of polymorphic malware and encrypted payloads may be challenging to model accurately  
+            \end{itemize}
+
+            \item Is executable packing (UPX) a good proxy for the obfuscation methods seen in the wild? 
+            
+            \begin{itemize}
+                \item What other obfuscation techniques and solutions could work for this? 
+            \end{itemize}
+
+            \item Could diffusion modelling enable machine de-obfuscation? 
+
+            \begin{itemize}
+                \item Obfuscation is analgous to noise in a signal 
+                \item Diffusion models are well suited to denoising of data 
+                \item Might be able to de-obfuscate programs to generate large scale 
+            \end{itemize}
+
+            \item Data limitations
+            
+            \begin{itemize}
+                \item Lack of large-scale, benign executable datasets 
+                \item High presence of obfuscation in real-world malware samples 
+                \item Unobfuscated malware samples are not representative of malware seen in the wild as they are often ``toy'' projects, and lack advanced capabilities 
+                \item Unobfuscated, advanced malware are hard to find   
+            \end{itemize}
+
+            \item Conclusion 
+        \end{itemize}
+    }%
+}
+
+\printbibliography
+\end{document}

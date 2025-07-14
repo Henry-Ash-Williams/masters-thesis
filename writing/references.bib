@@ -64,6 +64,23 @@
   publisher = {Instytut Łączności-Państwowy Instytut Badawczy}
 }
 
+@online{al-karakiExploringLLMsMalware2024,
+  title = {Exploring {{LLMs}} for {{Malware Detection}}: {{Review}}, {{Framework Design}}, and {{Countermeasure Approaches}}},
+  shorttitle = {Exploring {{LLMs}} for {{Malware Detection}}},
+  author = {Al-Karaki, Jamal and Khan, Muhammad Al-Zafar and Omar, Marwan},
+  date = {2024-09-11},
+  eprint = {2409.07587},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2409.07587},
+  url = {http://arxiv.org/abs/2409.07587},
+  urldate = {2025-06-06},
+  abstract = {The rising use of Large Language Models (LLMs) to create and disseminate malware poses a significant cybersecurity challenge due to their ability to generate and distribute attacks with ease. A single prompt can initiate a wide array of malicious activities. This paper addresses this critical issue through a multifaceted approach. First, we provide a comprehensive overview of LLMs and their role in malware detection from diverse sources. We examine five specific applications of LLMs: Malware honeypots, identification of text-based threats, code analysis for detecting malicious intent, trend analysis of malware, and detection of non-standard disguised malware. Our review includes a detailed analysis of the existing literature and establishes guiding principles for the secure use of LLMs. We also introduce a classification scheme to categorize the relevant literature. Second, we propose performance metrics to assess the effectiveness of LLMs in these contexts. Third, we present a risk mitigation framework designed to prevent malware by leveraging LLMs. Finally, we evaluate the performance of our proposed risk mitigation strategies against various factors and demonstrate their effectiveness in countering LLM-enabled malware. The paper concludes by suggesting future advancements and areas requiring deeper exploration in this fascinating field of artificial intelligence.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Cryptography and Security},
+  file = {/Users/henrywilliams/Zotero/storage/H8FICM6D/Al-Karaki et al. - 2024 - Exploring LLMs for Malware Detection Review, Framework Design, and Countermeasure Approaches.pdf;/Users/henrywilliams/Zotero/storage/GF4HZMEP/2409.html}
+}
+
 @article{alazabProfilingClassifyingBehavior2015,
   title = {Profiling and Classifying the Behavior of Malicious Codes},
   author = {Alazab, Mamoun},
@@ -294,6 +311,23 @@
   urldate = {2025-02-21},
   langid = {english},
   file = {/Users/henrywilliams/Zotero/storage/9NUZ4DVI/European Union Agency for Cybersecurity. - 2024 - ENISA threat landscape 2024 July 2023 to June 2024..pdf}
+}
+
+@online{gibertAdversarialRobustnessDeep2024,
+  title = {Adversarial {{Robustness}} of {{Deep Learning-based Malware Detectors}} via ({{De}}){{Randomized Smoothing}}},
+  author = {Gibert, Daniel and Zizzo, Giulio and Le, Quan and Planes, Jordi},
+  date = {2024-02-23},
+  eprint = {2402.15267},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2402.15267},
+  url = {http://arxiv.org/abs/2402.15267},
+  urldate = {2025-04-15},
+  abstract = {Deep learning-based malware detectors have been shown to be susceptible to adversarial malware examples, i.e. malware examples that have been deliberately manipulated in order to avoid detection. In light of the vulnerability of deep learning detectors to subtle input file modifications, we propose a practical defense against adversarial malware examples inspired by (de)randomized smoothing. In this work, we reduce the chances of sampling adversarial content injected by malware authors by selecting correlated subsets of bytes, rather than using Gaussian noise to randomize inputs like in the Computer Vision (CV) domain. During training, our ablation-based smoothing scheme trains a base classifier to make classifications on a subset of contiguous bytes or chunk of bytes. At test time, a large number of chunks are then classified by a base classifier and the consensus among these classifications is then reported as the final prediction. We propose two strategies to determine the location of the chunks used for classification: (1) randomly selecting the locations of the chunks and (2) selecting contiguous adjacent chunks. To showcase the effectiveness of our approach, we have trained two classifiers with our chunk-based ablation schemes on the BODMAS dataset. Our findings reveal that the chunk-based smoothing classifiers exhibit greater resilience against adversarial malware examples generated with state-of-the-are evasion attacks, outperforming a non-smoothed classifier and a randomized smoothing-based classifier by a great margin.},
+  pubstate = {prepublished},
+  version = {1},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Cryptography and Security},
+  file = {/Users/henrywilliams/Zotero/storage/RVRMIE8U/Gibert et al. - 2024 - Adversarial Robustness of Deep Learning-based Malware Detectors via (De)Randomized Smoothing.pdf;/Users/henrywilliams/Zotero/storage/TCIV3WVH/2402.html}
 }
 
 @article{habibiPerformanceEvaluationCNN2023,
@@ -609,6 +643,22 @@
   institution = {National Audit Office},
   location = {London, England},
   url = {https://web.archive.org/web/20241212140331/https://www.nao.org.uk/reports/investigation-wannacry-cyber-attack-and-the-nhs/}
+}
+
+@online{nguyenLeveragingUncertaintyImproved2021,
+  title = {Leveraging {{Uncertainty}} for {{Improved Static Malware Detection Under Extreme False Positive Constraints}}},
+  author = {Nguyen, Andre T. and Raff, Edward and Nicholas, Charles and Holt, James},
+  date = {2021-08-09},
+  eprint = {2108.04081},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2108.04081},
+  url = {http://arxiv.org/abs/2108.04081},
+  urldate = {2025-05-06},
+  abstract = {The detection of malware is a critical task for the protection of computing environments. This task often requires extremely low false positive rates (FPR) of 0.01\% or even lower, for which modern machine learning has no readily available tools. We introduce the first broad investigation of the use of uncertainty for malware detection across multiple datasets, models, and feature types. We show how ensembling and Bayesian treatments of machine learning methods for static malware detection allow for improved identification of model errors, uncovering of new malware families, and predictive performance under extreme false positive constraints. In particular, we improve the true positive rate (TPR) at an actual realized FPR of 1e-5 from an expected 0.69 for previous methods to 0.80 on the best performing model class on the Sophos industry scale dataset. We additionally demonstrate how previous works have used an evaluation protocol that can lead to misleading results.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Cryptography and Security,Computer Science - Machine Learning},
+  file = {/Users/henrywilliams/Zotero/storage/UFSPKHQC/Nguyen et al. - 2021 - Leveraging Uncertainty for Improved Static Malware Detection Under Extreme False Positive Constraint.pdf;/Users/henrywilliams/Zotero/storage/FKLTF4V8/2108.html}
 }
 
 @article{niMalwareIdentificationUsing2018,

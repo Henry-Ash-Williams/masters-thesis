@@ -29,7 +29,7 @@ class OpcodeDataset(Dataset):
 
         processed = np.zeros(MAX_LENGTH, dtype=np.int64)
         attention_mask = np.ones(MAX_LENGTH, dtype=np.int64)
-        labels = np.full(MAX_LENGTH, -100)
+        labels = np.full(MAX_LENGTH, -100, dtype=torch.int64)
 
         start = np.random.randint(0, len(tokens))
 

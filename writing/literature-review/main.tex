@@ -1,8 +1,8 @@
 %!LW recipe=pdflatex ➞ bibtex ➞ pdflatex`×2
 
-\documentclass[twocolumn]{article}
+\documentclass{article}
 
-\usepackage[backend=bibtex]{biblatex} 
+\usepackage[backend=bibtex,natbib,style=authoryear,maxcitenames=1]{biblatex} 
 \usepackage[margin=2cm]{geometry} 
 \usepackage{hyperref} 
 \usepackage{siunitx} 
@@ -46,112 +46,121 @@
 \addbibresource{../references.bib}
 
 \begin{document}
-\section{Background}
+\section{Introduction}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.4\textwidth]{../assets/malware-stats.pdf}
-    \caption{Number of malicious programs seen in the wild since 2008, data taken from~\cite{instituteAVATLASMalwarePUA}}
+    \includegraphics[width=0.7\textwidth]{../assets/malware-stats.pdf}
+    \caption{Observed growth in the number of unique forms of malware over time. Data taken from~\cite{av-test-theindependentit-securityinstituteAVATLASMalwarePUA2025}}
     \label{fig:malware-in-the-wild}
 \end{figure}
 
-% What this literature review will cover 
 \noindent
-Malicious software, otherwise known as malware, are widely considered to be one of the most pervasive dangers faced by users in the current digital threat landscape~\cite{europeanunionagencyforcybersecurity.ENISAThreatLandscape2024}. In recent years, the prevelance of this form of software has been on the increase, with nearly 100 million occurances seen since the beginning of 2024 alone~(Figure~\ref{fig:malware-in-the-wild}). Mitigation of the risks posed by these programs is thus of the utmost importance to security researchers, and has been an active area of research in the field~\cite{manirihoSystematicLiteratureReview2024}.
+Malicious software, also known as malware, may be defined as software that has an adverse impact on the expected operation of a computer system. This encompasses the provision of access by an unauthorised user to an infected host, the illegitimate extraction and modification of information, or the denial of access to its users. They are considered one of the most pervasive threats to both individuals and organisations in our current digital threat landscape \citep{europeanunionagencyforcybersecurityENISAThreatLandscape2024,aleneziEvolutionMalwareThreats2020}. 
 
-In this literature review, we explore the defining characteristics of malware, how threat actors evade detection by existing anti-malware services, and a number of proposed approaches that leverage machine learning to more reliably detect these programs. 
+The threat posed by malware can be seen in cyberattacks such as the 2022 Viasat hack~\citep{quiquetAnalysisViasatCyber2023}, and the 2017 WannaCry incident~\citep{nationalauditofficenaoInvestigationWannaCryCyber2017,akbanovWannaCryRansomwareAnalysis2019}. In both of these cases, sophisticated malware were used to disrupt critical infrastructure including communications infrastructure across Europe, and the infrastructure underpinning the National Health Service of the United Kingdom. 
 
-\subsection{Malware}
+In recent years, both the sophistication~\citep{aleneziEvolutionMalwareThreats2020,baeznerStuxnet2017c} and frequency~(\autoref{fig:malware-in-the-wild}) of malware have increased significantly. As a result of both this, and the potential of malicious software to cause significant damage to digital systems, there has been a great deal of interest into how we can reliably identify malware~\citep{m.ComprehensiveSurveyDeep2023,manirihoSystematicLiteratureReview2024,aboaojaMalwareDetectionIssues2022}. In this literature review, we explore common features of malicious software, how sophisticated modern malware avoid detection by conventional means, and both historical and contemporary attempts at identifying such programs. 
 
-According to~\citeauthor{kramerGeneralDefinitionMalware2010a}~\cite{kramerGeneralDefinitionMalware2010a}, malware are defined as programs that cause other software to deviate from its intended behavior in a harmful way. More generally, they can be thought of as programs that perform detrimental, or unwanted actions on a host system, without the knowledge of its user. They are one of the most powerful tools available to threat actors, and are often designed to be as covert as possible in order to maximise the time before which their actions are noticed. This makes them a pervasive threat to digital infrastructure across the globe. For example, in 2017 the WannaCry ransomware infected the National Health Service, and led to the institution being unable to access critical healthcare infrastructure~\cite{nationalauditofficenaoInvestigationWannaCryCyber2017} for the attacks duration.
+\section{Malware}
 
-Security researchers often categorise these programs based on how they spread between hosts, and their actions on a host system. It is worth noting that categories within the following taxonomy are not mutually exclusive, as modern malware often exist in multiple classes at once. 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{../assets/malware-taxonomy.pdf}
+    \caption{Categories of Malware, including both the means of propagation and behaviour on an infected host.}
+    \label{fig:malware-taxonomy}
+\end{figure}
+
+As outlined in the previous section, malware are a form of software that have a detrimental impact on the expected operation on any system it is installed. Both ours, and more formal definitions, such as the one presented by~\citep{kramerGeneralDefinitionMalware2010a}, which define malware as software that cause other software to deviate from their intened behavior, typically in a harmful manner, fail to define what is meant by harmful however. Thus, we define harmful behavior as actions that are in violation of the Confidentiallity-Integrity-Availability (CIA) triad~\citep{cochranCIATriadSafeguarding2024}. This is a key concept of modern information security policies, that outlines the need for a system to be protected against unauthorised access (confidentiallity), modification (integrity), and reliable (availability) to be considered secure. 
+
+Malware is often categorised according to its behavior, and the means by which it spreads. We present the following taxonomy based on the work of~\cite{manirihoSystematicLiteratureReview2024} shown in~\autoref{fig:malware-taxonomy} that outlines the different kinds of malware seen by security researchers, and how they are spread. Note that categories within this taxonomy are not mutually exclusive, as modern malware often exist within multiple families at the same time.
 
 \begin{itemize}
-    \item \textbf{Worm} | Malicious software that automatically propagate throughout a network. 
-    \item \textbf{Virus} | Programs that modify other programs to replicate itself throughout an infected host. 
-    \item \textbf{Trojans} | Malware that disguises itself as legitimate software to infect a host.
-    \item \textbf{Backdoor} | Software that provide covert remote access to infected systems. 
-    \item \textbf{Ransomware} | Malware that deny access to systems or information until a fee is paid.
-    \item \textbf{Information Stealer} | Malware that extract information, such as credentials and user activity
-    \item \textbf{Botnet} | Often part of a larger network of infected systems, controlled by a threat actor to perform large scale attacks against digital infrastructure.
+    \item \textbf{Worm} | Malicious software that automatically propagates throughout a network. 
+    \item \textbf{Virus} | Programs that modify other programs to replicate themselves throughout an infected host. 
+    \item \textbf{Trojans} | Malware that disguises itself as a legitimate program to infect a host.
+    \item \textbf{Backdoor} | Malware that provides covert remote access to infected systems. 
+    \item \textbf{Ransomware} | Malware that denies access to systems or information until a fee is paid.
+    \item \textbf{Spyware} | Malware that spy on the user without their knowledge, often extracting information such as credentials, keyboard logs, and live screenshots of the users activity. 
+    \item \textbf{Botnet} | Malware that integrate infected systems into a coordinated network of agents. 
     \item \textbf{Rootkit} | Malware providing privileged access to an infected system.
+    \item \textbf{Adware} | Malware that display advertisments on the host machine.
+    \item \textbf{Crypto-miner} | Malware that hijack the users hardware to mine cryptocurrencies.
 \end{itemize}
 
-\subsection{Obfuscation}
+\subsection{Evasion Techniques}
 
-\begin{lstlisting}[xleftmargin=10pt, xrightmargin=10pt, caption={An example YARA rule}, label={lst:yara-example}]
-rule ExampleRule
-{
-    strings:
-        $a = "malicious string"
-        $b = { 6A 40 68 00 30 00 00 }
-    
-    condition:
-        $a or $b
-}
-\end{lstlisting}
+In addition to performing these harmful actions, malware also employ various techniques designed to make it difficult to detect by automated security services, and the user. This allows the software to go undetected for as long as possible, maximising the potential amount of damage it can do to the system before it is eventually found. These are known as evasion techniques, which encompasses obfuscation, environmental awareness, and living-off-the-land. In the following section, we discuss these techniques, and why they are effective at defeating existing anti-malware solutions. 
 
-% Why do malware authors obfuscate their programs? 
-\noindent
-One common approach to malware detection often used by commercial services make use of a set of rules that define sequences of bytes, found in known malicious programs. If an unknown program were to match with any of these rules, it can be flagged as malicious, and we have provided an example of such a rule in \cref{lst:yara-example}. A large collection of these rules are maintained by a community of security researchers, and provide an efficient and effective means by which to detect frequently seen malware. 
+\subsubsection{Obfuscation}
 
-To avoid detection by these rules, malware developers will often modify their programs in a technique known as obfuscation~\cite{youMalwareObfuscationTechniques2010} whereby characteristics of a program that may be indicative of its behavior are obscured. This makes understanding a program without executing it challenging to both human security researchers and automated analysis tools alike. As a result of this, most modern malware often feature some form of obfuscation. However, it is worth noting that it is not exclusive to malicious programs, as commercial software developers may also employ these techniques to protect their intellectual property. This is not common practise however, and a majority of benign programs do not feature these techniques. As a result of this, the datasets used to train programs  
+Obfuscation is defined as the act of making something more challenging to understand. In the context of malware, and its detection, it refers to a set of evasion techniques that modify the structure of a program, while maintaining its behavioral characteristics. These techniques are particularly effective at defeating static signature based methods, as they rely upon simple, byte-level patterns associated with malicious programs. 
 
-Many forms of obfuscation exist, and new techniques are observed in the wild by security researchers frequently. 
+The first of these obfuscation techniques is known as register re-assignment. Registers are small portions of memory within the CPU that store intermediate values during computation. A number of these registers exist, some with a specific purpose and others for more general usage. In the 64-bit x86 instruction set, 16 general purpose registers are present. By changing which registers values are stored in, we modify the structure of a program, without affecting its behavior. Early signature based anti-malware solutions relied on a database containing the cryptographic hashes of malicious programs. Minor changes to the representation of a program, that have no bearing on its behavioral characteristics, such as changing the registers used to store intermediate values, will result in a unique hash. Thus, the program will not be found in the database, and allowed to run, resulting in the infection of a host. 
 
-% This technique makes the program more challenging to understand to both security researchers, and automated detection systems, while preserving its original behavior. Obfuscation is a common feature of malicious programs, and a number of techniques for it exist, such as encryption~\cite{yaacoubiRiseEncryptedMalware2019}, self-modifying code, and code transposition. 
+While this approach is successful at defeating early anti-malware solutions, more targeted signature based methods that recognise a sequence of bytes within the program are able to defeat it through the use of an intermediate representation. A technique that is able to defeat these sophisticated methods is to insert instructions that have no impact on the execution of the program. For example, the \texttt{nop} instruction tells the CPU to do nothing, and is often used for padding, or timing purposes. However, by inserting these useless instructions, signature based methods that search for the presence of a specific pattern of bytes associated with a certain peice of malware would be unable to recognise the program as malicious. This is known as dead code insertion. 
 
-% This poses a number of challenges to malware scanners, as more sophisticated techniques to reliably detect obfuscated malware are necessary. In addition to this, it also poses difficulties to machine learning-based approaches to detecting malicious programs, as the ubiquity of these techniques in malware may lead models to detect malware based on the presence of obfuscation. However, this technique is not exclusive to malicious programs. For example, a software developer may opt to obfuscate their code to protect their intellectual property from reverse engineering. This may lead to their program being flagged as malicious by an automated system, despite its benign nature. 
-
-\subsection{Machine Learning}
+Within an executable program, code are organised into a set of basic blocks, which each have a label associated with them. When the program reaches a conditional operation, the pointer to the next instruction jumps to the location of the selected block, and continues execution. By changing where these basic blocks are located within the program, it is possible to create unique programs that are behaviourally identicall to eachother. This is a form of obfuscation known as code transposition.
 
 
-\subsection{Detection}
 
-A number of approaches to malware detection have been proposed in the literature. These largely fall into three categories, based on how features are extracted for later use for classification, these are as follows: 
+% \subsubsection{Binary Packing}
 
-\begin{itemize}
-    \item \textbf{Static} | Features extracted from the structure of a program, including metadata, instructions, and data found within the executable. 
-    \item \textbf{Dynamic} | Features extracted during the execution of the program, including external function calls, communication, and modifications made to the host. 
-    \item \textbf{Hybrid} | A combination of both \emph{static} and \emph{dynamic} features 
-\end{itemize}
+% \begin{figure}
+%     \centering 
+%     \includegraphics[width=0.7\textwidth]{../assets/binary-packing.pdf}
+%     \caption{How binary packing can be used to reduce the size of a executable program, and obscure its actions.}
+%     \label{fig:binary-packing}
+% \end{figure}
 
-\subsubsection{Static}
+% Binary packing is a technique that use compression algorithms to reduce the size of an executable~(\autoref{fig:binary-packing}). To create a packed executable, the original program is firstly passed through a compression algorithm. This compressed program is then inserted into the data section of another program that is tasked with decompressing, and executing the original program. This gives a packed executable, that is smaller in size than the original program, but has identical functionality. 
 
-Static detection methods leverage features derived from the programs structure rather than its behaviour. We have seen a number of static features used to detect malware in the literature relating to this topic, such as instruction sequences~\cite{attaluriProfileHiddenMarkov2009,runwalOpcodeGraphSimilarity2012}, strings~\cite{shijoIntegratedStaticDynamic2015}, external functions~\cite{schultzDataMiningMethods2001a}, and the executable header~\cite{raviMultiViewAttentionbasedDeep2022}. 
+% This is widely used by developers of both benign, and malicious software as it reduces the size of a program, allowing it to be executed in environments where available storage is limited. In addition to this, it makes the executable more difficult to understand and reason about through reverse engineering. Legitimate software developers may use this to protect their intellectual property, and cybercriminals may use it to evade dectection by automated analysis tools. 
 
-In~\cite{schultzDataMiningMethods2001a}, the authors propose using static features such as  printable strings, and external API calls to train conventional machine learning algoriths for malware detection. In this investigation, the authors found that the naive bayes algorithm, trained on an executables strings gave the best performance, with 97\% classification accuracy. In addition to this, they also tested an inductive rule learning algorithm known as RIPPER\@. This algorithm was trained on information pertaining to what external functions and libraries are used by any given program. They found that this approach was sub-optimal, accurately classifying programs only approximately 90\% of the time, that we believe to be a result of the high degree of overlap between external methods used by malicious and benign programs, albeit for different purposes. Furthermore, in their experiments, the authors used a small unblanced dataset of only approximately 4000 samples, of which over two-thirds were malicious, which would likely have an adverse effect on the generalisability of their proposed models. 
+% \subsubsection{Obfuscation}
 
-A great deal of previous research into static malware detection utilise Convolutional Neural Networks (CNNs)~\cite{suLightweightClassificationIoT2018,niMalwareIdentificationUsing2018,jainConvolutionalNeuralNetworks2020,manirihoSystematicLiteratureReview2024}. These approaches firstly convert programs to grayscale images, upon which a CNN is then trained on. They have been shown to be a promising approach to this problem, as CNNs are effective at learning a wide range of classification problems~\cite{habibiPerformanceEvaluationCNN2023,krizhevskyImageNetClassificationDeep2017}. However, as CNNs expect inputs of fixed size, it becomes necessary to resize the images to a fixed resolution before they can be trained or infered upon. Image resizing is a lossy operation, whereby important information may be lost, meaning that over datasets where there is significant variation in executable size, the trained models may struggle to accurately identify malicious programs. 
+% Binary packing is a form of obfuscation, which encompasses various techniques that modify the structure of a program to make understanding its actions more challenging, by both human experts, and automated analysis tools. Advanced obfuscation technqiues such as cryptographic, oligomorphic, and polymorphic obfuscation build upon the concept of binary packing by introducing encrpytion on top of the compression, and random modification of the decryption and decompression portions of the packed executable. Metamorphic obfuscation applies obfuscation whenever the malware propagates between hosts, creating a unique malicious executable on every infected host, making it effectively impossible for antivirus software to detect it~\citep{youMalwareObfuscationTechniques2010}. 
 
-Instruction sequences have also been explored as static features in malware detection. For example, in~\cite{attaluriProfileHiddenMarkov2009,runwalOpcodeGraphSimilarity2012}, the authors utilise hidden markov models and achieve promising results. As these models consider what actions are being performed by the host system without having to execute the program, they offer a solution that we believe to be more resiliant to obfuscation than other static approaches. 
+% In order to evade detection by automated analysis tools, malware developers may include sections of code that are not executed by the program at runtime. This is a process known as dead code insertion, and bypasses detection by adding sections of code that are entirely benign to trick the scanner to allow its execution. However, these sections of code are not executed, and the malicious portion of the code is run instead. This could also take the form of randomly inserting assembly instructions that have no purpose, such as swapping the value of a register with itself, or incrementing a register not currently in use by the program. 
 
-Extending upon the idea of utilising instruction sequences for malware detection,~\citeauthor{demirciStaticMalwareDetection2022}~\cite{demirciStaticMalwareDetection2022} outline an approach in which they propose the use of stacked bidirectional Long-Short Term Memory (BiLSTM) and pre-trained language models including BERT~\cite{devlinBERTPretrainingDeep2019a}, and GPT-2~\cite{radfordLanguageModelsArea}. In their investigation, the BiLSTM model was able to achieve 98\% classification accuracy whereas the pre-trained transformer models achieved only 77\%. Transformer models have been shown to be a capable method in sequence classification problems, and as such, this result is surprising. We believe this to be a result of the corpora used to pre-train the transformer models used in their investigation, which are comprised of mostly english texts. The understanding of these models would thus be limited to langauges similar to english, and may struggle to understand the introcases of assembly langauge, impacting their ability to reliably classify malware. 
 
-Previous research has also established the use of pre-trained language models in malware detection on the metadata of an executable. In~\cite{rahaliMalBERTMalwareDetection2021},~\citeauthor{rahaliMalBERTMalwareDetection2021} fine-tune BERT on text gathered from the manifest file found in android applications. This file contains information pertaining to the activities, background tasks, event listeners, and permissions granted to an application. Their model was able to achieve 97\% binary classification accuracy, in comparison to~\cite{demirciStaticMalwareDetection2022} which was only able to achieve 77\% with the same model, trained on instruction sequences. We believe this discrepancy to be a result of the language found in these manifest files being more closely related to the pre-training corpora of the BERT model. This would enable their model to better understand the information found in the manifest, and its use in distinguishing between benign and malicious executables. Their approach however, is limited to environments where a file containing metadata are required, such as mobile operating systems, making it unsuitable for desktop malware detection. 
+% \subsubsection{Register Re-assignment}
 
-\subsubsection{Dynamic}
+% Registers are small portions of memory within the CPU that store intermediate values used during computation. A number of these registers exist, some with a specific purpose and others for more general usage. One method of obfuscation are to randomly re-assign registers used by the program as it executes. The effectiveness of this technique is debatable, as it would only be likely to fool signature based detection systems. However, when used in conjunction with other techniques, it may be more effective. 
 
-In comparison to static methods, dynamic methods consider the behavioral characteristics of a program during its execution. This requires the use of an isolated environment, such as a virtual machine to safely execute a program to observe its behavior~\cite{botacinChallengesPitfallsMalware2021}. These approaches are known to be more resiliant to obfuscation, at the high cost of complexity and computational resources. 
+% \subsubsection{Code Transposition}
 
-Our research indicates that much of the work in this field leverage API call sequences to distinguish between malicious and benign programs. This enables these approaches to develop an understanding of actions taken by a program on a host system, and what actions may be indicative of a malicious program. This has been shown to be an effective approach to dynamic malware detection. For example, in~\cite{kiNovelApproachDetect2015}, the authors propose a signature based approach that was shown to be highly accurate in their experiments with an accuracy of approximately 99\%. The authors curate a database of subsequences often associated with malicious programs through the use of multi-sequence alignment. However, we do not believe their approach would be resiliant to obfuscation, as a malware developer could simply insert junk api calls in between other important calls to avoid detection by the proposed approach. 
+% Another obfuscation technique used by malware developers is code transposition, where sections of code are randomly re-assigned. As conventional signature based detectors rely on a specific pattern of bytes as a given offset, changing the structure of a program can help it evade detection. 
 
-In their \citeyear{liDMalNetDynamicMalware2022} paper, \citeauthor{liDMalNetDynamicMalware2022}~\cite{liDMalNetDynamicMalware2022}, the authors propose a detection method that also makes use of API call sequence information. However, they extend upon previous research by providing this information in the form of a graph, where shared arguments between two consecuitive api calls are given as edge data. A graph neural network is then trained to classify this information, and was able to achieve 98\% accuracy over a large dataset of 40,000 samples. In comparison to~\cite{kiNovelApproachDetect2015}, junk API calls would be disconnected in the graph, and the model could easily learn to ignore any such elements.
+% \subsubsection{Control Flow Graph Flattening}
 
-However, some forms of malware obfuscate their API calls, effectively defeating these approaches~\cite{liAPIASONovelAPI2023}. As a result of this, other features that are more resiliant to obfuscation have been explored. For example, in~\cite{doxuanNewApproachAPT2022}, the authors outline an approach that again makes use of graph neural networks. However, instead of considering just API calls, they develop a behavioral profile in order to detect highly sophisticated malware, such as those developed by Advanced Persistent Threats (APTs). APTs are often sponsored by a nation state, and thus have access to advanced tools, such as zero-day exploits, and advanced obfuscation techniques, making detection challenging. This behavioral profile is based on system events triggered by a program, and includes information relating to the creation of processes, changes made to the file system and registry, and any network communications. This method is able to reliably detect these sophisticated forms of malware, and is resiliant to advanced forms of obfuscation. However, this comes at a high cost in terms of computational resources. 
+% \begin{figure*}
+%     \centering 
+%     \begin{subfigure}[b]{0.3\textwidth}
+%         \includegraphics[width=\textwidth]{../assets/cfg-flattening-C.pdf} 
+%         \caption{Normal}
+%         \label{sfig:cfg}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[b]{0.55\textwidth}
+%         \includegraphics[width=\textwidth]{../assets/cfg-flattening-D.pdf} 
+%         \caption{Flattened}
+%         \label{sfig:flattened-cfg}
+%     \end{subfigure}
+%     \caption{The control flow graphs of a program that finds the sum of 0 to 100, shown as both unobfuscated~(\ref{sfig:cfg}), and flattened~(\ref{sfig:flattened-cfg}), \citep{laszloObfuscatingProgramsControl2007}}
+%     \label{fig:cfg-flattening}
+% \end{figure*}
 
-\subsection{Conclusions and Future Research Directions}
+% The control flow graph, shown in~\autoref{fig:cfg-flattening}, represents a programs execution as a graph. Each node is a block of code to be executed, and upon reaching a conditional statement, such as an if statement, it branches into one of many possible paths. This can be used to better understand how a program executes, detect unreachable code, and reason about the program as a whole. Malware developers often add redundant code to their programs in order to evade detection that is never run during its execution. A call flow graph would allow this to be easily detected, and some malware scanners use this to determine if a program is malicious~\citep{tiwariMalwareDetectionUsing2024}. By flattening the graph, it becomes more challenging to determine what code is performed during execution, without merely running the program, thereby assisting in its evasion by these analyses.
 
-From our research, we have found that there are a number of approaches to malware detection that utilise a variety of features. 
+% \subsection{Environmental Awareness}
 
-Static approaches, whereby only the structure of an executable is considered rely heavily on image-based representations of programs, which a CNN can then be trained on. The success of these approaches vary, but we found that as a result of variability in the size of an executable, important features may be lost when resizing the image to a fixed resolution. 
+% As a result of the challenges faced by static malware scanners due to various obfuscation techniques, it has become popular in recent years to observe the behavior of a program, rather than its structure, as this remains unchanged depsite the obfuscation techniques applied to it. This is typically performed in a ``sandbox'', an isolated environment, representative of its intended target that is isolated from the outside world where it can perform the malicious actions. This typically takes the form of a virtual machine. The program is run within this sandbox, and dynamic features, such as the system API calls made by the malware are observed. 
 
-We have also found that sequential models, that learn to detect malware based on the instructions performed throughout the course of a program execution are a promising area of investigation. The BiLSTM model proposed in~\cite{demirciStaticMalwareDetection2022} achieves high detection accuracy, and also suggest that pre-trained transformer models, such as BERT are less suitable to this task. However, these models have been shown to be well suited to sequence classification, and we believe that they could be a viable approach to malware detection if they were to be pre-trained on assembly instructions rather than natural languages such as english. Other approaches that levearge transformer architectures seem to verify this claim, as seen in~\cite{rahaliMalBERTMalwareDetection2021}, where a transformer architecture was fine-tuned to classify malware using the manifest file found in android executables. The contents of this file are more similar to the language used in pre-training, and their model would thus have a better understanding of the file, enhancing its classification accuracy. 
+% To further evade detection, a common feature of modern malware is to determine whether the program is running in a virtual machine or on a real-world target. This may be done by looking at the number of CPU cores available, as virtual machines tend to have only one or two, the duration of time between instructions being performed, or the presence of certain shared libraries used to communicate between the guest (the virtual machine) and the host (the system running the guest). If the malware thinks that it's running within one of these sandboxes, it prevents its execution in order to prevent the system from observing its behavior and classifying it as malicious.  
 
-Dynamic detection methods on the other hand, despite being more resource intensive, seem to be more capable to detecting heavily obfuscated executables, through the observation of an executables behavior rather than its structure. Much of the work done in this area of the field extract sequences of API calls made during a programs execution, upon which the executable can be classified. This is a powerful approach to malware detection, however significant infrastructure is necessary to safely execute a program in an isolated environment. Furthermore, it is possible to obfuscate API calls, as shown in~\cite{liAPIASONovelAPI2023} that degrade the effectiveness of this approach. While it is possible to develop behavioral profiles to aid these approaches resiliance to obfuscation, this comes at a high cost in computation. 
+% \subsection{Fileless Malware}
 
-We believe that by pre-training our own transformer based model, such as BERT, on assembly instructions, and then fine tuning this model to classify programs, we can achieve a good balance between computational efficiency, and detection accuracy. We will also investigate this models resiliance to obfuscation, by obfuscating our benign programs to varying degrees. 
 
 
 \printbibliography\end{document}

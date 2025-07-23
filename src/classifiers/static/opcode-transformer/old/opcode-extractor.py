@@ -1,38 +1,27 @@
 # Disassembles each executable within a directory,
 # and saves it to a json file
 
-import datetime
 import json
 import logging
+from multiprocessing import Process
+
 import os
-import time
 from os import PathLike
 
 import r2pipe
+from tqdm import tqdm
 
-import utils.data as data
-
-BASE = "/Volumes/New Volume/malware-detection-dataset/opcodes/"
+BASE = "/Volumes/malware-dataset/obfuscated-benign/"
 MAX_FILE_SIZE_MB = 1024 * 1024
 MAX_INSTR_COUNT = 10000
 DEBUG = False
-DATA_DIR = os.path.join(BASE, "data-2/")
-
-logging.basicConfig(
-    filename=os.path.join(
-        BASE,
-        f"{datetime.datetime.now().isoformat()}_{'debug_' if DEBUG else ''}opcode_extraction.log",
-    ),
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
-
+DATA_DIR = os.path.join(BASE, "disassembly")
 
 def get_opcodes(path: PathLike):
     if not os.path.exists(path):
         raise Exception(f"Could not find specified file at {path}")
 
-    r2 = r2pipe.open(path)
+    r2 = r2pipe.open(path, ['-12'])
     r2.cmd("aaa")
 
     info = r2.cmdj("ij")
@@ -59,55 +48,54 @@ def get_opcodes(path: PathLike):
 
     return full_disassembly
 
+def run(input_path, output_path):
+    opcode_info = [
+        instruction["inst"]
+        for instruction in get_opcodes(input_path)
+        if instruction["inst"] != "invalid"
+    ]
 
+    if not DEBUG:
+        with open(output_path, "w") as fp:
+            json.dump(opcode_info, fp)
+
+    
+def run_with_timeout(input_path, output_path, timeout=60):
+    p = Process(target=run, args=(input_path, output_path)) 
+    
+    p.start()
+    p.join(timeout)
+
+    if p.is_alive():
+        p.terminate()
+        p.join() 
+        raise Exception("Skipped due to timeout")
+ 
 if __name__ == "__main__":
-    dataset = data.MalwareDataset()
     labels = {}
-    logging.info("Beginning opcode extraction")
 
     if not os.path.exists(DATA_DIR):
         os.makedirs(DATA_DIR)
 
-    for path, label in dataset:
-        ppath = path.split("/")[-1]
-        opcode_path = os.path.join(DATA_DIR, f"{path.split('/')[-1]}.json")
-        if os.path.exists(opcode_path):
-            labels[opcode_path] = int(label)
-            logging.warning(f"Skipping {ppath}: already processed")
-            continue
-
-        if os.path.getsize(path) > MAX_FILE_SIZE_MB:
-            logging.warning(
-                f"Skipping {ppath}: File size exceeds limit ({MAX_FILE_SIZE_MB / (1024 * 1024)} MB)."
-            )
-            continue
+    files = tqdm(os.listdir(BASE))
+    for path in files:
+        full_path = os.path.join(BASE, path)
+        opcode_path = os.path.join(DATA_DIR, path.replace('.exe', '.json'))
 
         try:
-            logging.info(f"Started processing {ppath}")
-            start_time = time.time()
-            opcode_info = [
-                instruction["inst"]
-                for instruction in get_opcodes(path)
-                if instruction["inst"] != "invalid"
-            ]
-            elapsed = time.time() - start_time
 
-            if not DEBUG:
-                with open(opcode_path, "w") as fp:
-                    json.dump(opcode_info, fp)
-            else:
-                logging.warning(f"Saving {ppath} was skipped as debug mode is enabled")
+            if os.path.exists(opcode_path):
+                raise Exception("Already Processed")
 
-            labels[opcode_path] = int(label)
-            logging.info(f"Finished processed {ppath} in {elapsed:.2f}s.")
+            if os.path.getsize(full_path) > MAX_FILE_SIZE_MB:
+                raise Exception("Too Big")
+
+            labels[opcode_path] = 0
+            files.set_description(path)
+            run_with_timeout(full_path, opcode_path, timeout=10)
         except Exception as e:
-            logging.error(f"Error processing {ppath}: {e}")
-            continue
-
-    logging.info("Saving label information to disk")
+            files.write(f"Error processing {path}:\n{e}")
 
     if not DEBUG:
         with open(os.path.join(BASE, "labels.json"), "w") as fp:
             json.dump(labels, fp)
-
-    logging.info("Opcode extraction complete.")

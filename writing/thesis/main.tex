@@ -48,41 +48,41 @@
 
 \begin{document}
 
-\begin{titlepage}
-	\begin{center}
-		\includegraphics[width=5cm]{../assets/uoslogo}\\[2cm]% \bigskip
-		%\vspace*{.05\textheight}
-		%\hrulefill
-		\textsc{\Large Masters Thesis}
-		%\hrulefill\\%[0.5cm] % Thesis type
+% \begin{titlepage}
+% 	\begin{center}
+% 		\includegraphics[width=5cm]{../assets/uoslogo}\\[2cm]% \bigskip
+% 		%\vspace*{.05\textheight}
+% 		%\hrulefill
+% 		\textsc{\Large Masters Thesis}
+% 		%\hrulefill\\%[0.5cm] % Thesis type
 
-		\Huge \textbf{Placeholder title}\\[3cm] % Thesis title
+% 		\Huge \textbf{Placeholder title}\\[3cm] % Thesis title
 
-		\large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of Masters of Research}\\[0.5cm] % University 
-		\textit{in the}\\[0.5cm]
-		School of Engineering and Informatics\\ [1cm]
+% 		\large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of Masters of Research}\\[0.5cm] % University 
+% 		\textit{in the}\\[0.5cm]
+% 		School of Engineering and Informatics\\ [1cm]
 	
-		\begin{minipage}{.45\linewidth}
-			\begin{flushleft} %\large
-			\emph{Author:}\\
-			Henry Williams% Author name - remove the \href bracket to remove the link
-			\end{flushleft}
-		\end{minipage}
-		\hfill
-		\begin{minipage}{.45\linewidth}
-			\begin{flushright} %\large
-			\emph{Supervisor:} \\
-			%\href{http://www.sussex.ac.uk/profiles/168614}{\mySupervisor}%\\ % Supervisor name - remove the \href bracket to remove the link  
-			Jeff Mitchell% Supervisor name
-			\end{flushright}
-		\end{minipage}
+% 		\begin{minipage}{.45\linewidth}
+% 			\begin{flushleft} %\large
+% 			\emph{Author:}\\
+% 			Henry Williams% Author name - remove the \href bracket to remove the link
+% 			\end{flushleft}
+% 		\end{minipage}
+% 		\hfill
+% 		\begin{minipage}{.45\linewidth}
+% 			\begin{flushright} %\large
+% 			\emph{Supervisor:} \\
+% 			%\href{http://www.sussex.ac.uk/profiles/168614}{\mySupervisor}%\\ % Supervisor name - remove the \href bracket to remove the link  
+% 			Jeff Mitchell% Supervisor name
+% 			\end{flushright}
+% 		\end{minipage}
 
-		\vfill
-		\large August 2025
+% 		\vfill
+% 		\large August 2025
 		 
-	\end{center}
-%\end{titlepage} 
-\end{titlepage}
+% 	\end{center}
+% %\end{titlepage} 
+% \end{titlepage}
 
 \chapter{Introduction}
 
@@ -116,7 +116,7 @@
                 \item Common features (obfuscation, anti-debugging, etc)
             \end{itemize}
 
-            \item Machine Learning (?)
+            \item Machine Learning 
             \item Existing Approaches 
             
             \begin{itemize}
@@ -195,7 +195,19 @@
                     \item Certainty ($D_{KL}$) of classification increases as more programs are obfuscated
                 \end{itemize}
 
-                \item TODO: Image model
+                \item Image model
+                
+                \begin{itemize}
+                    \item Effect seems to be more pronounced in filtered model 
+                    \item Increase in classification accuracy when only mal obfuscated 
+                    \item Decrease in c.a. when only ben obfuscated 
+                    \item Similar in base model but less pronounced
+                    \item Confidence of base model increases when all and/or ben are obfuscated 
+                    \item Confidence when mal obfuscated decreases certainty 
+                    \item Filtered model less confident overall, little impact in obfuscation
+                \end{itemize}
+
+                \item TODO: Retrain both models on dataset with obfuscated benign train data \& repeat previous experiments
             \end{itemize}
         \end{itemize}
     }%
@@ -205,7 +217,7 @@
 
 \noindent\fbox{%
     \parbox{\textwidth}{%
-        \textbf{Word Count: 4000}
+        \textbf{Word Count: 3000}
 
         \begin{itemize}
             \item Are dynamic methods vulnerable to advanced obfuscation techniques? 

@@ -1,0 +1,30 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Dataset 
+data/*
+!data/raw.zip
+
+# wandb
+wandb/
+
+# Saved model & tokenizer
+MalBERT/
+MalBERTa*/
+
+# Artifacts 
+artifacts/ 
+
+.vscode/
+
+obfuscation-experiment-results/
+obfuscation-experiment-results-with-ob/
+obfuscation-experiment-results-with-pob/

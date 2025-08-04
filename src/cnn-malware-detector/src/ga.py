@@ -1,0 +1,147 @@
+import pandas as pd
+from collections import defaultdict
+from tqdm import trange
+from scipy.stats import norm
+import numpy as np
+
+
+POPULATION_SIZE = 100
+GENERATIONS = 1000
+MUTATION_RATE = 0.001
+
+OFFSET = 0
+FACTOR = -1
+
+df = pd.read_csv("dataset.csv", index_col="Unnamed: 0")
+labels = df["label"].values
+sizes = df["size"].values
+label0_idx = labels == 0
+label1_idx = labels == 1
+
+
+def kl_div(mu1: float, sigma1: float, mu2: float, sigma2: float) -> float:
+    sigma1 = np.maximum(sigma1, 1e-9)
+    sigma2 = np.maximum(sigma2, 1e-9)
+    return (
+        np.log(sigma2 / sigma1) + (sigma1**2 + (mu1 - mu2) ** 2) / (2 * sigma2**2) - 0.5
+    )
+
+
+def init_population(best=None):
+    if best is None:
+        return np.full((POPULATION_SIZE, len(df)), True)
+    else:
+        return np.repeat(best[np.newaxis, :], POPULATION_SIZE, axis=0)
+
+
+def mutate_mask(mask, rate=MUTATION_RATE):
+    a = np.random.rand(len(mask)) < rate
+    return np.bitwise_xor(mask, a)
+
+
+def fitness_fn(mask, return_dict=False):
+    masked_labels = labels[mask]
+    masked_sizes = sizes[mask]
+
+    size_1 = masked_sizes[masked_labels == 1]
+    size_0 = masked_sizes[masked_labels == 0]
+
+    if len(size_1) < 2 or len(size_0) < 2:
+        D_kl = np.inf
+    else:
+        mu_m, sigma_m = norm.fit(size_1)
+        mu_b, sigma_b = norm.fit(size_0)
+        D_kl = kl_div(mu_m, sigma_m, mu_b, sigma_b)
+
+    count0 = np.count_nonzero(mask[label0_idx])
+    count1 = np.count_nonzero(mask[label1_idx])
+
+    ratio = 1.0 if count1 == 0 else np.clip(1.0 - (count0 / count1), 0.0, 1.0)
+
+    w_d = -(np.exp(OFFSET + FACTOR * D_kl) / (1 + np.exp(OFFSET + FACTOR * D_kl))) + 1
+    w_r = 1 - w_d
+
+    fitness = {
+        "overall": w_d * D_kl + w_r * ratio,
+        "D_kl": D_kl,
+        "ratio": ratio,
+        "W_d": w_d,
+        "W_r": w_r,
+    }
+
+    return fitness if return_dict else fitness["overall"]
+
+
+def simulate_generation(best=None):
+    population = init_population(best)
+    prior = np.array([fitness_fn(p) for p in population])
+    offspring = np.apply_along_axis(mutate_mask, axis=1, arr=population)
+    post = np.array([fitness_fn(o) for o in offspring])
+
+    better = post < prior
+    next_generation = np.where(better[:, np.newaxis], offspring, population)
+
+    fitness = np.where(better, post, prior)
+
+    best_idx = np.argmin(fitness)
+    best = next_generation[best_idx]
+    return best, fitness_fn(best, return_dict=True)
+
+
+def has_stagnated(f, s):
+    if len(f) < s:
+        return False
+
+    return np.all(np.diff(f[-s:]) >= 0)
+
+
+def simulate():
+    history = defaultdict(list)
+    loop = trange(GENERATIONS)
+    best = None
+
+    for i in loop:
+        best, fitness = simulate_generation(best)
+        [history[f].append(fitness[f]) for f in fitness]
+        loop.set_postfix_str(
+            f"F: {fitness['overall']:.2f}, D_kl: {fitness['D_kl']:.2f}, R: {fitness['ratio']:.2f}"
+        )
+
+        if has_stagnated(history["overall"], 10):
+            loop.write("Early stopping criteria matched")
+            loop.close()
+            break
+    return best, history
+
+
+if __name__ == "__main__":
+    malicious = df[df["label"] == 1]
+    benign = df[df["label"] == 0]
+    mean_m, std_m = norm.fit(malicious["size"])
+    mean_b, std_b = norm.fit(benign["size"])
+
+    baseline = kl_div(mean_m, std_m, mean_b, std_b)
+
+    print(f"Benign:\t\tN({mean_b:.2f}, {std_b:.2f})")
+    print(f"Malicious:\tN({mean_m:.2f}, {std_m:.2f})")
+    print(f"D_kl:\t\t{baseline:.2f}")
+
+    best, _ = simulate()
+    df = df[best]
+
+    print("Dataset size statistics (kB)")
+    print((df["size"] * 1e-4).describe())
+
+    print("Dataset class distribution")
+    print(df["label"].value_counts())
+
+    malicious = df[df["label"] == 1]
+    benign = df[df["label"] == 0]
+    mean_m, std_m = norm.fit(malicious["size"])
+    mean_b, std_b = norm.fit(benign["size"])
+
+    baseline = kl_div(mean_m, std_m, mean_b, std_b)
+
+    print(f"Benign:\t\tN({mean_b:.2f}, {std_b:.2f})")
+    print(f"Malicious:\tN({mean_m:.2f}, {std_m:.2f})")
+    print(f"D_kl:\t\t{baseline:.2f}")

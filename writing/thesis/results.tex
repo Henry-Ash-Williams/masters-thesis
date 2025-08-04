@@ -1,0 +1,32 @@
+% !TeX root = main.tex
+\documentclass[main.tex]{subfiles}
+
+\begin{document}
+
+\section{Baseline}
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{@{}llllll@{}}
+    \toprule
+    \textbf{Algorithm}                                  & \textbf{Feature} & \textbf{Accuracy} & \textbf{F1 Score} & \textbf{Precision} & \textbf{Recall} \\ \midrule
+    \multirow{2}{*}{\textbf{Support Vector Classifier}} & DLL              & 0.89              & 0.89              & 0.89               & 0.89            \\
+                                                        & Function         & 0.92              & 0.92              & 0.92               & 0.92            \\ \midrule
+    \multirow{2}{*}{\textbf{Logistic Regression}}       & DLL              & 0.87              & 0.87              & 0.87               & 0.87            \\
+                                                        & Function         & 0.91              & 0.91              & 0.92               & 0.91            \\ \midrule
+    \multirow{2}{*}{\textbf{Decision Tree}}             & DLL              & 0.88              & 0.88              & 0.89               & 0.89            \\
+                                                        & Function         & 0.93              & 0.93              & 0.93               & 0.93            \\ \bottomrule
+    \end{tabular}
+    \caption{Binary classification metrics of our baseline approaches.}
+    \label{tab:baseline-results}
+\end{table}
+
+\section{Sequence Classification}
+
+\section{Image Classification}
+
+\section{Obfuscation Experiment}
+
+\section{Analysis}
+
+\end{document}

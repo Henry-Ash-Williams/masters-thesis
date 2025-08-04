@@ -1,0 +1,162 @@
+% !TeX root = main.tex
+\documentclass[main.tex]{subfiles}
+
+\begin{document}
+
+\noindent
+In our investigation, we develop a static malware detection method inspired by modern Natural Language Processing techniques, to establish if they are well suited to the identification of malware. We develop a model inspired by the architecture, and training procedures of BERT and other modern transformer based language models that is able to detect malicious software, without the significant overhead associated with dynamic approaches. This model is then compared against an image-based CNN approach, which is a common approach seen in the literature. 
+
+We also aim to establish a better understanding of the challenges faced by existing static approaches to malware detection, by testing both approaches on a dataset of unobfuscated executables. 
+
+\section{Dataset}
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{size-dist.png}
+        \caption{Distribution of executable size across benign and malicious programs}
+        \label{fig:dataset:size-dist}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{obfuscation-dist.png}
+        \caption{Distribution of code analysis coverage of benign and malicious programs}
+        \label{fig:dataset:obf-dist}
+    \end{subfigure}
+    \hfill
+    % \vspace{0.25cm}
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \begin{tabular}{@{}ll@{}}
+            \toprule
+            \textbf{Class}     & \textbf{Count} \\ \midrule
+            Malicious & 5792   \\
+            Benign    & 5323   \\ \midrule
+            \textbf{Total}     & 11115  \\ \bottomrule
+        \end{tabular}
+        \caption{Distribution of classes with our dataset.}
+        \label{fig:dataset:class-dist}
+    \end{subfigure}
+    \caption{Description of our dataset, including the size of programs (a), the extent of obfuscation (b), and the total number of samples in each class (c).}
+    \label{fig:dataset}
+\end{figure}
+
+Our dataset consists of 11115 windows PE32 executables (\autoref{fig:dataset:class-dist}). Malicious files were gathered from VirusShare\footnote{\url{https://virusshare.com/about}}, which contains malware samples collected from real-world cybersecurity incidents with over 90 million samples. The benign executables were collected from the personal devices of the authors, and were scanned using Microsoft defender to ensure no mislabelled samples were present. 
+
+Windows was selected as the target for this investigation due to the high availability of malicious software that attack this operating system. While malware that target other operating systems, such as MacOS and Linux, do exist, there are significantly fewer than those targeting windows. Therefore, each of our samples are stored in the Windows Portable Executable format. In addition to the logic and data of the program, this format also include various metadata that provide all the necessary information to the operating system to run the program. This includes external references, code size, and instruction set to name a few. 
+
+Our dataset demonstrates wide variation in characteristics between classes. For example, malicious programs are often much smaller than our benign executables (\autoref{fig:dataset:size-dist}). Benign programs typically provide more functionality, such as Graphical User Interfaces and custom configuration options that will increase the size of the program. Malicious programs on the other hand, are much smaller, as typically do not require additional complexity that would increase the size of the program. 
+
+We believe that there is significant variation in the extent of obfuscation between classes. We use a static code analysis tool known as Rizin\footnote{\url{https://github.com/rizinorg/rizin}} to find the analysis coverage. This is the ratio of total code analysed to the total amount of code, and a lower value typically indicates a greater extent of obfuscation. In \autoref{fig:dataset:obf-dist}, find the distributions of analysis coverage between classes which shows that there is significantly more obfuscation in the malicious executables. 
+
+\subsection{Obfuscation Experiment Dataset}
+
+\begin{figure}[h]
+    \centering
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Class}      & \textbf{Count} \\ \midrule
+        Malicious           & 60   \\
+        Benign              & 61   \\ \midrule
+        \textbf{Total}      & 121  \\ \bottomrule
+    \end{tabular}
+    \caption{Distribution of classes with our obfuscation experiment dataset.}
+    \label{fig:obfs-ds-class-dist}
+\end{figure}
+
+To investigate the impact of obfuscation on malware detection, we have also curated a secondary dataset, consisting of unobfuscated executables. To achieve this, we use the work presented by \citep{rokonSourceFinderFindingMalware2020} in which they use machine learning to identify the github repositories of malware. From this list, we identify malware targeting windows, that include an executable, and without obfuscation. The executables comprise the malicious portion of this dataset, and the benign programs consist of Windows XP system binaries. 
+
+\section{Baseline}
+
+\begin{figure}[h]
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \begin{tabular}{@{}l|rr@{}}
+        \toprule
+        \textbf{Similarity} & \multicolumn{1}{l}{Malicious} & \multicolumn{1}{l}{Benign} \\ \midrule
+        Malicious           & 0.1428                        & 0.0931                     \\
+        Benign              & 0.0931                        & 0.1217                     \\ \bottomrule
+        \end{tabular}
+        \caption{Cross-class external function similarity}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \begin{tabular}{@{}l|rr@{}}
+        \toprule
+        \textbf{Similarity} & \multicolumn{1}{l}{Malicious} & \multicolumn{1}{l}{Benign} \\ \midrule
+        Malicious           & 0.2249                        & 0.1606                     \\
+        Benign              & 0.1606                        & 0.1643                     \\ \bottomrule
+        \end{tabular}
+        \caption{Cross-class DLL similarity}
+    \end{subfigure}
+    \caption{Similarity between classes based on external functions and DLLs}
+    \label{fig:similarity}
+\end{figure}
+
+
+We firstly establish a baseline using the conventional machine learning algorithms and a list of external references associated with each program. These external references tell the program the location of libraries and functions provided by the operating system. For example, in order to interact with the host file system, a reference to the \texttt{KERNEL32.dll} will be present. Both the library, and the specific function within said library used by the program are present, and can be easily extracted with tools such as radare2\footnote{\url{https://github.com/radareorg/radare2}}. References with a single occurence across our dataset are removed, and a binary feature vector for both libraries and functions are produced for each sample in our dataset. We test 3 machine learning algorithms for our baseline, namely support vector classifiers, logistic regression, and decision trees. 
+
+In addition to the baseline approaches, we also use the feature vectors to quantify the similarity of programs with our dataset. We use the cosine similarity function (\autoref{eq:cosine-sim}) to find the pairwise similarity of all samples. We then take the average similarity between classes which are presented in \autoref{fig:similarity}. From this, we can assume that functions and libraries used by the malicious programs are more similar than the ones used by benign programs. 
+
+\begin{equation}
+    S\left(A,B\right) := \cos\left(\theta\right)={\mathbf {A} \cdot \mathbf {B} \over \|\mathbf {A} \|\|\mathbf {B} \|}\label{eq:cosine-sim}
+\end{equation}
+
+\section{RoBERTa for Opcode Sequence Classification}
+
+\begin{figure}[h]
+    \centering
+    \begin{BVerbatim}
+ret lea mov add add lea mov add add nop
+    \end{BVerbatim}
+    \caption{An example sequence of opcodes}
+    \label{fig:opcode-sequence}
+\end{figure}
+
+In recent years, transformer-based architectures for natural language processing have been shown to be highly effective across a wide variety of language based tasks. A significant advancement within the field was the development of the Bidirectional Encoded Representation from Transformers model, known as BERT~\citep{devlinBERTPretrainingDeep2019a}. This model uses an encoder-only architecture, based on the multi-head self-attention mechanism~\citep{vaswaniAttentionAllYou2023a} in conjunction with a pretraining stage to develop a deep understanding of language. Pretraining consists of two tasks, masked language modelling where the model predicts specific tokens based on their surrounding context, and next sentence prediction. The pretrained model is then fine-tuned on a downstream problem such as sequence classification, question answering, and general language understanding. At the time of publication, it was able to achieve state-of-the-art performance in General Language Understanding Evaluation (GLUE), Stanford Question Answering Dataset (SQuAD), and Situations With Adversarial Generations (SWAG) benchmarks and has been used extensively throughout the field. Fine-tuning of the pretrained model allows researchers to solve tasks with fewer training samples, short training periods, and less intensive compute requirements. RoBERTa extends upon the original BERT model by expanding the number of parameters, removing the next sentence prediction task from the pretraining stage, optimising its hyperparameters, and training on a larger corpus. 
+
+We develop a custom RoBERTa model, trained on opcode sequences for malware detection. Opcodes refer to the operation to be performed by the CPU, such as \texttt{add}, \texttt{cmp}, \texttt{mov}. These sequences are extracted from the disassembly of a program generated with radare2. The operands are then removed to reduce the vocabulary size of the model giving a collection of opcode sequences as shown in \autoref{fig:opcode-sequence} for each program within the dataset. These opcode sequences are tokenized with a word level tokenizer, where each token is a single word within the corpus as the vocabulary size is relatively low following the removal of operands. 
+
+We train three sequence classification models that predict the class label of a sequence of opcodes. The first uses a pretrained model, trained on masked language modelling of opcode sequences. We also train a model again using the same pretrained model, but with all frozen weights in the attention layers, meaning only the classification head is trained. This significantly reduces the time spent training, and the compute required to train the model, however it can lead to suboptimal performance. Finally, we train a model from scratch to see if pretraining is necessary in this context. 
+
+Our models share the architecture shown in \autoref{tab:model-params} that was found to be the optimal configuration after an extensive hyperparameter sweep of 90 runs. Training was performed with a single Nvidia A40 GPU, and 16GB of ram with a batch size of 128 for a single epoch. 
+
+For each sequence of opcodes, with a fixed length the model predicts its class label, either malicious or benign. However, due to limited compute resources, we are unable to perform sequence classification over the entire sequence of opcodes for a single program. Therefore, to determine the class of a program, we need to reduce a collection of class likelihood values into a single pair or logits. We tested both mean reduction, where we take the average class likelihood for each over the sequence of logits, and majority choice where the most common result is selected. Of these methods, we found mean reduction to be most effective.  
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{@{}lr@{}}
+        \toprule
+        \textbf{Parameter}      & \textbf{Value} \\ \midrule
+        Sequence Length         & 32    \\
+        Hidden Layer Size       & 512   \\
+        Hidden Layers           & 7     \\
+        Attention Heads         & 4     \\
+        Intermediate Layer Size & 2048  \\
+        Activation Function     & GELU  \\
+        Hidden Dropout Rate     & 0.01  \\
+        Attention Dropout Rate  & 0.001 \\ \bottomrule
+    \end{tabular}
+    \caption{RoBERTa model parameters}
+    \label{tab:model-params}
+\end{table}
+
+\section{CNN for Image Classification}
+
+In addition to the RoBERTa sequence classification model, we also develop an image based CNN approach. We use the EfficientNet-B0 architecture \citep{tanEfficientNetRethinkingModel2020}, due to its computational efficiency and high performance on image classification problems. The model is trained from scratch, and we modify the final layer of the model to output binary class likelihood values. 
+
+To create an image representation of a program, we firstly find $d = \lceil \sqrt{L} \rceil$ where $L$ is the size of the program. This is used to create a square image which is large enough to store the entire program. Each byte of the program is then interpreted as the lightness value of its corresponding pixel. Finally this greyscale image is resized to the 224x224 pixels as required by the EfficientNet architecture. 
+
+As previously established, the size of benign programs is typically much higher than malicious programs. As a result of this, benign images are more significantly resized than malicious images. Resizing an image will introduce artifacts to the image, such as anti-aliasing or blurring. Therefore, benign images may have more prevalent artifacts than malicious images which could be used by the model to learn a suboptimal solution. To prevent this from occurring, we test the same model on a subset of the dataset where the distribution of program size between classes are more similar. We use a genetic algorithm that minimises the Kullback-Leibler divergence $D_{KL}$ between the distributions of program size for each class of program by modelling it as a Knapsack problem~\citep{khuriZeroOneMultiple1994}. We also encourage the algorithm to prefer solutions that have a high ratio of malicious to benign samples to ensure the class distribution is approximately equal. 
+
+\section{Obfuscation}
+
+Obfuscation is highly pervasive within malware seen in real world security incidents. As a result of this, we believe that static malware detection methods learn to identify obfuscation as opposed to other malicious characteristics. However, obfuscation is not exclusive to malicious programs, as legitimate software developers may use similar techniques to protect their intellectual property. Should this be the case, legitimate benign software that have been obfuscated may be misidentified as malicious, thereby degrading the effectiveness of these approaches in real world deployment. 
+
+We investigate this by observing how the models performance changes as we increase the presence of obfuscation within the unobfuscated dataset. We perform three trials for each model, that vary which kinds of program are to be obfuscated. For example, only malicious, benign, and all programs. At each step, we obfuscate a certain percentage of programs within the dataset and this percentage increases by 10\% upon completion. We collect the logits for each sequence, which can then be used to calculate both the sequence level classification accuracy, and the file level accuracy. 
+
+Obfuscation is performed using a tool known as UPX, which performs binary packing. This tool was selected as it can perform obfuscation to a wide variety of windows executables, and has also been used to protect benign programs against reverse engineering, and reduce their size. Furthermore, this tool has been used to obfuscate several of the malicious samples used to train our models. 
+
+\end{document}

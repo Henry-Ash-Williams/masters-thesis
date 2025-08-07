@@ -1,3 +1,5 @@
+%!LW recipe=pdflatex ➞ bibtex ➞ pdflatex`×2
+
 \documentclass{report}
 
 \usepackage[backend=bibtex,natbib,style=authoryear,maxcitenames=1]{biblatex} 
@@ -15,10 +17,16 @@
 \usepackage{multirow}
 \usepackage{listings}
 \usepackage{caption}
-\usepackage{cleveref}
 \usepackage{ifthen}
 \usepackage{etoolbox}
 \usepackage{fancyvrb}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cleveref}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \newcommand{\includeSection}[1]{%
   \noindent
@@ -31,7 +39,6 @@
 
 \newboolean{outline}
 \setbool{outline}{true}
-
 
 \usepackage{subfiles}
 
@@ -75,6 +82,8 @@
 		 
 	\end{center}
 \end{titlepage}
+
+\tableofcontents
 
 \chapter{Introduction}
 
@@ -182,6 +191,12 @@
 
         \begin{itemize}
             \item Baseline results 
+
+            \begin{itemize}
+                \item All hover around 90\% accuracy
+                \item Functions are marginally better than DLLs 
+            \end{itemize}
+
             \item Opcode model 
 
             \begin{itemize}
@@ -281,4 +296,28 @@
 }
 
 \printbibliography
+
+
+\appendix 
+\chapter{Implementation Details}
+
+\section{Conversion of Executable Programs to Greyscale Images}\label{apdx:prog-to-img}
+
+\begin{algorithm}
+\caption{Converts a program to an image}
+\begin{algorithmic}[1]
+\Require Program $P \in [0, 255]^L$ of $L$ bytes 
+\Ensure Matrix $M \in [0, 255]^{d \times d}$
+\State $d \gets \lceil \sqrt{L} \rceil$
+\State Initialize $V \in [0, 255]^{d^2}$ with zeros
+\For{$i \gets 1$ to $L$}
+    \State $V_i \gets P_i$
+\EndFor
+\State Reshape $V$ into matrix $M \in [0, 255]^{d \times d}$ in row-major order
+\State \Return $M$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Genetic Algorithm}
+
 \end{document}

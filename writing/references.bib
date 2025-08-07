@@ -164,6 +164,24 @@
   file = {/Users/henrywilliams/Zotero/storage/4LGLMA3L/Alenezi et al. - 2020 - Evolution of Malware Threats and Techniques A Review.pdf}
 }
 
+@misc{andersonEMBEROpenDataset2018,
+  title = {{{EMBER}}: {{An Open Dataset}} for {{Training Static PE Malware Machine Learning Models}}},
+  shorttitle = {{{EMBER}}},
+  author = {Anderson, Hyrum S. and Roth, Phil},
+  year = {2018},
+  month = apr,
+  number = {arXiv:1804.04637},
+  eprint = {1804.04637},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1804.04637},
+  urldate = {2025-08-05},
+  abstract = {This paper describes EMBER: a labeled benchmark dataset for training machine learning models to statically detect malicious Windows portable executable files. The dataset includes features extracted from 1.1M binary files: 900K training samples (300K malicious, 300K benign, 300K unlabeled) and 200K test samples (100K malicious, 100K benign). To accompany the dataset, we also release open source code for extracting features from additional binaries so that additional sample features can be appended to the dataset. This dataset fills a void in the information security machine learning community: a benign/malicious dataset that is large, open and general enough to cover several interesting use cases. We enumerate several use cases that we considered when structuring the dataset. Additionally, we demonstrate one use case wherein we compare a baseline gradient boosted decision tree model trained using LightGBM with default settings to MalConv, a recently published end-to-end (featureless) deep learning model for malware detection. Results show that even without hyper-parameter optimization, the baseline EMBER model outperforms MalConv. The authors hope that the dataset, code and baseline model provided by EMBER will help invigorate machine learning research for malware detection, in much the same way that benchmark datasets have advanced computer vision research.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Cryptography and Security},
+  file = {/Users/henrywilliams/Zotero/storage/UUVTV6LM/Anderson and Roth - 2018 - EMBER An Open Dataset for Training Static PE Malware Machine Learning Models.pdf;/Users/henrywilliams/Zotero/storage/H85QRPBF/1804.html}
+}
+
 @article{aslanNewMalwareClassification2021,
   title = {A {{New Malware Classification Framework Based}} on {{Deep Learning Algorithms}}},
   author = {Aslan, {\"O}mer and Yilmaz, Abdullah Asim},
@@ -699,6 +717,23 @@
   abstract = {Malware has become an enormous risk in today's world. There are different kinds of malware or malicious programs found on the internet. Research shows that malware has grown exponentially over the last decade, causing substantial financial losses to various organizations. Malware is a malicious program or software that proves exceedingly harmful to the user's computer. The user's system can be affected in several ways. The proposed solution uses various machine learning techniques to detect whether a file downloaded from the internet contains malware or not. This research aims to use different machine learning algorithms to differentiate between malicious and benign files successfully. The main idea is to study different features of the downloaded file like MD5 hash, size of the Optional Header, and Load Configuration Size. Based on the analysis performed on these features, the files will be classified as malicious or non-malicious. The models are trained on these different features which enables them to learn how to classify files. The models after proper training will be compared among each other based on various criteria. This comparison is made with the help of the Validation and Test datasets. Finally, the model with the best accuracy will be selected. This process helps in identifying all those types of malware that can have a detrimental impact on the user's system after getting infected. The approach used here will be able to detect malware like Adware, Trojan, Backdoors, Unknown, Multidrop, Rbot, Spam, and Ransomware. After training and testing various machine learning models, the Random Forest Classifier was found to be the most accurate. It's accuracy went as high as 99.99\% in the case of the test dataset. This was closely followed by the XGBoost model with an accuracy of 99.68\%. The results of five different models have been compared with those obtained in the previous research. These include the Decision Tree Classifier (99.57\% accuracy), Random Forest Classifier (99.99\% accuracy), Gradient Boosting Model (99.09\% accuracy), XGBoost Model (99.68\% accuracy), and AdaBoost Model (98.87\% accuracy). Four out of five of these models have been found to have accuracies greater than those obtained in previous research works.},
   keywords = {AES,Cryptography,LSB,Security,SHA 256},
   file = {/Users/henrywilliams/Zotero/storage/AB6PP54A/Kamboj et al. - 2023 - Detection of malware in downloaded files using various machine learning models.pdf;/Users/henrywilliams/Zotero/storage/RS856SW4/S111086652200072X.html}
+}
+
+@misc{kaplanScalingLawsNeural2020,
+  title = {Scaling {{Laws}} for {{Neural Language Models}}},
+  author = {Kaplan, Jared and McCandlish, Sam and Henighan, Tom and Brown, Tom B. and Chess, Benjamin and Child, Rewon and Gray, Scott and Radford, Alec and Wu, Jeffrey and Amodei, Dario},
+  year = {2020},
+  month = jan,
+  number = {arXiv:2001.08361},
+  eprint = {2001.08361},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2001.08361},
+  urldate = {2025-02-13},
+  abstract = {We study empirical scaling laws for language model performance on the cross-entropy loss. The loss scales as a power-law with model size, dataset size, and the amount of compute used for training, with some trends spanning more than seven orders of magnitude. Other architectural details such as network width or depth have minimal effects within a wide range. Simple equations govern the dependence of overfitting on model/dataset size and the dependence of training speed on model size. These relationships allow us to determine the optimal allocation of a fixed compute budget. Larger models are significantly more sample-efficient, such that optimally compute-efficient training involves training very large models on a relatively modest amount of data and stopping significantly before convergence.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/henrywilliams/Zotero/storage/BLAKBYV2/Kaplan et al. - 2020 - Scaling Laws for Neural Language Models.pdf;/Users/henrywilliams/Zotero/storage/XZH8WU9R/2001.html}
 }
 
 @article{karbabMalDozerAutomaticFramework2018,
@@ -1505,6 +1540,25 @@
   pages = {6--9},
   doi = {10.1016/S1353-4858(19)30059-5},
   abstract = {Increasingly complex multi-cloud architectures and more stringent regulatory environments have increased reliance on encryption -- primarily secure sockets layer (SSL) and transport layer security (TLS) -- to the extent that over 80\% of all network traffic is now encrypted. While in many ways the growth of encryption is a good thing for security, it also creates a backdoor for hackers and threat actors looking to hide from traditional detection tools. Organisations are adopting more stringent encryption practices. And while the growth of encryption might seem a good thing for security, it also creates a backdoor for hackers and threat actors looking to hide from detection tools. Additionally, as organisations continue to move to the cloud, increase their utilisation of APIs and adopt ever-more complex and sensitive systems, they find themselves with ever-more complex multi-cloud architectures. The solution lies in encrypted cognitive analytics, argues Omar Yaacoubi of Barac, which enables the creation of new types of data elements or telemetry that are independent of protocol details.}
+}
+
+@inproceedings{yangBODMASOpenDataset2021,
+  title = {{{BODMAS}}: {{An Open Dataset}} for {{Learning}} Based {{Temporal Analysis}} of {{PE Malware}}},
+  shorttitle = {{{BODMAS}}},
+  booktitle = {2021 {{IEEE Security}} and {{Privacy Workshops}} ({{SPW}})},
+  author = {Yang, Limin and Ciptadi, Arridhana and Laziuk, Ihar and Ahmadzadeh, Ali and Wang, Gang},
+  year = {2021},
+  month = may,
+  pages = {78--84},
+  publisher = {IEEE},
+  address = {San Francisco, CA, USA},
+  doi = {10.1109/SPW53761.2021.00020},
+  urldate = {2025-08-05},
+  abstract = {We describe and release an open PE malware dataset called BODMAS to facilitate research efforts in machine learning based malware analysis. By closely examining existing open PE malware datasets, we identified two missing capabilities (i.e., recent/timestamped malware samples, and well-curated family information), which have limited researchers' ability to study pressing issues such as concept drift and malware family evolution. For these reasons, we release a new dataset to fill in the gaps. The BODMAS dataset contains 57,293 malware samples and 77,142 benign samples collected from August 2019 to September 2020, with carefully curated family information (581 families). We also perform a preliminary analysis to illustrate the impact of concept drift and discuss how this dataset can help to facilitate existing and future research efforts.},
+  copyright = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/IEEE.html},
+  isbn = {978-1-6654-3732-5},
+  langid = {english},
+  file = {/Users/henrywilliams/Zotero/storage/9STNK73F/Yang et al. - 2021 - BODMAS An Open Dataset for Learning based Temporal Analysis of PE Malware.pdf}
 }
 
 @inproceedings{youMalwareObfuscationTechniques2010,

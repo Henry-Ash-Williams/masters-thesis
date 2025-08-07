@@ -5,7 +5,7 @@
 
 \section{Baseline}
 
-\begin{table}[]
+\begin{table}[h]
     \centering
     \begin{tabular}{@{}llllll@{}}
     \toprule
@@ -21,12 +21,46 @@
     \label{tab:baseline-results}
 \end{table}
 
+The results of our baseline approaches are presented in \autoref{tab:baseline-results}, and indicate the methods we tested are comparible in terms of their performance. The F1 score is approximately 0.9 across models trained on external functions used by programs, and is approximately 0.89 across models trained on DLL information. This suggests that external functions are a better indicator of a programs intent than the DLLs they are members of. 
+
+Our earlier analysis of import tables throughout our dataset support this result, as we were able to show that the average cosine similarity of external libraries (DLLs) used by malicious programs is greater than that of the external functions. This is also seen in the average cross-class pairwise similarity, and the average benign pairwise similarity, indicating that the DLLs used by a program are too general to be indicative of a programs nature. 
+
+Of all the methods tested, we found the decision tree classifier to be the best at identifying malicious software based on the usage of external functions. For external libraries, Support Vector Machines offered the best performance over others. 
+
 \section{Sequence Classification}
+
+\setlength{\extrarowheight}{2pt}
+\begin{table}[h]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{llllllllllll}
+        \toprule
+        \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Model}}} &  & \multicolumn{4}{c}{\textbf{Sequence Level}} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\textbf{File Level}} & \vspace{2pt}\\ \cline{3-6} \cline{8-11}
+        \multicolumn{1}{c}{} &  & Accuracy & F1-Score & Precision & Recall & \textbf{} & Accuracy & F1-Score & Precision & Recall &  \\  \midrule
+        % &  & & & & &  & & & &  \\
+        From Scratch &  & 0.8756 & 0.8742 & 0.8798 & 0.8756 &  & 0.8976 & 0.8971 & 0.9095 & 0.8989 &  \\
+        &  & & & & &  & & & &  \\
+        From Pretrained &  & 0.9010 & 0.9002 & 0.9042 & 0.9010 &  & 0.9452 & 0.9452 & 0.9479 & 0.9458 &  \\
+        &  & & & & &  & & & &  \\
+        \begin{tabular}[c]{@{}l@{}}From Pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8302 & 0.8265 & 0.8409 & 0.8302 & & 0.8076 & 0.8037 & 0.8393 & 0.8098 & \vspace{5pt} \\ 
+        \hline
+        \end{tabular}%
+    }
+    \caption{Performance of our RoBERTa model for opcode sequence classification and malware detection}
+    \label{tab:seq-level-malberta-base}
+\end{table}
+
+\noindent
+The results for our NLP based approach to detecting malware are presented in \autoref{tab:seq-level-malberta-base}. We find that on sequence level problems, where the model is tasked with identifying malicious opcode sequences, the pretrained model is comparible in terms of performance to our best baseline approaches (\autoref{tab:baseline-results}). When the attention layers are frozen however, performance is degraded by a significant margin. It is well established that an increase in model complexity is directly correlated with its performance~\citep{kaplanScalingLawsNeural2020}. The model architecture (shown in \autoref{tab:model-params}) used in our investigation has approximately $2.3\mathrm{e}+7$ parameters of which approximately 1\% are used for classification\footnote{23011330 in total, 263682 used in classification head}. Therefore, in the fine-tuned model, the complexity is significantly lower than the other models, meaning it is unable to reliably classify opcode sequences. Pretraining has a positive impact on the models sequence classification ability, as shown in the discepancy between the pretrained model, and the model trained from scratch. 
+
+However, these results only consider the sequence level accuracy. In order to identify malicious programs, we would need to aggregate each of these results into a single result for the file itself. To find this result, we take the mean of each class likelihood value for all sequence classification results. From this, we see the file level accuracy increase for both the pretrained model, and the model trained from scratch. However, the pretrained model with frozen attention weights actually decreases in terms of its performance, indicating the reduction has an adverse impact on its performance. We believe this to be caused by the fact that prior to its reduction, approximately 83\% of the sequences will be classified correctly. In comparison to the other models which are able to more reliably classify sequences, 
+
 
 \section{Image Classification}
 
 \section{Obfuscation Experiment}
 
 \section{Analysis}
+
 
 \end{document}

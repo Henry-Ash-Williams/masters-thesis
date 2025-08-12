@@ -1,15 +1,27 @@
-%!LW recipe=pdflatex ➞ bibtex ➞ pdflatex`×2
+%!LW recipe=xelatex ➞ bibtex ➞ xelatex`×2
 
-\documentclass{report}
+\documentclass[a4paper, 12pt, UKenglish]{report}
 
+
+\usepackage[l2tabu,orthodox]{nag}
+\usepackage[all,warning]{onlyamsmath}
+\usepackage{inputenc}
+\usepackage{fontenc}
+\usepackage{babel}
+\usepackage[babel=true]{microtype}
 \usepackage[backend=bibtex,natbib,style=authoryear,maxcitenames=1]{biblatex} 
-\usepackage[margin=2cm]{geometry} 
+\newlength{\alphabet}
+\settowidth{\alphabet}{\normalfont abcdefghijklmnopqrstuvwxyz}
+\usepackage[textwidth=2.3\alphabet,margin=2cm]{geometry}
+% \usepackage{pdfx}
 \usepackage{hyperref} 
+
 \usepackage{siunitx} 
 \usepackage{graphicx} 
 \usepackage[super]{nth} 
 \usepackage{tabularx} 
 \usepackage{ltablex} 
+\usepackage{csquotes}
 \usepackage{longtable} 
 \usepackage{subcaption} 
 \usepackage{booktabs}
@@ -25,8 +37,29 @@
 \usepackage{cleveref}
 \usepackage{float}
 \usepackage{wrapfig}
+\usepackage{tocbibind}
+\usepackage{tocloft}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+
+
+\widowpenalty=10000
+\clubpenalty=10000
+
+%% "Proper" small caps
+\newcommand{\flatcaps}[1]{\textsc{\MakeLowercase{#1}}}
+%% 'compact' reduces the space above and below headings to a single blank line
+\usepackage[compact]{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+%% Upright (normal) numbers here
+\titleformat{\subsection}{\large}{\thesubsection}{.6em}{\flatcaps}
+%% Below, both heading should form sentences
+\titleformat{\subsubsection}{}{\thesubsubsection}{.6em}{}{\itshape}
+\titleformat{\paragraph}[runin]{\flatcaps}{\theparagraph}{0pt}{}
+
+\titlespacing*{\section}{0pt}{2\baselineskip}{1\baselineskip}
+\titlespacing*{\subsection}{0pt}{1\baselineskip}{1\baselineskip}
+\titlespacing*{\subsubsection}{0pt}{8pt}{5pt}
 
 \newcommand{\includeSection}[1]{%
   \noindent
@@ -37,8 +70,19 @@
   }%
 }
 
+\frenchspacing
 \newboolean{outline}
 \setbool{outline}{true}
+
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmainfont[
+  Ligatures=TeX,
+  Numbers={OldStyle, Proportional},
+]{Linux Libertine O}
+\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
+\setmathfont[Scale=MatchUppercase]{Libertinus Math}
+
 
 \usepackage{subfiles}
 
@@ -48,66 +92,73 @@
 \begin{document}
 
 \begin{titlepage}
-	\begin{center}
-		\includegraphics[width=5cm]{uoslogo}\\[2cm]% \bigskip
-		%\vspace*{.05\textheight}
-		%\hrulefill
-		\textsc{\Large Masters Thesis}
-		%\hrulefill\\%[0.5cm] % Thesis type
+    \begin{center}
+        \includegraphics[width=5cm]{uoslogo}\\[2cm]% \bigskip
+        %\vspace*{.05\textheight}
+        %\hrulefill
+        \textsc{\Large Masters Thesis}
+        %\hrulefill\\%[0.5cm] % Thesis type
 
-		\Huge \textbf{Placeholder title}\\[3cm] % Thesis title
+        \Huge \textbf{Placeholder title}\\[3cm] % Thesis title
 
-		\large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of Master of Research in Advanced Artificial Intelligence}\\[0.5cm] % University 
-		\textit{in the}\\[0.5cm]
+        \large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of Master of Research in Advanced Artificial Intelligence}\\[0.5cm] % University 
+        \textit{in the}\\[0.5cm]
         University of Sussex\\[0.1cm]
-		School of Engineering and Informatics\\ [1cm]
-	
-		\begin{minipage}{.45\linewidth}
-			\begin{flushleft} %\large
-			\emph{Author:}\\
-			Henry Williams% Author name - remove the \href bracket to remove the link
-			\end{flushleft}
-		\end{minipage}
-		\hfill
-		\begin{minipage}{.45\linewidth}
-			\begin{flushright} %\large
-			\emph{Supervisor:} \\
-			%\href{http://www.sussex.ac.uk/profiles/168614}{\mySupervisor}%\\ % Supervisor name - remove the \href bracket to remove the link  
-			Jeff Mitchell% Supervisor name
-			\end{flushright}
-		\end{minipage}
+        School of Engineering and Informatics\\ [1cm]
+    
+        \begin{minipage}{.45\linewidth}
+            \begin{flushleft} %\large
+            \emph{Author:}\\
+            Henry Williams% Author name - remove the \href bracket to remove the link
+            \end{flushleft}
+        \end{minipage}
+        \hfill
+        \begin{minipage}{.45\linewidth}
+            \begin{flushright} %\large
+            \emph{Supervisor:} \\
+            %\href{http://www.sussex.ac.uk/profiles/168614}{\mySupervisor}%\\ % Supervisor name - remove the \href bracket to remove the link  
+            Jeff Mitchell% Supervisor name
+            \end{flushright}
+        \end{minipage}
 
-		\vfill
-		\large August 2025
-		 
-	\end{center}
+        \vfill
+        \large August 2025
+         
+    \end{center}
 \end{titlepage}
+\newpage
+
+\microtypesetup{protrusion=false}
 
 \tableofcontents
+\listoffigures
+\listoftables
+
+\microtypesetup{protrusion=true}
 
 \chapter{Introduction}
 
-\ifthenelse{\boolean{outline}}{
-\noindent\fbox{%
-    \parbox{\textwidth}{%
-        \textbf{Word Count: 1000}
+% \ifthenelse{\boolean{outline}}{
+% \noindent\fbox{%
+%     \parbox{\textwidth}{%
+%         \textbf{Word Count: 1000}
 
-        \begin{itemize}
-            \item What is malware? 
-            \item Why is detecting it important? 
-            \item How do we detect it? 
-            \item How does it evade detection? 
-            \item What are we doing? 
-            \item Ethical \& Safety considerations 
+%         \begin{itemize}
+%             \item What is malware? 
+%             \item Why is detecting it important? 
+%             \item How do we detect it? 
+%             \item How does it evade detection? 
+%             \item What are we doing? 
+%             \item Ethical \& Safety considerations 
             
-            \begin{itemize}
-                \item Ethics | maybe better malware detection could be used to guide development of adverserial malware? 
-                \item Safety | outline ways to ensure malware samples are never to be executed 
-            \end{itemize}
-        \end{itemize}
-    }%
-}
-}{}
+%             \begin{itemize}
+%                 \item Ethics | maybe better malware detection could be used to guide development of adverserial malware? 
+%                 \item Safety | outline ways to ensure malware samples are never to be executed 
+%             \end{itemize}
+%         \end{itemize}
+%     }%
+% }
+% }{}
 
 
 \includeSection{./introduction.tex}
@@ -184,116 +235,124 @@
 
 \chapter{Results}
 
-\ifthenelse{\boolean{outline}}{
-\noindent\fbox{%
-    \parbox{\textwidth}{% 
-        \textbf{Word Count: 3000}
+% \ifthenelse{\boolean{outline}}{
+% \noindent\fbox{%
+%     \parbox{\textwidth}{% 
+%         \textbf{Word Count: 3000}
 
-        \begin{itemize}
-            \item Baseline results 
+%         \begin{itemize}
+%             \item Baseline results 
 
-            \begin{itemize}
-                \item All hover around 90\% accuracy
-                \item Functions are marginally better than DLLs 
-            \end{itemize}
+%             \begin{itemize}
+%                 \item All hover around 90\% accuracy
+%                 \item Functions are marginally better than DLLs 
+%             \end{itemize}
 
-            \item Opcode model 
+%             \item Opcode model 
 
-            \begin{itemize}
-                \item Is pretraining useful? 
-                \item How best to reduce sequence-level classification results to a file-level result? 
-            \end{itemize}
+%             \begin{itemize}
+%                 \item Is pretraining useful? 
+%                 \item How best to reduce sequence-level classification results to a file-level result? 
+%             \end{itemize}
 
-            \item Image model 
+%             \item Image model 
             
-            \begin{itemize}
-                \item Is increased classification accuracy a result of the difference between the distribution between the size of malicious and benign programs? 
-            \end{itemize}
+%             \begin{itemize}
+%                 \item Is increased classification accuracy a result of the difference between the distribution between the size of malicious and benign programs? 
+%             \end{itemize}
 
-            \item Obfuscation Experiment
+%             \item Obfuscation Experiment
             
-            \begin{itemize}
-                \item Opcode Model 
+%             \begin{itemize}
+%                 \item Opcode Model 
 
-                \begin{itemize}
-                    \item Baseline file-level classification accuracy on secondary dataset 
-                    \item When both classes of programs, or soley malicious programs are obfuscated, performance increases 
-                    \item When only benign programs are obfuscated, accuracy doesn't increase 
-                    \item Less pronounced in sequence level tasks 
-                    \item Certainty ($D_{KL}$) of classification increases as more programs are obfuscated
-                \end{itemize}
+%                 \begin{itemize}
+%                     \item Baseline file-level classification accuracy on secondary dataset 
+%                     \item When both classes of programs, or soley malicious programs are obfuscated, performance increases 
+%                     \item When only benign programs are obfuscated, accuracy doesn't increase 
+%                     \item Less pronounced in sequence level tasks 
+%                     \item Certainty ($D_{KL}$) of classification increases as more programs are obfuscated
+%                 \end{itemize}
 
-                \item Image model
+%                 \item Image model
                 
-                \begin{itemize}
-                    \item Effect seems to be more pronounced in filtered model 
-                    \item Increase in classification accuracy when only mal obfuscated 
-                    \item Decrease in c.a. when only ben obfuscated 
-                    \item Similar in base model but less pronounced
-                    \item Confidence of base model increases when all and/or ben are obfuscated 
-                    \item Confidence when mal obfuscated decreases certainty 
-                    \item Filtered model less confident overall, little impact in obfuscation
-                \end{itemize}
+%                 \begin{itemize}
+%                     \item Effect seems to be more pronounced in filtered model 
+%                     \item Increase in classification accuracy when only mal obfuscated 
+%                     \item Decrease in c.a. when only ben obfuscated 
+%                     \item Similar in base model but less pronounced
+%                     \item Confidence of base model increases when all and/or ben are obfuscated 
+%                     \item Confidence when mal obfuscated decreases certainty 
+%                     \item Filtered model less confident overall, little impact in obfuscation
+%                 \end{itemize}
 
-                \item TODO: Retrain both models on dataset with obfuscated benign train data \& repeat previous experiments
-            \end{itemize}
-        \end{itemize}
-    }%
-}
-}{}
+%                 \item TODO: Retrain both models on dataset with obfuscated benign train data \& repeat previous experiments
+%             \end{itemize}
+%         \end{itemize}
+%     }%
+% }
+% }{}
 
 \includeSection{./results.tex}
 
 \chapter{Discussion}
 
-\noindent\fbox{%
-    \parbox{\textwidth}{%
-        \textbf{Word Count: 3000}
+% \noindent\fbox{%
+%     \parbox{\textwidth}{%
+%         \textbf{Word Count: 3000}
 
-        \begin{itemize}
-            \item Are dynamic methods vulnerable to advanced obfuscation techniques? 
+%         \begin{itemize}
+%             \item Are dynamic methods vulnerable to advanced obfuscation techniques? 
             
-            \begin{itemize}
-                \item It's possible to hide API calls from standard API call hooking techniques 
-                \item Other redundant API calls may be made to obfuscate call sequences 
-                \item Advanced malware (i.e. Rootkits) are able to stealthily perform malicious actions on the host
-            \end{itemize}
+%             \begin{itemize}
+%                 \item It's possible to hide API calls from standard API call hooking techniques 
+%                 \item Other redundant API calls may be made to obfuscate call sequences 
+%                 \item Advanced malware (i.e. Rootkits) are able to stealthily perform malicious actions on the host
+%             \end{itemize}
 
-            \item Are opcode sequences suitable features for NLP based malware detection? 
+%             \item Are opcode sequences suitable features for NLP based malware detection? 
             
-            \begin{itemize}
-                \item Full disassembly may offer provide better information for transformer architectures 
-                \item Was not tested due to time/compute limitations 
-                \item Byte-level modelling may work, but the presence of polymorphic malware and encrypted payloads may be challenging to model accurately  
-            \end{itemize}
+%             \begin{itemize}
+%                 \item Full disassembly may offer provide better information for transformer architectures 
+%                 \item Was not tested due to time/compute limitations 
+%                 \item Byte-level modelling may work, but the presence of polymorphic malware and encrypted payloads may be challenging to model accurately  
+%             \end{itemize}
 
-            \item Is executable packing (UPX) a good proxy for the obfuscation methods seen in the wild? 
+%             \item Is executable packing (UPX) a good proxy for the obfuscation methods seen in the wild? 
             
-            \begin{itemize}
-                \item What other obfuscation techniques and solutions could work for this? 
-            \end{itemize}
+%             \begin{itemize}
+%                 \item What other obfuscation techniques and solutions could work for this? 
+%             \end{itemize}
 
-            \item Could diffusion modelling enable machine de-obfuscation? 
+%             \item Could diffusion modelling enable machine de-obfuscation? 
 
-            \begin{itemize}
-                \item Obfuscation is analgous to noise in a signal 
-                \item Diffusion models are well suited to denoising of data 
-                \item Might be able to de-obfuscate programs to generate large scale 
-            \end{itemize}
+%             \begin{itemize}
+%                 \item Obfuscation is analgous to noise in a signal 
+%                 \item Diffusion models are well suited to denoising of data 
+%                 \item Might be able to de-obfuscate programs to generate large scale 
+%             \end{itemize}
 
-            \item Data limitations
+%             \item Data limitations
             
-            \begin{itemize}
-                \item Lack of large-scale, benign executable datasets 
-                \item High presence of obfuscation in real-world malware samples 
-                \item Unobfuscated malware samples are not representative of malware seen in the wild as they are often ``toy'' projects, and lack advanced capabilities 
-                \item Unobfuscated, advanced malware are hard to find   
-            \end{itemize}
+%             \begin{itemize}
+%                 \item Lack of large-scale, benign executable datasets 
+%                 \item High presence of obfuscation in real-world malware samples 
+%                 \item Unobfuscated malware samples are not representative of malware seen in the wild as they are often ``toy'' projects, and lack advanced capabilities 
+%                 \item Unobfuscated, advanced malware are hard to find   
+%             \end{itemize}
 
-            \item Conclusion 
-        \end{itemize}
-    }%
-}
+%             \item Issues with Obfuscation Experiment 
+            
+%             \begin{itemize}
+%                 \item single trial and random selection of obfuscated samples may produce less meaningful results 
+%                 \item trials should be repeated to see if this changes things
+%                 \item trials took a long time to run so only a single run was possible. 
+%             \end{itemize}
+
+%             \item Conclusion 
+%         \end{itemize}
+%     }%
+% }
 
 \printbibliography
 
@@ -306,18 +365,49 @@
 \begin{algorithm}
 \caption{Converts a program to an image}
 \begin{algorithmic}[1]
-\Require Program $P \in [0, 255]^L$ of $L$ bytes 
-\Ensure Matrix $M \in [0, 255]^{d \times d}$
-\State $d \gets \lceil \sqrt{L} \rceil$
-\State Initialize $V \in [0, 255]^{d^2}$ with zeros
-\For{$i \gets 1$ to $L$}
-    \State $V_i \gets P_i$
+\Require Program \(P \in {[0, 255]}^L\) of \(L\) bytes 
+\Ensure Matrix \(M \in [0, 255]^{d \times d}\)
+\State \(d \gets \lceil \sqrt{L} \rceil\)
+\State Initialize \(V \in [0, 255]^{d^2}\) with zeros
+\For{\(i \gets 1\) to \(L\)}
+    \State \(V_i \gets P_i\)
 \EndFor
-\State Reshape $V$ into matrix $M \in [0, 255]^{d \times d}$ in row-major order
-\State \Return $M$
+\State Reshape \(V\) into matrix \(M \in [0, 255]^{d \times d}\) in row-major order
+\State \Return \(M\)
 \end{algorithmic}
 \end{algorithm}
 
 \section{Genetic Algorithm}
 
+\chapter{Supplimental results}
+
+\section{Obfuscated Benign Sequence Classification Metrics}
+
+\begin{table}[h]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllllllllll}
+\toprule
+\multicolumn{1}{c}{\multirow{2}{*}{\textbf{Model}}} &  & \multicolumn{4}{c}{\textbf{Sequence Level}} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\textbf{File Level}} & \vspace{2pt} \\ \cline{3-6} \cline{8-11}
+\multicolumn{1}{c}{} &  & Accuracy & F1-Score & Precision & Recall & \textbf{} & Accuracy & F1-Score & Precision & Recall &  \\ \midrule
+From Scratch &  & 0.8584 & 0.8587 & 0.8596 & 0.8584 &  &  &  &  &  &  \\
+From Pretrained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  &  &  &  &  &  \\
+\begin{tabular}[c]{@{}l@{}}From Pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8471 & 0.8471 & 0.8472 & 0.8471 &  &  &  &  &  &  \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+
+\section{Partially Obfuscated Benign Sequence Classification Metrics}
+\begin{table}[h]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllllllllll}
+\toprule
+\multicolumn{1}{c}{\multirow{2}{*}{\textbf{Model}}} &  & \multicolumn{4}{c}{\textbf{Sequence Level}} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\textbf{File Level}} & \vspace{2pt} \\ \cline{3-6} \cline{8-11}
+\multicolumn{1}{c}{} &  & Accuracy & F1-Score & Precision & Recall & \textbf{} & Accuracy & F1-Score & Precision & Recall &  \\ \midrule
+From Scratch &  & 0.8282 & 0.8256 & 0.8310 & 0.8282 &  &  &  &  &  &  \\
+From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  &  &  &  &  &  \\
+\begin{tabular}[c]{@{}l@{}}From Pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8053 & 0.7987 & 0.8169 & 0.8053 &  &  &  &  &  &  \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
 \end{document}

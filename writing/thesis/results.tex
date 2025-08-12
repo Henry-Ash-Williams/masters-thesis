@@ -7,29 +7,31 @@
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{@{}llllll@{}}
-    \toprule
-    \textbf{Algorithm}                                  & \textbf{Feature} & \textbf{Accuracy} & \textbf{F1 Score} & \textbf{Precision} & \textbf{Recall} \\ \midrule
-    \multirow{2}{*}{\textbf{Support Vector Classifier}} & DLL              & 0.89              & 0.89              & 0.89               & 0.89            \\
-                                                        & Function         & 0.92              & 0.92              & 0.92               & 0.92            \\ \midrule
-    \multirow{2}{*}{\textbf{Logistic Regression}}       & DLL              & 0.87              & 0.87              & 0.87               & 0.87            \\
-                                                        & Function         & 0.91              & 0.91              & 0.92               & 0.91            \\ \midrule
-    \multirow{2}{*}{\textbf{Decision Tree}}             & DLL              & 0.88              & 0.88              & 0.89               & 0.89            \\
-                                                        & Function         & 0.93              & 0.93              & 0.93               & 0.93            \\ \bottomrule
-    \end{tabular}
+    \begin{tabular}{llllll}
+        \toprule
+        \textbf{Algorithm} & \textbf{Feature} & \textbf{Accuracy} & \textbf{F1 Score} & \textbf{Precision} & \textbf{Recall} \\ \midrule
+        \multirow{2}{*}{\textbf{Support Vector Classifier}} & DLL & 0.89 & 0.89 & 0.89 & 0.89 \\
+        & Function & 0.92 & 0.92 & 0.92 & 0.92 \\ \midrule
+        \multirow{2}{*}{\textbf{Logistic Regression}} & DLL & 0.87 & 0.87 & 0.87 & 0.87 \\
+        & Function & 0.91 & 0.91 & 0.92 & 0.91 \\ \midrule
+        \multirow{2}{*}{\textbf{Decision Tree}} & DLL & 0.88 & 0.88 & 0.89 & 0.89 \\
+        & Function & 0.93 & 0.93 & 0.93 & 0.93 \\ \bottomrule
+    \end{tabular}%
     \caption{Binary classification metrics of our baseline approaches.}
     \label{tab:baseline-results}
 \end{table}
 
-The results of our baseline approaches are presented in \autoref{tab:baseline-results}, and indicate the methods we tested are comparible in terms of their performance. The F1 score is approximately 0.9 across models trained on external functions used by programs, and is approximately 0.89 across models trained on DLL information. This suggests that external functions are a better indicator of a programs intent than the DLLs they are members of. 
+\noindent
+The results of our baseline approaches are presented in \cref{tab:baseline-results}, and indicate that all methods tested are comparible in terms of performance. When trained on non-unique external function usage, these methods achieve an F1 score of approximately 0.9. External library usage however, incurs a minor degradation in classification performance, as the same methods achieve an F1 score of approximately 0.88. Therefore, we can assume that the usage of external functions is a better indicator of a programs intent. 
 
-Our earlier analysis of import tables throughout our dataset support this result, as we were able to show that the average cosine similarity of external libraries (DLLs) used by malicious programs is greater than that of the external functions. This is also seen in the average cross-class pairwise similarity, and the average benign pairwise similarity, indicating that the DLLs used by a program are too general to be indicative of a programs nature. 
+This can be explained by our earlier analysis of executable similarity based on the same features. We found that the average pairwise similarity between malicious and benign executables based on the function level information was much lower than that of the library level information. Therefore, the API methods used by the programs within our dataset exhibit more variation across benign and malicious samples than external libraries and are thus a better feature for classification. 
 
-Of all the methods tested, we found the decision tree classifier to be the best at identifying malicious software based on the usage of external functions. For external libraries, Support Vector Machines offered the best performance over others. 
+Our results indicate that the best algorithm for classification was the decision tree classifier, trained on the external function usage of our programs. In addition to providing the best performance of all baseline methods tested in this experiment, decision tree algorithms have the added benefit of being interpretable. This means that we can visualise the internal mechanisms of the algorithm, and reason about how programs are categorised. 
+
+
 
 \section{Sequence Classification}
 
-\setlength{\extrarowheight}{2pt}
 \begin{table}[h]
     \centering
     \resizebox{\textwidth}{!}{%
@@ -37,30 +39,157 @@ Of all the methods tested, we found the decision tree classifier to be the best 
         \toprule
         \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Model}}} &  & \multicolumn{4}{c}{\textbf{Sequence Level}} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\textbf{File Level}} & \vspace{2pt}\\ \cline{3-6} \cline{8-11}
         \multicolumn{1}{c}{} &  & Accuracy & F1-Score & Precision & Recall & \textbf{} & Accuracy & F1-Score & Precision & Recall &  \\  \midrule
-        % &  & & & & &  & & & &  \\
         From Scratch &  & 0.8756 & 0.8742 & 0.8798 & 0.8756 &  & 0.8976 & 0.8971 & 0.9095 & 0.8989 &  \\
-        &  & & & & &  & & & &  \\
         From Pretrained &  & 0.9010 & 0.9002 & 0.9042 & 0.9010 &  & 0.9452 & 0.9452 & 0.9479 & 0.9458 &  \\
-        &  & & & & &  & & & &  \\
-        \begin{tabular}[c]{@{}l@{}}From Pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8302 & 0.8265 & 0.8409 & 0.8302 & & 0.8076 & 0.8037 & 0.8393 & 0.8098 & \vspace{5pt} \\ 
+        \begin{tabular}[c]{@{}l@{}}From Pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8302 & 0.8265 & 0.8409 & 0.8302 & & 0.8076 & 0.8037 & 0.8393 & 0.8098 &  \\ 
         \hline
         \end{tabular}%
     }
     \caption{Performance of our RoBERTa model for opcode sequence classification and malware detection}
-    \label{tab:seq-level-malberta-base}
+    \label{tab:malberta-base-results}
 \end{table}
 
 \noindent
-The results for our NLP based approach to detecting malware are presented in \autoref{tab:seq-level-malberta-base}. We find that on sequence level problems, where the model is tasked with identifying malicious opcode sequences, the pretrained model is comparible in terms of performance to our best baseline approaches (\autoref{tab:baseline-results}). When the attention layers are frozen however, performance is degraded by a significant margin. It is well established that an increase in model complexity is directly correlated with its performance~\citep{kaplanScalingLawsNeural2020}. The model architecture (shown in \autoref{tab:model-params}) used in our investigation has approximately $2.3\mathrm{e}+7$ parameters of which approximately 1\% are used for classification\footnote{23011330 in total, 263682 used in classification head}. Therefore, in the fine-tuned model, the complexity is significantly lower than the other models, meaning it is unable to reliably classify opcode sequences. Pretraining has a positive impact on the models sequence classification ability, as shown in the discepancy between the pretrained model, and the model trained from scratch. 
 
-However, these results only consider the sequence level accuracy. In order to identify malicious programs, we would need to aggregate each of these results into a single result for the file itself. To find this result, we take the mean of each class likelihood value for all sequence classification results. From this, we see the file level accuracy increase for both the pretrained model, and the model trained from scratch. However, the pretrained model with frozen attention weights actually decreases in terms of its performance, indicating the reduction has an adverse impact on its performance. We believe this to be caused by the fact that prior to its reduction, approximately 83\% of the sequences will be classified correctly. In comparison to the other models which are able to more reliably classify sequences, 
+
+\noindent
+In \cref{tab:malberta-base-results} we present both the sequence level, and file level classifiction metrics of the models trained in this investigation. We find that in sequence level tasks, where the model is tasked with classifying a subsequence of opcodes as either malicious or benign, the pretrained model offers the best performance. When this pretraining stage is skipped, performance degrades by approximately 3\%, indicating the prior understanding of opcode sequences is necessary to more accurately identify malicious sequences. In comparison to our baseline approaches presented in \cref{tab:baseline-results}, only the pretrained model offers similar performance. 
+
+In addition to this, the performance of the same pretrained model is impacted significantly when the parameters of its attention layers are frozen. These weights encode the understanding of langaue developed during the pretraining stage to create an encoded representation of a sequence, which is then used by a classification head to determine the class likelihood values of an opcode sequence. In fine-tuning tasks, these initial layer weights are frozen to reduce the computational cost, and the amount of training data used during training the model. However, in our case freezing of the attention layers has a significantly negative implication on the models performance effect. We believe this is a result of lower model complexity, as only approximately 1\% of the models parameters are updated during training. It is well established that the number of a models learnable parameters is directly associated with its performance~\citep{kaplanScalingLawsNeural2020}. By freezing the weights in the attention layers, the number of learnable parameters are reduced, leading to worse performance. \citep{leeWhatWouldElsa2019} show that when fine-tuning a model, freezing of the first 75\% of layers in similar models incurs only a 10\% decrease in performance against its fully-trainable equivalent. Therefore, a better strategy for selecting which layers to freeze in fine-tuning tasks is necessary. 
+
+These sequence level tasks however are not representative of our models performance in real world tasks. To understand how they perform in real-world malware identification tasks, we firstly classify each opcode sequence that make up the executable, and take the mean to find the file level class likelihood values. We find that the pretrained model achieves the best performance in file level tasks, with an F1 score of 0.94, outperforming our baseline approaches by a small margin. This increase in performance between sequence level and file level tasks is also seen in the non-pretrained model to a lesser extent. However, the model with frozen attention layers exhibits a decrease in performance on file level tasks as the class logits used to generate the file level logits are more likely to be incorrect, negatively impacting the lieklihood of the model correctly identifying the class of the file. 
 
 
 \section{Image Classification}
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{@{}lllll@{}}
+        \toprule
+        \textbf{Dataset} & \textbf{Accuracy} & \textbf{F1-Score} & \textbf{Precision} & \textbf{Recall} \\ \midrule
+        Full & 0.9316 & 0.9315 & 0.9314 & 0.9322 \\
+        Filtered & 0.9121 & 0.9121 & 0.9120 & 0.9122 \\ \bottomrule
+    \end{tabular}
+    \caption{Performance of the Image Classification Models for Malware detection}
+\end{table}
+
 \section{Obfuscation Experiment}
 
-\section{Analysis}
+\subsection{Sequence Classification}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-base.png}
+        \caption{File-level classification metrics}
+        \label{fig:seq-obf-file-level-base}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-base.png}
+        \caption{Sequence level classification metrics}
+        \label{fig:seq-obf-seq-level-base}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-certainty-base.png}
+        \caption{Confidence in model predictions}
+        \label{fig:seq-obf-certainty-base}
+    \end{subfigure}
+    \caption{Impact of obfuscation on the performance of file-level and sequence-level classification, and certainty of our RoBERTa sequence classification models.}
+    \label{fig:base-obf-results}
+\end{figure}
+
+We find that our sequence classification models seem to heavily rely on obfuscation as an indicator of a programs intent. This can be seen in \Cref{fig:seq-obf-file-level-base}, where an increased presence of obfuscated malicious samples drives an increase in the models classification performance. When only bengin files are obfuscated however, we see a marginal increase in classification accuracy, suggesting that there may have been a handful of obfuscated samples in our benign dataset. This idea is reinforced by the fact that we see greater classification accuracy when all files are obfusctaed as opposed to when only malicious samples are obfuscated. However, it may also be possible that when we apply obfuscation across all samples in the dataset, there is a higher likelihood of any given sample being obfuscated due to the larger sample size. Therefore, it may be that when we apply obfuscation across all samples, as opposed to a single class, more of a single class has been obfuscated which drives an increase in the classification accuracy, particularly with malicious programs. 
+
+When we consider sequence level accuracy however, this trend is pronounced to a lesser extent, as shown in \Cref{fig:seq-obf-seq-level-base}. We do see an a positive correlation between classification accuracy and obfuscation likelihood across all samples, however when obfuscation is applied to a single class of program, we see no meaningful trend. 
+
+To better understand how the model deals with obfuscation, we quantify the certainty in the predictions of the model by taking the Kullback-Leibler Divergence \cref{eq:kl_div} between the models output, and the uniform distribution. This metric tells us how confident a model is in its predictions, by measuring the distributional distance between its predictions, and a distribution representing the model picking at random. We find that certainty increases significantly across all trials as we increase the prevalance of obfuscation as shown in \cref{fig:seq-obf-certainty-base}. This suggests that the model considers obfuscation as highly indicative of a samples class. 
+
+\begin{equation}
+    D_{KL}\left(p~||~q\right) = \sum_{x \in \mathcal{X}} p\left(x\right) \log \left(\frac{p\left(x\right)}{q\left(x\right)}\right)\label{eq:kl_div}
+\end{equation}
+
+We also see that across all models tested in this experiment, the trends are largely similar. An example of this can be seen in how the file-level classification accuracy increases as we increase the presence of obfuscated malicious samples in the dataset. A similar trend can be seen across all models, however the extent of this varies between them. This suggests that our models are learning similar representations, yet are limited by other factors such as a prior understanding of the langauge, and insufficient model complexity. To visualise this, we perform representational similarity analysis (RSA) on the activations of our models using Clustered Kernel Alignment (CKA) as outlined in~\citep{kornblithSimilarityNeuralNetwork2019}. This metric quantifies the correspondance between hidden representations of data between models trained from different representations, which is visualised in \cref{fig:rsa-cka-base}. This shows how the similarity of representations in the attention layers of the pretrained and non-pretrained models decrease with the number of layers, and the demonstrate how the representation at the classification head are very similar. The model with frozen attention layers however, exhibits a greater similarity across the representations at all layers. However, the first layers seem to be most disimilar between the two. This suggests that the model pretrained model has most updates to its representations at the initial layers. Furthermore, the similarity in representations at the classification head of the frozen model are highly similar to the internal representations, suggesting that the frozen model is limited by its insufficient complexity, despite learning similar representations of information.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-base-pretrained-scratch.png}
+        \caption{Non-pretrained}
+        \label{fig:rsa-pretrained-scratch}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-base-pretrained-frozen.png}
+        \caption{Frozen attention weights}
+        \label{fig:rsa-pretrained-frozen}
+    \end{subfigure}
+    \caption{Representational Similarity Analysis of the pretrained model and the non-pretrained (\ref{sub@fig:rsa-pretrained-scratch}) and (\ref{sub@fig:rsa-pretrained-frozen}) frozen attention weight models using Clustered Kernel Alignment}
+    \label{fig:rsa-cka-base}
+\end{figure}
+
+We then repeat this experiment on two groups of models trained on modified datasets to see if data augmentation can produce models which are more resiliant to obfuscation. The first of these datasets has had all of its benign samples obfuscated prior to opcode extraction, and the second contains both the obfuscated and regular benign samples. We refer to these as our obfuscated bengin and partially obfuscated datasets respectively.  
+
+\subsubsection{Obfuscated Benign}
+
+The models trained on the this dataset all demonstrate increased classification accuracy when only bengin samples are obfuscated. When only malicious programs are obfuscated however, its accuracy decreases. In addition to this, when all samples are targets for obfuscation, the accuracy remains relatively consistent as shown in \cref{fig:seq-obf-file-level-ob}. This is to be expected, as the obfuscated benign samples used to train the model are generated using UPX, the same tool used to generate obfuscated samples in our experiment. Therefore, the model learns to recognise this form of obfuscation, as it is indicative of benign samples according to its training data. When all samples are obfuscated, the model is not able to accurately distinguish between the classes in the dataset, as it expects only benign samples to be obfuscated. Thus, when both classes are obfuscated, it is effectively guessing which class it belongs to. This can also be seen in its certainty, where the KL-Divergence decreases significantly as we increase the presence of obfuscation as shown in \cref{fig:seq-obf-certainty-ob}, suggesting the predicted class distribution approaches random selection with increased presence of obfuscation across both classes. 
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-ob.png}
+        \caption{File-level classification metrics}
+        \label{fig:seq-obf-file-level-ob}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-ob.png}
+        \caption{Sequence level classification metrics}
+        \label{fig:seq-obf-seq-level-ob}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-certainty-ob.png}
+        \caption{Confidence in model predictions}
+        \label{fig:seq-obf-certainty-ob}
+    \end{subfigure}
+    \caption{Impact of obfuscation on the performance of file-level and sequence-level classification, and certainty of our RoBERTa sequence classification models trained on the obfuscated bengin dataset.}
+    \label{fig:seq-obf-results-ob}
+\end{figure}
+
+\subsubsection{Partially Obfuscated Benign}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-pob.png}
+        \caption{File-level classification metrics}
+        \label{fig:seq-obf-file-level-pob}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-pob.png}
+        \caption{Sequence level classification metrics}
+        \label{fig:seq-obf-seq-level-pob}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-certainty-pob.png}
+        \caption{Certainty (KL-Divergence between logits and uniform distribution)}
+        \label{fig:seq-obf-certainty-pob}
+    \end{subfigure}
+    \caption{Impact of obfuscation on the performance of file-level and sequence-level classification, and certainty of our RoBERTa sequence classification models trained on the partially obfuscated benign dataset.}
+    \label{fig:seq-obf-results-pob}
+\end{figure}
+
+
 
 
 \end{document}

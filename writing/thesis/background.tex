@@ -26,21 +26,22 @@ In recent years, the sophistication~\citep{aleneziEvolutionMalwareThreats2020,ba
     \label{fig:malware-taxonomy}
 \end{figure}
 
+\noindent
 As outlined in the previous section, malware are a form of software that have a detrimental impact on the expected operation of an infected system. However, both this definition, and formal definitions, such as the one presented by~\citep{kramerGeneralDefinitionMalware2010a}, fail to define what is meant by harmful. Therefore, we define harmful behaviour as actions that are in violation of the Confidentiality-Integrity-Availability (CIA) triad~\citep{cochranCIATriadSafeguarding2024}. This is a principle used to guide security policies that outline the need for a system to be protected against unauthorised access (Confidentiality), modification (integrity), and reliable (availability) to be considered secure. 
 
 Malware can be categorised based on its behaviour, and its method of propagation. We present the following taxonomy based on the work of~\cite{manirihoSystematicLiteratureReview2024} shown in~\autoref{fig:malware-taxonomy} that outlines the different kinds of malware seen by security researchers, and how they are spread. Note that categories within this taxonomy are not mutually exclusive, as they often belong to multiple categories at once. 
 
 \begin{itemize}
-    \item \textbf{Worm} | Malicious software that automatically propagates throughout a network. 
-    \item \textbf{Virus} | Programs that modify other programs to replicate themselves throughout an infected host. 
-    \item \textbf{Trojans} | Malware that disguises itself as a legitimate program to infect a host.
-    \item \textbf{Backdoor} | Malware that provides covert remote access to infected systems. 
-    \item \textbf{Ransomware} | Malware that denies access to systems or information until a fee is paid.
-    \item \textbf{Spyware} | Malware that spy on the user without their knowledge, often extracting information such as credentials, keyboard logs, and live screenshots of the user's activity. 
-    \item \textbf{Botnet} | Malware that integrate infected systems into a coordinated network of agents. 
-    \item \textbf{Rootkit} | Malware providing privileged access to an infected system.
-    \item \textbf{Adware} | Malware that display advertisements on the host machine.
-    \item \textbf{Crypto-miner} | Malware that hijack the user's hardware to mine cryptocurrencies.
+    \item \textbf{Worm} --- Malicious software that automatically propagates throughout a network. 
+    \item \textbf{Virus} --- Programs that modify other programs to replicate themselves throughout an infected host. 
+    \item \textbf{Trojans} --- Malware that disguises itself as a legitimate program to infect a host.
+    \item \textbf{Backdoor} --- Malware that provides covert remote access to infected systems. 
+    \item \textbf{Ransomware} --- Malware that denies access to systems or information until a fee is paid.
+    \item \textbf{Spyware} --- Malware that spy on the user without their knowledge, often extracting information such as credentials, keyboard logs, and live screenshots of the user's activity. 
+    \item \textbf{Botnet} --- Malware that integrate infected systems into a coordinated network of agents. 
+    \item \textbf{Rootkit} --- Malware providing privileged access to an infected system.
+    \item \textbf{Adware} --- Malware that display advertisements on the host machine.
+    \item \textbf{Crypto-miner} --- Malware that hijack the user's hardware to mine cryptocurrencies.
 \end{itemize}
 
 \subsection{Evasion Techniques}
@@ -49,7 +50,7 @@ The earliest forms of malware detection used a combination of unique signatures 
 
 \subsubsection{Obfuscation}
 
-\begin{figure}[t]
+\begin{figure}
     \centering 
     \includegraphics[width=0.7\textwidth]{../assets/binary-packing.pdf}
     \caption{How binary packing can be used to reduce the size of an executable program, and obscure its behaviour.}

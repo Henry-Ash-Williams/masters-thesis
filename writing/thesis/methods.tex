@@ -8,9 +8,9 @@ In our investigation, we develop a static malware detection method inspired by m
 
 We also aim to establish a better understanding of the challenges faced by existing static approaches to malware detection, by testing both approaches on a dataset of unobfuscated executables. 
 
-\section{Dataset}
+\section{Dataset}\label{sec:dataset}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \begin{subfigure}{0.4\textwidth}
         \includegraphics[width=\textwidth]{size-dist.png}
@@ -23,8 +23,10 @@ We also aim to establish a better understanding of the challenges faced by exist
         \caption{Distribution of code analysis coverage of benign and malicious programs}
         \label{fig:dataset:obf-dist}
     \end{subfigure}
-    \hfill
-    % \vspace{0.25cm}
+    % \hfill
+    \vspace{1em}
+    \\
+    \centering
     \begin{subfigure}{0.4\textwidth}
         \centering
         \begin{tabular}{@{}ll@{}}
@@ -41,7 +43,7 @@ We also aim to establish a better understanding of the challenges faced by exist
     \label{fig:dataset}
 \end{figure}
 
-Our dataset consists of 11115 windows PE32 executables (\autoref{fig:dataset:class-dist}). Malicious files were gathered from VirusShare\footnote{\url{https://virusshare.com/about}}, which contains malware samples collected from real-world cybersecurity incidents with over 90 million samples. The benign executables were collected from the personal devices of the authors, and were scanned using Microsoft defender to ensure no mislabelled samples were present. 
+Our dataset consists of 11115 windows PE32 executables (\cref{fig:dataset:class-dist}). Malicious files were gathered from VirusShare\footnote{\url{https://virusshare.com/about}}, which contains malware samples collected from real-world cybersecurity incidents with over 90 million samples. The benign executables were collected from the personal devices of the authors, and were scanned using Microsoft defender to ensure no mislabelled samples were present. 
 
 Windows was selected as the target for this investigation due to the high availability of malicious software that attack this operating system. While malware that target other operating systems, such as MacOS and Linux, do exist, there are significantly fewer than those targeting windows. Therefore, each of our samples are stored in the Windows Portable Executable format. In addition to the logic and data of the program, this format also include various metadata that provide all the necessary information to the operating system to run the program. This includes external references, code size, and instruction set to name a few. 
 
@@ -49,7 +51,9 @@ Our dataset demonstrates wide variation in characteristics between classes. For 
 
 We believe that there is significant variation in the extent of obfuscation between classes. We use a static code analysis tool known as Rizin\footnote{\url{https://github.com/rizinorg/rizin}} to find the analysis coverage. This is the ratio of total code analysed to the total amount of code, and a lower value typically indicates a greater extent of obfuscation. In \autoref{fig:dataset:obf-dist}, find the distributions of analysis coverage between classes which shows that there is significantly more obfuscation in the malicious executables. 
 
-\subsection{Obfuscation Experiment Dataset}
+We also split the dataset into two subsets, a training set used to train our models, and a test set, used during evaluation. The train set consists of 80\% of the full dataset, and the test set consists of the remaining 20\%. 
+
+\subsection{Obfuscation Experiment Dataset}\label{ssec:secondary-dataset}
 
 \begin{figure}[h]
     \centering
@@ -120,7 +124,7 @@ We firstly establish a baseline using the conventional machine learning algorith
 In addition to the baseline approaches, we also use the feature vectors to quantify the similarity of programs with our dataset. We use the cosine similarity function (\autoref{eq:cosine-sim}) to find the pairwise similarity of all samples. We then take the average similarity between classes which are presented in \autoref{fig:similarity}. From this, we can assume that functions and libraries used by the malicious programs are more similar than the ones used by benign programs. 
 
 \begin{equation}
-    S\left(A,B\right) := \cos\left(\theta\right)={\mathbf {A} \cdot \mathbf {B} \over \|\mathbf {A} \|\|\mathbf {B} \|}\label{eq:cosine-sim}
+    S\left(A,B\right) := \cos\left(\theta\right)=\frac{\mathbf {A} \cdot \mathbf {B}}{\|\mathbf {A} \|\|\mathbf {B} \|}\label{eq:cosine-sim}
 \end{equation}
 
 \section{RoBERTa for Opcode Sequence Classification}
@@ -134,6 +138,7 @@ ret lea mov add add lea mov add add nop
     \label{fig:opcode-sequence}
 \end{figure}
 
+\noindent
 In recent years, transformer-based architectures for natural language processing have been shown to be highly effective across a wide variety of language based tasks. A significant advancement within the field was the development of the Bidirectional Encoded Representation from Transformers model, known as BERT~\citep{devlinBERTPretrainingDeep2019a}. This model uses an encoder-only architecture, based on the multi-head self-attention mechanism~\citep{vaswaniAttentionAllYou2023a} in conjunction with a pretraining stage to develop a deep understanding of language. Pretraining consists of two tasks, masked language modelling where the model predicts specific tokens based on their surrounding context, and next sentence prediction. The pretrained model is then fine-tuned on a downstream problem such as sequence classification, question answering, and general language understanding. At the time of publication, it was able to achieve state-of-the-art performance in General Language Understanding Evaluation (GLUE), Stanford Question Answering Dataset (SQuAD), and Situations With Adversarial Generations (SWAG) benchmarks and has been used extensively throughout the field. Fine-tuning of the pretrained model allows researchers to solve tasks with fewer training samples, short training periods, and less intensive compute requirements. RoBERTa extends upon the original BERT model by expanding the number of parameters, removing the next sentence prediction task from the pretraining stage, optimising its hyperparameters, and training on a larger corpus. 
 
 We develop a custom RoBERTa model, trained on opcode sequences for malware detection. Opcodes refer to the operation to be performed by the CPU, such as \texttt{add}, \texttt{cmp}, \texttt{mov}. These sequences are extracted from the disassembly of a program generated with radare2. The operands are then removed to reduce the vocabulary size of the model giving a collection of opcode sequences as shown in \autoref{fig:opcode-sequence} for each program within the dataset. These opcode sequences are tokenized with a word level tokenizer, where each token is a single word within the corpus as the vocabulary size is relatively low following the removal of operands. 

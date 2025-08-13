@@ -59,7 +59,6 @@ In addition to this, the performance of the same pretrained model is impacted si
 
 These sequence level tasks however are not representative of our models performance in real world tasks. To understand how they perform in real-world malware identification tasks, we firstly classify each opcode sequence that make up the executable, and take the mean to find the file level class likelihood values. We find that the pretrained model achieves the best performance in file level tasks, with an F1 score of 0.94, outperforming our baseline approaches by a small margin. This increase in performance between sequence level and file level tasks is also seen in the non-pretrained model to a lesser extent. However, the model with frozen attention layers exhibits a decrease in performance on file level tasks as the class logits used to generate the file level logits are more likely to be incorrect, negatively impacting the lieklihood of the model correctly identifying the class of the file. 
 
-
 \section{Image Classification}
 
 \begin{table}[h]
@@ -68,10 +67,24 @@ These sequence level tasks however are not representative of our models performa
         \toprule
         \textbf{Dataset} & \textbf{Accuracy} & \textbf{F1-Score} & \textbf{Precision} & \textbf{Recall} \\ \midrule
         Full & 0.9316 & 0.9315 & 0.9314 & 0.9322 \\
-        Filtered & 0.9121 & 0.9121 & 0.9120 & 0.9122 \\ \bottomrule
+        Filtered & 0.9306 & 0.9306 & 0.9309 & 0.9306 \\ \bottomrule
     \end{tabular}
     \caption{Performance of the Image Classification Models for Malware detection}
+    \label{tab:image-classifier-model-results}
 \end{table}
+
+Both image classification models demonstrate comparible performance to our baseline approaches, as shown in \cref{tab:image-classifier-model-results}. In addition to this, both models outperform the non-pretrained and the frozen attention weight sequence classification models. However, they are both beaten by the pretrained sequence classification model in file level tasks. Images used by this model contains the entire executable, including the metadata stored in the executable header, static data, and the code itself. Our sequence classification models however, only use the opcodes of the instructions to determine a programs classification. Therefore, pretrained sequence classification models are more accurately identify malware, with less information, and by integrating the aforementioned information used by image classification models, we may be able to further improve its ability to recognise malicious programs.
+
+We have also previously shown that there is a significant discrepancy in the size of executables across classes in our dataset. As we are required to resize images to a constant resolution of 320\(\times\)320 pixels, artifacts originating from the resizing algorithm may be more pervasive in a single class. This could prevent the model from accurately identifying malware, as it may rely on the presence of these artifacts to distinguish between malicious and benign software. Therefore, we train another model which is trained on a subset of our dataset, which has a more consistent distribution of executable sizes between classes. A genetic algorithm was used to identify this subset, and the resulting collection has distributional distance of zero, and an approximately equal ratio of malicious to benign samples (\cref{fig:filtered-ds-size}). However, the models trained on this dataset demonstrate performance similar to models trained on the full dataset. These results suggest that this is not be the case, as the size of a program has very little impact on its classification. 
+
+Furthermore, the architecture of these models make them highly efficient. We are able to achieve comprable performance to that of the sequence classification models, with only approximately 20\% of the paramters. This enable these models to be run on devices with lower computational resources, with only a minor decrease in performance. In addition to this, the entire program is classified at once, as opposed to our RoBERTa model, which iterates over each sequence that make up its code. Therefore, this model is much faster to perform inference.  
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{filtered-dataset-size-dist.png}
+    \caption{Distribution of executable size in the filtered dataset}
+    \label{fig:filtered-ds-size}
+\end{figure}
 
 \section{Obfuscation Experiment}
 
@@ -189,7 +202,26 @@ The models trained on the this dataset all demonstrate increased classification 
     \label{fig:seq-obf-results-pob}
 \end{figure}
 
+\subsection{Image Classifer}
 
+The impact of obfuscation on our image classification models is shown in \Cref{fig:img-obfs-results}. We find that both of the image based malware detection models are more likely to identify malicious software based on the presence of obfuscation. In both cases, we see that the presence of obfuscation increases across our malicious samples is positively correlated with the classification accuracy. In comparison to this, an increased prevalance of obfuscation in benign samples leads to a degradation in performance. Furthermore, when obfuscation is applied across all samples in this dataset, we see no meaningful trend in classification accuracy as obfuscation becomes more common. 
 
+This heavily suggests that these models use the presence of obfuscation as an indicator of an executables kind. 
+
+\begin{figure}
+    \centering 
+    \begin{subfigure}{\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{img-obf-file-level.png}
+        \caption{Classification Accuracy}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{img-obf-certainty.png}
+        \caption{Confidence in model predictions}
+    \end{subfigure}
+    \caption{Impact of obfuscation on the performance of image-based malware detection models, and the confidence of the model in its predictions.}
+    \label{fig:img-obfs-results}
+\end{figure}
 
 \end{document}

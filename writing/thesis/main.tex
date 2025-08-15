@@ -2,6 +2,9 @@
 
 \documentclass[a4paper, 12pt, UKenglish]{report}
 
+\newlength{\alphabet}
+\settowidth{\alphabet}{\normalfont abcdefghijklmnopqrstuvwxyz}
+
 \usepackage[l2tabu,orthodox]{nag}
 \usepackage[all,warning]{onlyamsmath}
 \usepackage{inputenc}
@@ -9,12 +12,9 @@
 \usepackage{babel}
 \usepackage[babel=true]{microtype}
 \usepackage[backend=bibtex,natbib,style=authoryear,maxcitenames=1]{biblatex} 
-\newlength{\alphabet}
-\settowidth{\alphabet}{\normalfont abcdefghijklmnopqrstuvwxyz}
 \usepackage[textwidth=2.3\alphabet,margin=2cm]{geometry}
-% \usepackage{pdfx}
 \usepackage{hyperref} 
-
+\usepackage{enumitem}
 \usepackage{siunitx} 
 \usepackage{graphicx} 
 \usepackage[super]{nth} 
@@ -40,6 +40,21 @@
 \usepackage{tocloft}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\usepackage{subfiles}
+\usepackage[compact]{titlesec}
+
+% \floatname{algorithm}{Procedure}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\setmainfont[
+  Ligatures=TeX,
+  Numbers={OldStyle, Proportional},
+]{Linux Libertine O}
+\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
+\setmathfont[Scale=MatchUppercase]{Libertinus Math}
 
 
 \widowpenalty=10000
@@ -48,7 +63,6 @@
 %% "Proper" small caps
 \newcommand{\flatcaps}[1]{\textsc{\MakeLowercase{#1}}}
 %% 'compact' reduces the space above and below headings to a single blank line
-\usepackage[compact]{titlesec}
 \titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
 %% Upright (normal) numbers here
 \titleformat{\subsection}{\large}{\thesubsection}{.6em}{\flatcaps}
@@ -70,23 +84,11 @@
 }
 
 \frenchspacing
-\newboolean{outline}
-\setbool{outline}{true}
 
-\usepackage{fontspec}
-\usepackage{unicode-math}
-\setmainfont[
-  Ligatures=TeX,
-  Numbers={OldStyle, Proportional},
-]{Linux Libertine O}
-\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
-\setmathfont[Scale=MatchUppercase]{Libertinus Math}
-
-
-\usepackage{subfiles}
 
 \addbibresource{../references.bib}
 \graphicspath{{./assets}}
+
 
 \begin{document}
 
@@ -94,11 +96,11 @@
     \begin{center}
         \includegraphics[width=5cm]{uoslogo}\\[2cm]% \bigskip
         %\vspace*{.05\textheight}
-        %\hrulefill
+        % \hrulefill
         \textsc{\Large Masters Thesis}
-        %\hrulefill\\%[0.5cm] % Thesis type
+        % \hrulefill\\%[0.5cm] % Thesis type
 
-        \Huge \textbf{Placeholder title}\\[3cm] % Thesis title
+        \Huge \textbf{On the Effectiveness of Deep Learning Techniques for Malware Detection and their Resiliance to Obfuscation}\\[3cm] % Thesis title
 
         \large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of Master of Research in Advanced Artificial Intelligence}\\[0.5cm] % University 
         \textit{in the}\\[0.5cm]
@@ -136,6 +138,7 @@
 \microtypesetup{protrusion=true}
 
 \chapter{Introduction}
+
 
 % \ifthenelse{\boolean{outline}}{
 % \noindent\fbox{%
@@ -296,68 +299,114 @@
 
 \chapter{Discussion}
 
-% \noindent\fbox{%
-%     \parbox{\textwidth}{%
-%         \textbf{Word Count: 3000}
 
-%         \begin{itemize}
-%             \item Are dynamic methods vulnerable to advanced obfuscation techniques? 
-            
-%             \begin{itemize}
-%                 \item It's possible to hide API calls from standard API call hooking techniques 
-%                 \item Other redundant API calls may be made to obfuscate call sequences 
-%                 \item Advanced malware (i.e. Rootkits) are able to stealthily perform malicious actions on the host
-%             \end{itemize}
 
-%             \item Are opcode sequences suitable features for NLP based malware detection? 
-            
-%             \begin{itemize}
-%                 \item Full disassembly may offer provide better information for transformer architectures 
-%                 \item Was not tested due to time/compute limitations 
-%                 \item Byte-level modelling may work, but the presence of polymorphic malware and encrypted payloads may be challenging to model accurately  
-%             \end{itemize}
+\begingroup 
+\small
+\setlist{nolistsep}
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        \textbf{Word Count: 3000}
 
-%             \item Is executable packing (UPX) a good proxy for the obfuscation methods seen in the wild? 
-            
-%             \begin{itemize}
-%                 \item What other obfuscation techniques and solutions could work for this? 
-%             \end{itemize}
+        \begin{itemize}
+            % \setlength\itemsep{0.1em}
 
-%             \item Could diffusion modelling enable machine de-obfuscation? 
+            \item Are dynamic methods vulnerable to advanced obfuscation techniques? 
+            \begin{itemize}
+                \item It's possible to hide API calls from standard API call hooking techniques 
+                \item Other redundant API calls may be made to obfuscate call sequences 
+                \item Advanced malware (i.e. Rootkits) are able to stealthily perform malicious actions on the host
+            \end{itemize}
 
-%             \begin{itemize}
-%                 \item Obfuscation is analgous to noise in a signal 
-%                 \item Diffusion models are well suited to denoising of data 
-%                 \item Might be able to de-obfuscate programs to generate large scale 
-%             \end{itemize}
+            \item Are opcode sequences suitable features for NLP based malware detection? 
+            \begin{itemize}
+                \item Full disassembly may offer provide better information for transformer architectures 
+                \item Was not tested due to time/compute limitations 
+                \item Byte-level modelling may work, but the presence of polymorphic malware and encrypted payloads may be challenging to model accurately  
+            \end{itemize}
 
-%             \item Data limitations
-            
-%             \begin{itemize}
-%                 \item Lack of large-scale, benign executable datasets 
-%                 \item High presence of obfuscation in real-world malware samples 
-%                 \item Unobfuscated malware samples are not representative of malware seen in the wild as they are often ``toy'' projects, and lack advanced capabilities 
-%                 \item Unobfuscated, advanced malware are hard to find   
-%             \end{itemize}
+            \item Is executable packing (UPX) a good proxy for the obfuscation methods seen in the wild? 
+            \begin{itemize}
+                \item What other obfuscation techniques and solutions could work for this? 
+            \end{itemize}
 
-%             \item Issues with Obfuscation Experiment 
-            
-%             \begin{itemize}
-%                 \item single trial and random selection of obfuscated samples may produce less meaningful results 
-%                 \item trials should be repeated to see if this changes things
-%                 \item trials took a long time to run so only a single run was possible. 
-%             \end{itemize}
+            \item Could diffusion modelling enable machine de-obfuscation? 
+            \begin{itemize}
+                \item Obfuscation is analgous to noise in a signal 
+                \item Diffusion models are well suited to denoising of data 
+                \item Might be able to de-obfuscate programs to generate large scale 
+            \end{itemize}
 
-%             \item Conclusion 
-%         \end{itemize}
-%     }%
-% }
+            \item Data limitations
+            \begin{itemize}
+                \item Lack of large-scale, benign executable datasets 
+                \item High presence of obfuscation in real-world malware samples 
+                \item Unobfuscated malware samples are not representative of malware seen in the wild as they are often ``toy'' projects, and lack advanced capabilities 
+                \item Unobfuscated, advanced malware are hard to find   
+            \end{itemize}
+
+            \item Issues with Obfuscation Experiment 
+            \begin{itemize}
+                \item single trial and random selection of obfuscated samples may produce less meaningful results 
+                \item trials should be repeated to see if this changes things
+                \item trials took a long time to run so only a single run was possible. 
+            \end{itemize}
+
+            \item Conclusion 
+        \end{itemize}
+    }%
+}
+\endgroup 
+
+\includeSection{./discussion.tex}
 
 \printbibliography
 
 
 \appendix 
-\chapter{Implementation Details}
+\chapter{Supplimental Information}
+\section{Disassembly Extraction and Processing}
+
+\begin{algorithm}
+\caption{Extract Disassembly from an Executable}
+\label{algo:disasm-extraction}
+\begin{algorithmic}[1]
+\Require Path to executable \(P\)
+\Ensure Sequence of disassembled instructions of \(P\)
+\State \(L \gets\) empty list
+\State Load \(P\) into radare2
+\State Perform full analysis \Comment{R2 Command: \texttt{aaa}}
+\If{Instruction set of \(P\) is not x86}
+    \State \Return
+\EndIf
+\State \(S \gets\) list of sections in \(P\) \Comment{R2 Command: \texttt{iS}}
+\State \(S_x \gets\) filter \(S\) for executable sections 
+\ForAll{\(s \in S_x\)}
+    \State \(o \gets\) section offset of \(s\)
+    \State \(n \gets\) section size of \(s\)
+    \State \(D \gets\) disassemble bytes from \(o\) to \(o + n\) \Comment{R2 Command: \texttt{pda} \(o\) \texttt{@} \(o + n\)}
+    \State \(D' \gets\) filtered \(D\) to remove padding bytes 
+    \State Append \(D'\) to \(L\)
+\EndFor
+\State \Return \(L\)
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Extract Opcodes from Assembly Instructions}
+\label{algo:opcode-sequence-extraction}
+\begin{algorithmic}[1]
+\Require List of assembly instructions \(I\)
+\Ensure Sequence of opcodes
+\State \(L \gets\) empty list
+\ForAll{\(i \in I\)}
+    \State \(i' \gets\) split \(i\) on spaces
+    \State Append \(i'_0\) to \(L\)
+\EndFor
+\State \Return \(L\)
+\end{algorithmic}
+\end{algorithm}
+
 
 \section{Conversion of Executable Programs to Greyscale Images}\label{apdx:prog-to-img}
 
@@ -378,7 +427,105 @@
 
 \section{Genetic Algorithm}
 
-\chapter{Supplimental results}
+\begin{algorithm}
+\caption{Apply a random mutation to a genotype}
+\label{algo:mutate}
+\begin{algorithmic}[1]
+\Require Genome \(G \in \{0, 1\}^N\) of \(N\) binary values, mutation rate \(0 < p \leq 1\) 
+\Ensure Mutated Genome \(G' \in \{0, 1\}^N\) 
+\State \(V \in \mathbb{R}^N \gets\) a vector of random numbers in \([0, 1]\) 
+\State \(M \in \{0, 1\}^N \gets\) a binary vector where \(V_i < p\) 
+\State \(G' \gets G \oplus M\) 
+\State \Return \(G'\)
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Compute the fitness of a genotype}
+\label{algo:fitness}
+\begin{algorithmic}[1]
+\Require Genome \(G \in \{0, 1\}^N\) of \(N\) binary values
+\Ensure The fitness \(f \in \mathbb{R}\) of \(G\) 
+\State \(N_m \gets \) Number of malicious samples in \(G\)
+\State \(N_b \gets \) Number of benign samples in \(G\)
+\State \(\mu_m, \sigma_m \gets\) mean and variance of the size of malicious programs in \(G\)
+\State \(\mu_b, \sigma_b \gets\) mean and variance of the size of benign programs in \(G\) 
+\State \(d \gets\) the Kullback-Leibler Divergence between \(p_m \sim \mathcal{N}\left(\mu_m, \sigma_m\right)\) and \(p_b \sim \mathcal{N}\left(\mu_b, \sigma_b\right)\)
+\State \(r \gets \text{clip}\left(1 - \frac{N_b}{N_m}, 0, 1\right)\)
+\State \(w_d \gets - \left(\frac{e^{-d}}{1 + e^{-d}}\right)\)
+\State \(w_r \gets 1 - w_d\)
+\State \(f \gets w_d d + w_r r\)
+\State \Return \(f\)
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Simulate Evolution in a Population}
+\label{algo:simulate-single}
+\begin{algorithmic}[1]
+\Require The fittest member of the previous population \(G \in \{0, 1\}^N\), Population size \(N_p\), Mutation rate \(p_m\)
+\Ensure The fittest member of the current population \(G' \in \{0, 1\}^N\)
+\State \(P \gets N_p\) Copies of \(G\)
+\State \(F_P \gets\) Fitness of current population \Comment{\Cref{algo:fitness}}
+\State \(O \gets\) Mutated population of offspring from \(P\) with some mutation rate \(p_m\) \Comment{\Cref{algo:mutate}}
+\State \(F_O \gets\) Fitness of offspring population \Comment{\Cref{algo:fitness}}
+\State \(P' \gets\) New population where the fittest of a parent and its offspring survives 
+\State \(G' \gets\) The fittest member of \(P'\)
+\State \Return \(G'\)
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Simulate the process of evolution over multiple generations}
+\label{algo:simulate-full}
+\begin{algorithmic}[1]
+\Require Number of generations to simulate \(N_g\) 
+\Ensure The fittest member of the last generation \(G\) 
+\State \(G_0 \in \{0, 1\}^N\gets\) initial random genotype 
+\For{\(i \gets 0\) to \(N_g\)} 
+\State \(G_{i + 1} \gets\) Simulate a population with \(G_i\) \Comment{\Cref{algo:simulate-single}}
+\State \(F_i \gets\) Fitness of \(G_{i + 1}\) \Comment{\Cref{algo:fitness}}
+\If{\(F_i\) has not decreased in the past 10 generations}
+\State \Return \(G_{i + 1}\) 
+\EndIf 
+\EndFor
+\State \Return \(G_i\)
+\end{algorithmic}
+\end{algorithm}
+
+
+\section{Centered Kernel Alignment}\label{apdx:cka}
+
+Given two matrices of \(n\) examples of the output from layers in two neural networks trained from different initialisations, \(\mathbf{X} \in \mathbb{R}^{n \times d_x}\), and \(\mathbf{Y} \in \mathbb{R}^{n \times d_y}\), the Centered Kernel Alignment between these representations is defined as follows: 
+
+\begin{equation}
+    \text{CKA}\left(\mathbf{K}, \mathbf{L}\right) = \frac{\text{HSIC}\left(\mathbf{K}, \mathbf{L}\right)}{\sqrt{\text{HSIC}\left(\mathbf{K}, \mathbf{K}\right) \cdot \text{HSIC}\left(\mathbf{L}, \mathbf{L}\right)}}\label{eq:cka}
+\end{equation}
+
+\noindent
+Where \(\text{HSIC}\) refers to the Hilbert-Schmidt independence criterion, defined in \cref{eq:hsic}, \(\mathbf{K} = \mathbf{X}\mathbf{X}^T\), and \(\mathbf{L} = \mathbf{Y}\mathbf{Y}^T\). 
+
+\begin{equation}
+    \text{HSIC}\left(\mathbf{K}, \mathbf{L}\right) = \frac{\text{tr}\left(\mathbf{KHLH}\right)}{\left(n - 1\right)^2}\label{eq:hsic}
+\end{equation}
+
+\noindent
+Where \(\mathbf{H} = \mathbf{I}_n - \frac{1}{n}\mathbf{J}_n\), and \(\mathbf{J}_n\) is an \(n \times n\) matrix of ones. 
+\section{Windows Portable Executable File Format}\label{apdx:pe}
+
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.3\textwidth]{../assets/pe.png}
+    \caption{A high level overview of the windows portable executable file format.}
+    \label{fig:pe}
+\end{figure}
+
+\noindent
+Windows executables are defined in the portable executable file format. These files are not written by developers themselves as they require expert knowledge of low level programming, and instead are generated by a compiler. A high level overview of this file format is shown in Figure~\ref{fig:pe}, and it has been in use since Windows 95, making it incredibly widespread throughout the internet. 
+
+The file begins with a DOS (Disk Operating System) header for compatibility reasons~\citep{bridgePEFormat2025}, which is followed by the PE header, containing the information necessary for the programs execution. This includes the number of sections and symbols, and the instruction set used by the program. The section headers contain further metadata about the sections which comprise the program, and reference their location in memory. It also stores a pointer to a table referencing any external functions used by the program, such as the Windows API\@, and other dynamically linked objects, known as DLLs~\citep{ainapureDynamicLinkLibrary2025}. 
+
+\chapter{Supplimental Results}
 
 \section{Obfuscated Benign Sequence Classification Metrics}
 
@@ -409,4 +556,60 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  &  &  &  &  &  \\
 \end{tabular}%
 }
 \end{table}
+
+\newpage
+
+\section{Representational Similarity Analysis of Obfuscated Benign Sequence Classification Models}
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-ob-pretrained-scratch.png}
+        \caption{RSA of the pretrained and non-pretrained models.}
+        \label{fig:rsa-ob-pretrained-scratch}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-ob-pretrained-frozen.png}
+        \caption{RSA of the pretrained model and our pretrained model with frozen attention layer weights.}
+        \label{fig:rsa-ob-pretrained-frozen}
+    \end{subfigure}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-ob-frozen-scratch.png}
+        \caption{RSA of the pretrained model with frozen attention layer weights and the non-pretrained model.}
+        \label{fig:rsa-ob-pretrained-frozen}
+    \end{subfigure}
+    \caption{Representational Similarity Analysis (RSA) of our obfuscated benign models using Centered Kernel Alignment.}
+    \label{fig:rsa-cka-ob}
+\end{figure}
+
+\newpage
+
+\section{Representational Similarity Analysis of Partially Obfuscated Benign Sequence Classification Models}
+
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-pob-pretrained-scratch.png}
+        \caption{RSA of the pretrained and non-pretrained models.}
+        \label{fig:rsa-pob-pretrained-scratch}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-pob-pretrained-frozen.png}
+        \caption{RSA of the pretrained model and our pretrained model with frozen attention layer weights.}
+        \label{fig:rsa-pob-pretrained-frozen}
+    \end{subfigure}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-pob-frozen-scratch.png}
+        \caption{RSA of the pretrained model with frozen attention layer weights and the non-pretrained model.}
+        \label{fig:rsa-pob-pretrained-frozen}
+    \end{subfigure}
+    \caption{Representational Similarity Analysis (RSA) of our partially obfuscated benign models using Centered Kernel Alignment.}
+    \label{fig:rsa-cka-pob}
+\end{figure}
+
 \end{document}

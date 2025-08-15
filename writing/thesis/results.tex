@@ -50,9 +50,6 @@ Our results indicate that the best algorithm for classification was the decision
 \end{table}
 
 \noindent
-
-
-\noindent
 In \cref{tab:malberta-base-results} we present both the sequence level, and file level classifiction metrics of the models trained in this investigation. We find that in sequence level tasks, where the model is tasked with classifying a subsequence of opcodes as either malicious or benign, the pretrained model offers the best performance. When this pretraining stage is skipped, performance degrades by approximately 3\%, indicating the prior understanding of opcode sequences is necessary to more accurately identify malicious sequences. In comparison to our baseline approaches presented in \cref{tab:baseline-results}, only the pretrained model offers similar performance. 
 
 In addition to this, the performance of the same pretrained model is impacted significantly when the parameters of its attention layers are frozen. These weights encode the understanding of langaue developed during the pretraining stage to create an encoded representation of a sequence, which is then used by a classification head to determine the class likelihood values of an opcode sequence. In fine-tuning tasks, these initial layer weights are frozen to reduce the computational cost, and the amount of training data used during training the model. However, in our case freezing of the attention layers has a significantly negative implication on the models performance effect. We believe this is a result of lower model complexity, as only approximately 1\% of the models parameters are updated during training. It is well established that the number of a models learnable parameters is directly associated with its performance~\citep{kaplanScalingLawsNeural2020}. By freezing the weights in the attention layers, the number of learnable parameters are reduced, leading to worse performance. \citep{leeWhatWouldElsa2019} show that when fine-tuning a model, freezing of the first 75\% of layers in similar models incurs only a 10\% decrease in performance against its fully-trainable equivalent. Therefore, a better strategy for selecting which layers to freeze in fine-tuning tasks is necessary. 
@@ -125,22 +122,28 @@ To better understand how the model deals with obfuscation, we quantify the certa
     D_{KL}\left(p~||~q\right) = \sum_{x \in \mathcal{X}} p\left(x\right) \log \left(\frac{p\left(x\right)}{q\left(x\right)}\right)\label{eq:kl_div}
 \end{equation}
 
-We also see that across all models tested in this experiment, the trends are largely similar. An example of this can be seen in how the file-level classification accuracy increases as we increase the presence of obfuscated malicious samples in the dataset. A similar trend can be seen across all models, however the extent of this varies between them. This suggests that our models are learning similar representations, yet are limited by other factors such as a prior understanding of the langauge, and insufficient model complexity. To visualise this, we perform representational similarity analysis (RSA) on the activations of our models using Clustered Kernel Alignment (CKA) as outlined in~\citep{kornblithSimilarityNeuralNetwork2019}. This metric quantifies the correspondance between hidden representations of data between models trained from different representations, which is visualised in \cref{fig:rsa-cka-base}. This shows how the similarity of representations in the attention layers of the pretrained and non-pretrained models decrease with the number of layers, and the demonstrate how the representation at the classification head are very similar. The model with frozen attention layers however, exhibits a greater similarity across the representations at all layers. However, the first layers seem to be most disimilar between the two. This suggests that the model pretrained model has most updates to its representations at the initial layers. Furthermore, the similarity in representations at the classification head of the frozen model are highly similar to the internal representations, suggesting that the frozen model is limited by its insufficient complexity, despite learning similar representations of information.
+We also see that across all models tested in this experiment, the trends are largely similar. An example of this can be seen in how the file-level classification accuracy increases as we increase the presence of obfuscated malicious samples in the dataset. A similar trend can be seen across all models, however the extent of this varies between them. This suggests that our models are learning similar representations, yet are limited by other factors such as a prior understanding of the langauge, and insufficient model complexity. To visualise this, we perform representational similarity analysis (RSA) on the activations of our models using Centered Kernel Alignment (CKA) as outlined in~\citep{kornblithSimilarityNeuralNetwork2019} (shown in \cref{apdx:cka}). This metric quantifies the correspondance between hidden representations of data between models trained from different representations, which is visualised in \cref{fig:rsa-cka-base}. This shows how the similarity of representations in the attention layers of the pretrained and non-pretrained models decrease with the number of layers, and the demonstrate how the representation at the classification head are very similar. The model with frozen attention layers however, exhibits a greater similarity across the representations at all layers. However, the first layers seem to be most disimilar between the two. This suggests that the model pretrained model has most updates to its representations at the initial layers. Furthermore, the similarity in representations at the classification head of the frozen model are highly similar to the internal representations, suggesting that the frozen model is limited by its insufficient complexity, despite learning similar representations of information.
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-base-pretrained-scratch.png}
-        \caption{Non-pretrained}
+        \caption{RSA of the pretrained and non-pretrained models.}
         \label{fig:rsa-pretrained-scratch}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-base-pretrained-frozen.png}
-        \caption{Frozen attention weights}
+        \caption{RSA of the pretrained model and our pretrained model with frozen attention layer weights.}
         \label{fig:rsa-pretrained-frozen}
     \end{subfigure}
-    \caption{Representational Similarity Analysis of the pretrained model and the non-pretrained (\ref{sub@fig:rsa-pretrained-scratch}) and (\ref{sub@fig:rsa-pretrained-frozen}) frozen attention weight models using Clustered Kernel Alignment}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-base-frozen-scratch.png}
+        \caption{RSA of the pretrained model with frozen attention layer weights and the non-pretrained model.}
+        \label{fig:rsa-pretrained-frozen}
+    \end{subfigure}
+    \caption{Representational Similarity Analysis (RSA) of our baseline models using Centered Kernel Alignment.}
     \label{fig:rsa-cka-base}
 \end{figure}
 
@@ -202,11 +205,15 @@ The models trained on the this dataset all demonstrate increased classification 
     \label{fig:seq-obf-results-pob}
 \end{figure}
 
+In comparison to the models trained on our baseline, and obfuscated benign datasets, the results of the models trained on the partially obfuscated benign dataset demonstrate significant variation between eachother. Our previous models show that models trained on the same dataset, exhibit similar trends in performance as we increase the presence of obfuscation. However, the model trained to identify malware with no pretraining step shows that classification accuracy increases slightly with the prevalance of obfuscation across all obfuscation targets. The pretrained, and frozen attention weight models however, increase significantly as obfuscated benign samples increase, while obfuscated malicious samples have an adverse impact on its accuracy. This suggests that the non-pretrained model learns to identify malware beyond the presence of obfuscation. The other models that include a pretraining stage however, have both identified obfuscation as an indicator of benign programs. 
+
+In addition to this, we also see that these models also become increasingly uncertain as we increase the presence of obfuscation. Our obfuscated benign models also demonstrate this behavior, indicating that obfuscated benign samples in the training dataset leads to less accurate predictions. 
+
 \subsection{Image Classifer}
 
 The impact of obfuscation on our image classification models is shown in \Cref{fig:img-obfs-results}. We find that both of the image based malware detection models are more likely to identify malicious software based on the presence of obfuscation. In both cases, we see that the presence of obfuscation increases across our malicious samples is positively correlated with the classification accuracy. In comparison to this, an increased prevalance of obfuscation in benign samples leads to a degradation in performance. Furthermore, when obfuscation is applied across all samples in this dataset, we see no meaningful trend in classification accuracy as obfuscation becomes more common. 
 
-This heavily suggests that these models use the presence of obfuscation as an indicator of an executables kind. 
+This heavily suggests that these models use the presence of obfuscation as an indicator of an executables kind. The certainty of the base model's predictions seem to indicate 
 
 \begin{figure}
     \centering 

@@ -16,21 +16,20 @@ MAX_INSTR_COUNT = 10000
 DEBUG = False
 DATA_DIR = os.path.join(BASE, "disassembly")
 
+
 def get_opcodes(path: PathLike):
     if not os.path.exists(path):
         raise FileNotFoundError(f"{path}")
 
     try:
-        r2 = r2pipe.open(path, ['-2'])
+        r2 = r2pipe.open(path, ["-2"])
         r2.cmd("aaa")
         info = r2.cmdj("ij")
         if not info or info["bin"].get("arch") != "x86":
             return []
 
         section_info = r2.cmdj("iSj")
-        executable_sections = [
-            s for s in section_info if "x" in s.get("perm", "")
-        ]
+        executable_sections = [s for s in section_info if "x" in s.get("perm", "")]
 
         full_disassembly = []
         for section in executable_sections:
@@ -39,8 +38,7 @@ def get_opcodes(path: PathLike):
 
             disassembly = r2.cmdj(f"pdaj {size} @ {start}")
             valid = [
-                instr for instr in disassembly
-                if set(instr.get("bytes", [])) != {"0"}
+                instr for instr in disassembly if set(instr.get("bytes", [])) != {"0"}
             ]
             full_disassembly.extend(valid)
             time.sleep(0.01)  # Yield to scheduler
@@ -50,9 +48,11 @@ def get_opcodes(path: PathLike):
     except Exception:
         return []
 
+
 def restricted_run(input_path, output_path):
     try:
         import resource
+
         # Limit memory to 1.5GB
         # soft, hard = resource.getrlimit(resource.RLIMIT_AS)
         # resource.setrlimit(resource.RLIMIT_AS, (int(1.5e9), hard))
@@ -71,6 +71,7 @@ def restricted_run(input_path, output_path):
         with open(output_path, "w") as fp:
             json.dump(opcodes, fp)
 
+
 def run_with_timeout(input_path, output_path, timeout=60):
     p = Process(target=restricted_run, args=(input_path, output_path))
     p.start()
@@ -80,6 +81,7 @@ def run_with_timeout(input_path, output_path, timeout=60):
         p.terminate()
         p.join()
         raise TimeoutError(f"{input_path} exceeded {timeout}s")
+
 
 def main():
     set_start_method("spawn", force=True)
@@ -110,6 +112,7 @@ def main():
     if not DEBUG:
         with open(os.path.join(BASE, "labels.json"), "w") as fp:
             json.dump(labels, fp)
+
 
 if __name__ == "__main__":
     main()

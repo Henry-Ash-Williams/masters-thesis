@@ -27,3 +27,8 @@ wandb/
 *.synctex.gz 
 
 *.npy 
+writing/thesis/creationdate.lua
+writing/thesis/main.lof
+writing/thesis/pdfa.xmpi
+writing/thesis/main.toc
+writing/thesis/main.lot

@@ -1,0 +1,88 @@
+% !TeX root = main.tex
+\documentclass[main.tex]{subfiles}
+
+\begin{document}
+
+% Max WC = 3,482
+
+\noindent
+In this research, we assess the suitablility of deep learning techniques for static malware detection, and the resiliance of these approaches to obfuscation. We evaluate three approaches to this problem, consisting of linear machine learning models, transformer based sequence classification, and an image classification model using a Convolutional Neural Network. 
+
+
+Linear models comprise our baseline against which all other approaches are compared. We test a logistic regression, decision trees, and support vector machine with the radial basis function (RBF) kernel. Each of these models are trained on information extracted from the import tables of programs in our dataset, informing the models as to the external functions and libraries used by a program. 
+
+Our sequence classification approach uses modern natural language processing techniques, such as transformer based langauge models and pretraining. We use a BERT based architecture, trained on sequences of assembly instructions. We assess the impact of pretraining by training two sequence classification models, one using a pretrained masked language model, and another trained from a random initialisation. We also train another pretrained model which has had all parameters in its attention layers frozen to assess if the representations of the pretrained model are sufficient at identifying malicious opcode sequences. 
+
+Convolutional Neural Networks, specifically the EfficientNet architecture, offer a more computationally efficient model trained on image representations of programs in our dataset. We test this model, and a model trained on a subset of the dataset with a more similar distribution in the size of programs between classes. This was conducted to determine if the model uses rescaling artifacts to distinguish between malicious and benign programs, as the latter are typically larger than malware. 
+
+We then test these models on a secondary dataset of un-obfuscated programs, and increase the presence of obfuscation in each class to see if the presence of obfuscation indicative of malware. In this chapter, we provide our interpretation of the results obtained in our investigation, its relation to the work of others, and the limitations of this research. 
+
+\section{Interpretation of Results}
+
+\subsubsection{Baseline}
+
+\begin{figure}
+    \centering 
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{tsne-dll.png} 
+    \end{subfigure}
+    \hfill 
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{tsne-function.png} 
+    \end{subfigure}
+    \caption{Comparison between the functions and DLLs used by malicious and benign programs.}
+    \label{fig:baseline-tsne}
+\end{figure}
+
+Our baseline approaches achieve an average classification accuracy of 90\%. Between models trained on the usage of functions and libraries, we see an marginal increase in performance of approximately 4\%. This is seen across each of the algorithms tested, and indicates that the external functions used by a programs are a better feature than external library usage information. We believe that this is due to the difference in the amount of information encoded by their respective feature vectors. Across our entire dataset, we observe 196 unique DLLs, as opposed to 5926 external functions seen more than once. Therefore, the external function features encode significantly more information than the DLL feature vector, which allow the model to better understand malicious characteristics. We also find that DLLs are more commonly seen in both malicious and benign programs as opposed to external functions, as seen in \cref{fig:baseline-tsne}. This suggests that the external libraries used by malware are more similar too those used by benign programs, meaning they are less useful as a feature. 
+
+Of these baseline methods, we find that the decision tree algorithm achieves the best classification performance of approximately 93\%. In comparison to \citep{schultzDataMiningMethods2001a}, in which the DLL and function usage was used to identify novel malware with a rule based classification algorithm known as RIPPER, our results demonstrate improved performance. For example, the DLL usage achieved 83\% accuracy, and 89\% for function usage which seems to support our findings, despite being lower overall. We believe their results are a result of the substantially smaller dataset, which has a negative impact on model performance. They also test RIPPER on a modified version of our features, where the DLL and function level information are combined, and the number of occurances throughout the program are counted, that achieves similar performance to the function level classifier.
+
+\subsubsection{Sequence Classification}
+
+Our sequence classification model demonstrates performance that is in line with, and at times worse than the baseline approaches in sequence level tasks. For example, the pretrained model is able to identify malicious opcode sequences approximately 90\% of the time. However, this increases to approximately 95\% when the sequence level class logits are aggregated across the program. This outperforms our baseline by a small margin, but demonstrates that this approach can accurately identify malware. 
+
+This performance, is only seen in the pretrained model, as both the model trained from a random initialisation, and the pretrained model with frozen attention weights achieve accuracy in line with, and below the baseline respectively. In the case of the model trained from a random initialisation, this may be due to insufficient training, as the pretrained model has been trained for longer, due to the pretraining step. We see in \cref{fig:rsa-pretrained-scratch} that the representations at the initial layers are highly similar between the pretrained and non-pretrained models, which decreases with depth. It may be that with increased training time, the model approaches the solution of the pretrained model. 
+
+When the weights of the attention layers are frozen, allowing the model to modify only the classification head parameters, we see a drastic decrease in performance. We believe this is a result of reduced model complexity, as only approximately 1\% of the models parameters are updated during training. It is well established that the number of a models learnable parameters is directly associated with its performance~\citep{kaplanScalingLawsNeural2020}. By freezing the weights in the attention layers, the number of learnable parameters are reduced, leading to worse performance. \citep{leeWhatWouldElsa2019} show that when fine-tuning a model, freezing of the first 75\% of layers in similar models incurs only a 10\% decrease in performance against its fully-trainable equivalent. Therefore, a better strategy for selecting which layers to freeze in fine-tuning tasks is necessary. 
+
+\subsubsection{Image Classification}
+
+
+
+\subsubsection{Impact of Obfuscation}
+
+\section{Implications \& Limitations}
+
+\subsubsection{Implications}
+
+In our work,  
+
+We believe that this research demonstrates the potential of natural language processing techniques for not only malware detection, but reasoning about executables as a whole. We have shown that language models are capable of identifying malicious sequences of instructions, based exclusively on opcodes. It may be that training large scale transformer architectures on machine readable code could lead to similar advancements in reasoning about executables as was seen in recent years with large language models for natural language. This could allow for more advanced analysis of software, such as low-level code optimisations, reverse engineering, and debugging. 
+
+
+
+\subsubsection{Limitations}
+
+We identify a number of potential limitations of this work, which may have impacted the effectiveness of our work. To ensure this research is of high quality, we acknowledge these limitations, discuss how they impact the our findings, and how they may be prevented in future work. 
+
+The first of these issues relate to the data used to train, test, and conduct our obfuscation experiment. As explained in our literature review, there are no suitable large scale datasets containing executables for malware detection. Therefore, we curate our own dataset from executables found on the hardware of the researchers, and malware sample repositories. However, we were unable to gather a sufficiently large dataset. As shown in \cref{fig:dataset:class-dist}, we are limited to approximately 10000 samples, to ensure a balanced class distribution. It is well known that greater availability of training data is associated with greater model performance. Therefore, our work is limited by the availability of this data. 
+
+We have considered gathering benign samples from alternative sources, such as windows package repositories. However, these services often don't provide the executable, instead distributing an installer which would require extraction and installation by hand. Other sources used in the literature involve web scraping of sites such as github, and portable freeware. However, due to ethical and legal issues, we chose not to do this. 
+
+Furthermore, we postulate that our secondary dataset, used to conduct the investigation into obfuscation may not be sufficient for our purposes for a number of reasons. The first of these relate to the extent of obfuscation, we assume that the executables within this dataset are free of obfuscation. However, when applied to this dataset the static code coverage analysis, which was previously used to determine the extent of obfuscation in our main dataset demonstrates a greater disparity between classes as shown in \cref{fig:secondary-ds-obfs-extent}. This exceeds the disparity in the primary dataset, and either indicates that code analysis coverage may not be suitable for estimating obfuscation extent within a dataset, or that the malicious executables do in fact include obfuscation. Furthermore, our analysis of the github repositories of the malware found in this dataset demonstrate a lack of diversity in the kinds of malware. We note that a majority of these samples are simple proof of concept projects\footnote{As these projects are public on github, we are able to distribute source of samples in this dataset, which can be found at}. 
+
+\begin{figure}
+    \centering 
+    \includegraphics[width=0.8\textwidth]{obfuscation-dist-secondary-ds.png}
+    \caption{Extent of obfuscation between classes in the secondary dataset.}
+    \label{fig:secondary-ds-obfs-extent}
+\end{figure}
+
+\subsubsection{Future Work}
+
+\section{Conclusion}
+
+\end{document}

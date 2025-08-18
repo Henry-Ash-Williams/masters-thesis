@@ -162,7 +162,7 @@
 % }{}
 
 
-\includeSection{./introduction.tex}
+\includeSection{./introduction.tex} % WC = 837
 
 \chapter{Background}
 
@@ -196,7 +196,7 @@
 % }{}
 
 \noindent
-\includeSection{./background.tex}
+\includeSection{./background.tex} % WC = 2977
 
 
 \chapter{Methodology}
@@ -232,7 +232,7 @@
 % }
 % }{}
 
-\includeSection{./methods.tex}
+\includeSection{./methods.tex} % WC = 2281
 
 \chapter{Results}
 
@@ -294,68 +294,66 @@
 % }
 % }{}
 
-\includeSection{./results.tex}
+\includeSection{./results.tex} % WC = 2312
 
 \chapter{Discussion}
 
+% \begingroup 
+% \small
+% \setlist{nolistsep}
+% \noindent\fbox{%
+%     \parbox{\textwidth}{%
+%         \textbf{Word Count: 3000}
 
+%         \begin{itemize}
+%             % \setlength\itemsep{0.1em}
 
-\begingroup 
-\small
-\setlist{nolistsep}
-\noindent\fbox{%
-    \parbox{\textwidth}{%
-        \textbf{Word Count: 3000}
+%             \item Are dynamic methods vulnerable to advanced obfuscation techniques? 
+%             \begin{itemize}
+%                 \item It's possible to hide API calls from standard API call hooking techniques 
+%                 \item Other redundant API calls may be made to obfuscate call sequences 
+%                 \item Advanced malware (i.e. Rootkits) are able to stealthily perform malicious actions on the host
+%             \end{itemize}
 
-        \begin{itemize}
-            % \setlength\itemsep{0.1em}
+%             \item Are opcode sequences suitable features for NLP based malware detection? 
+%             \begin{itemize}
+%                 \item Full disassembly may offer provide better information for transformer architectures 
+%                 \item Was not tested due to time/compute limitations 
+%                 \item Byte-level modelling may work, but the presence of polymorphic malware and encrypted payloads may be challenging to model accurately  
+%             \end{itemize}
 
-            \item Are dynamic methods vulnerable to advanced obfuscation techniques? 
-            \begin{itemize}
-                \item It's possible to hide API calls from standard API call hooking techniques 
-                \item Other redundant API calls may be made to obfuscate call sequences 
-                \item Advanced malware (i.e. Rootkits) are able to stealthily perform malicious actions on the host
-            \end{itemize}
+%             \item Is executable packing (UPX) a good proxy for the obfuscation methods seen in the wild? 
+%             \begin{itemize}
+%                 \item What other obfuscation techniques and solutions could work for this? 
+%             \end{itemize}
 
-            \item Are opcode sequences suitable features for NLP based malware detection? 
-            \begin{itemize}
-                \item Full disassembly may offer provide better information for transformer architectures 
-                \item Was not tested due to time/compute limitations 
-                \item Byte-level modelling may work, but the presence of polymorphic malware and encrypted payloads may be challenging to model accurately  
-            \end{itemize}
+%             \item Could diffusion modelling enable machine de-obfuscation? 
+%             \begin{itemize}
+%                 \item Obfuscation is analgous to noise in a signal 
+%                 \item Diffusion models are well suited to denoising of data 
+%                 \item Might be able to de-obfuscate programs to generate large scale 
+%             \end{itemize}
 
-            \item Is executable packing (UPX) a good proxy for the obfuscation methods seen in the wild? 
-            \begin{itemize}
-                \item What other obfuscation techniques and solutions could work for this? 
-            \end{itemize}
+%             \item Data limitations
+%             \begin{itemize}
+%                 \item Lack of large-scale, benign executable datasets 
+%                 \item High presence of obfuscation in real-world malware samples 
+%                 \item Unobfuscated malware samples are not representative of malware seen in the wild as they are often ``toy'' projects, and lack advanced capabilities 
+%                 \item Unobfuscated, advanced malware are hard to find   
+%             \end{itemize}
 
-            \item Could diffusion modelling enable machine de-obfuscation? 
-            \begin{itemize}
-                \item Obfuscation is analgous to noise in a signal 
-                \item Diffusion models are well suited to denoising of data 
-                \item Might be able to de-obfuscate programs to generate large scale 
-            \end{itemize}
+%             \item Issues with Obfuscation Experiment 
+%             \begin{itemize}
+%                 \item single trial and random selection of obfuscated samples may produce less meaningful results 
+%                 \item trials should be repeated to see if this changes things
+%                 \item trials took a long time to run so only a single run was possible. 
+%             \end{itemize}
 
-            \item Data limitations
-            \begin{itemize}
-                \item Lack of large-scale, benign executable datasets 
-                \item High presence of obfuscation in real-world malware samples 
-                \item Unobfuscated malware samples are not representative of malware seen in the wild as they are often ``toy'' projects, and lack advanced capabilities 
-                \item Unobfuscated, advanced malware are hard to find   
-            \end{itemize}
-
-            \item Issues with Obfuscation Experiment 
-            \begin{itemize}
-                \item single trial and random selection of obfuscated samples may produce less meaningful results 
-                \item trials should be repeated to see if this changes things
-                \item trials took a long time to run so only a single run was possible. 
-            \end{itemize}
-
-            \item Conclusion 
-        \end{itemize}
-    }%
-}
-\endgroup 
+%             \item Conclusion 
+%         \end{itemize}
+%     }%
+% }
+% \endgroup 
 
 \includeSection{./discussion.tex}
 

@@ -10,6 +10,10 @@ Therefore, detecting malware before it can cause damage is of high priority to s
 
 Machine learning however offers a potential means of dealing with this by finding ways to detect malware in spite of these techniques. In this investigation, we use various techniques across a number of domains, such as linear modelling, natural langauge processing, and image processing to investigate both their performance at detecting malware targeting the windows operating system, and their resiliance to obfuscation. 
 
+We evaluate both a RoBERTa-based language model trained on assembly instruction sequences, and Convolutional Neural Network that uses image representations of programs to identify malware. These are known as static approaches where feature extraction is performed without executing the program. Dynamic methods on the other hand, observe the behavior of a program, and are typically more capable than static methods. However, this often incurs a significant overhead in complexity, as an environment where a potentially malicious program can be safely executed is required. This is typically a remote server hosting a virtual machine that isolates the execution, mitigating its potential impact. However, this means that an internet connection is required to detect malicious software. In comparison, static approaches are able to operate in environments where resources are constrained. Therefore, they are still relevant in the problem of malware detection. 
+
+Furthermore, due to the highly pervasive nature of obfuscation in modern malware, we theorise that these static approaches heavily rely on obfuscation as indicators of malicious programs. However, obfuscation is not exclusive to malware, as software developers often use it to protect their intellectual property from reverse engineering. Therefore, we also conduct an additional experiment that aims to evaluate the resiliance of these approaches to obfuscation. 
+
 The research questions we seek to answer in this work are as follows: 
 
 \begin{enumerate}[label=\textbf{RQ\arabic*}:]
@@ -17,6 +21,7 @@ The research questions we seek to answer in this work are as follows:
     \item \emph{Does pretraining improve the accuracy and reliability of malware detection models based on techniques from natural language processing?}
     \item \emph{To what extent are static malware detection models resiliant to obfuscation?}
 \end{enumerate}
+
 
 \section{Professional Considerations}
 

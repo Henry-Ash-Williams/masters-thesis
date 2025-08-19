@@ -174,7 +174,24 @@ For each opcode sequence, the model predicts two values, the likelihood of the s
 
 \section{CNN for Image Classification}
 
-In addition to the RoBERTa sequence classification model, we also evaluate an image based approach. We use the EfficientNet-B0 Convolutional Neural Network architecture \citep{tanEfficientNetRethinkingModel2020}, due to its computational efficiency and high performance on image classification problems. The model is trained from a random initialisation, and the final layer of the model is modified to output a binary class likelihood values. Programs are converted to greyscale images using the procedure outlined in \autoref{apdx:prog-to-img}, converted to RGB, and resized to 320\(\times\)320 pixels before it is used by the model.
+\begin{figure}
+    \centering 
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{malware-img-benign.png} 
+        \caption{Image Representation of a Benign Executable}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{malware-img-mal.png} 
+        \caption{Image Representation of a Malicious Executable}
+    \end{subfigure}
+    \caption{Image Representation of Executables in our Dataset}
+    \label{fig:img-rep}
+\end{figure}
+
+In addition to the RoBERTa sequence classification model, we also evaluate an image based approach. We use the EfficientNet-B0 Convolutional Neural Network architecture \citep{tanEfficientNetRethinkingModel2020}, due to its computational efficiency and high performance on image classification problems. The model is trained from a random initialisation, and the final layer of the model is modified to output a binary class likelihood values. Programs are converted to greyscale images using the procedure outlined in \autoref{apdx:prog-to-img}, converted to RGB, and resized to 320\(\times\)320 pixels before it is used by the model, as shown in \cref{fig:img-rep}.
 
 As previously established, the size of benign programs is typically much higher than malicious programs. Therefore, benign images are resized to a greater extent to that of malicious images. Resizing an image will introduce artifacts to the image, such as anti-aliasing or blurring. Thus, benign images may have more prevalent artifacts than malicious images which could be used by the model to learn a suboptimal solution. To prevent this from occurring, we train the same model on a subset of the dataset where the distribution of program size between classes are more similar, known as the ``filtered'' model. We use a genetic algorithm that minimises the Kullback-Leibler divergence $D_{KL}$ between the distributions of program size for each class of program by modelling it as a Knapsack problem~\citep{khuriZeroOneMultiple1994}. We also encourage the algorithm to select a subset with an approximately equal number of malicious and benign samples to ensure class balance. 
 

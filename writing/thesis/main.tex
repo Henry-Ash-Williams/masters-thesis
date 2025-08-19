@@ -44,6 +44,7 @@
 \usepackage{unicode-math}
 \usepackage{subfiles}
 \usepackage[compact]{titlesec}
+\usepackage{lipsum}
 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -99,7 +100,7 @@
         \textsc{\Large Masters Thesis}
         % \hrulefill\\%[0.5cm] % Thesis type
 
-        \Huge \textbf{On the Effectiveness of Deep Learning Techniques for Malware Detection and their Resiliance to Obfuscation}\\[3cm] % Thesis title
+        \Huge \textbf{On the Effectiveness of Deep Learning Techniques for Malware Detection and their Resiliance to Obfuscation}\\[1.5cm] % Thesis title
 
         \large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of Master of Research in Advanced Artificial Intelligence}\\[0.5cm] % University 
         \textit{in the}\\[0.5cm]
@@ -121,11 +122,45 @@
             \end{flushright}
         \end{minipage}
 
+        \vspace{0.5cm}
+
+        \begin{minipage}{0.8\linewidth}
+            \centering 
+            \textbf{Abstract} \\ 
+
+            \begin{flushleft}
+                \small Malicious software is an extremely pervasive threat faced by both individuals and organisations, that has the potential to cause significant damage to computer systems. We explore the usage of deep learning techniques for automated identification of malware, and evaluate how resiliant these approaches are to obfuscation techniques used to bypass existing malware detection services. We present a natural langauge processing based approach, using the BERT architecture for malicious opcode sequence classification, and an image-based approach using the EfficientNet architecture. We find that these static malware detection approaches consider obfuscation as highly indicative of malware, leading to misclassification of obfuscated benign executables.
+            \end{flushleft}
+        \end{minipage}
+
         \vfill
         \large August 2025
          
     \end{center}
 \end{titlepage}
+
+\begin{flushleft}
+    {\Huge \textbf{Statement Of Originality}} 
+
+    \vspace*{1cm}
+
+    This report is submitted as part requirement for the degree of Masters of Research in Advanced Artificial Intelligence at the University of Sussex. It is the product of my own labour, except where indicated in the text. The report may be freely copied and distributed provided the source is acknowledged. I hereby give permission for a copy of this report to be loaned out to students in future years
+    
+    \vspace*{1cm}
+    
+    Signed,
+    
+    \vspace*{0.5cm}
+
+    \includegraphics[width=0.4\textwidth]{signature.png}
+    
+    \vspace*{0.5cm}
+
+    \textbf{Henry Williams} \\
+    \textbf{Candidate No:} 233561
+\end{flushleft}
+
+
 \newpage
 
 \microtypesetup{protrusion=false}
@@ -355,11 +390,12 @@
 % }
 % \endgroup 
 
-\includeSection{./discussion.tex}
+\includeSection{./discussion.tex} % WC = 2523
 
 \printbibliography
 
 
+%TC:ignore
 \appendix 
 \chapter{Supplimental Information}
 
@@ -615,4 +651,35 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  &  &  &  &  &  \\
     \label{fig:rsa-cka-pob}
 \end{figure}
 
+
+\chapter{Acknowledgements}
+
+
+% I would like to express my deepest thanks to my supervisor, Dr Temitayo Olugbade for her invaluable guidance, support and insightful feedback while completing this dissertation. Her expertise, encouragement and mentorship were invaluable and without her, this work would not have been possible. 
+
+% I also would like to extend my thanks to all the lecturers and teaching staff at the University of Sussex for their dedication and commitment to providing an excellent academic environment. It has been a pleasure to study under all of them for the past four years. 
+
+% To my classmates, whose camaraderie and solidarity have made this journey enjoyable and fulfilling. I wish them all the best of luck in their future endeavors. I would like to also thank Jack Speat for always being there to help, I wish him the best of luck with his PhD. 
+
+% To all the committee members of Hacksussex, it has been a pleasure to help organise excellent student-led events and competitions across campus with you all. Their support and solidarity for my project were invaluable. 
+
+% The PAL team deserves special recognition for always being available to provide support and assistance over the course of this project. Their responsiveness and willingness to help have been greatly appreciated.
+
+% Last but not least, I would like to express my deepest gratitude to my family for their unwavering support, understanding, and encouragement throughout this academic pursuit. Their love and belief in me have been instrumental throughout my time at the University of Sussex. My sister, Agnes, deserves special thanks for always being available to provide help and support when needed. 
+
+
+This research would not have been possible without the guidance and support of my supervisor, Dr Jeff Mitchell. His expertise and advice has proven to be invaluable, and I am extremely greatful for it. 
+
+I would also like to express my gratitude to both Dr Ivor Simpson, and Dr Peter Wijeratne for organising this course. It has been the most challenging, yet deeply rewarding year of my life thus far, and has contributed greatly to my knowledge and professional development. 
+
+Many thanks to the lecturers and teaching staff at the University of Sussex whose expertise, and dedication to education have fostered an excellent academic environment. It has been a pleasure to study under all of them throughout my time at this institution. 
+
+I'd also like to acknowledge my classmates, whose camaraderie and solidarity have made this journey enjoyable and fulfilling. To Elouan Simonneau, Joe Mills, Jack Speat, and Amy Upson, thank you all for your support, and encouragement. Without you, this year would not have been the same, and I wish you all the best of luck in whatever comes next. 
+
+I would also like to thank my housemate Byron, for putting up with me over this past year, and for providing his much needed and appreciated support, boundless kindness, and unwavering understanding. 
+
+Last but not least, I would like to express my deepest gratitude to my family for their unwavering support, understanding, and encouragement throughout this academic pursuit. Their love and belief in me have been instrumental throughout my time at the University of Sussex. My sister, Agnes, deserves special thanks for always being available to provide help and support when needed, and for proofreading my work. I wish her the best of luck in her final year. 
+
+
+%TC:endignore
 \end{document}

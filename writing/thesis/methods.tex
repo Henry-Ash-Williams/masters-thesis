@@ -16,13 +16,13 @@ In this investigation, we evaluate the effectiveness of a custom RoBERTa model i
     \centering
     \begin{subfigure}{0.4\textwidth}
         \includegraphics[width=\textwidth]{size-dist.png}
-        \caption{Distribution of executable size across benign and malicious programs}
+        \caption{Distribution of executable size across classes.}
         \label{fig:dataset:size-dist}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.4\textwidth}
         \includegraphics[width=\textwidth]{obfuscation-dist.png}
-        \caption{Distribution of code analysis coverage of benign and malicious programs}
+        \caption{Distribution of code analysis coverage across classes.}
         \label{fig:dataset:obf-dist}
     \end{subfigure}
     % \hfill
@@ -31,6 +31,7 @@ In this investigation, we evaluate the effectiveness of a custom RoBERTa model i
     \centering
     \begin{subfigure}{0.4\textwidth}
         \centering
+        \caption{Distribution of classes with our dataset.}
         \begin{tabular}{@{}ll@{}}
             \toprule
             \textbf{Class}     & \textbf{Count} \\ \midrule
@@ -38,7 +39,6 @@ In this investigation, we evaluate the effectiveness of a custom RoBERTa model i
             Benign    & 5323   \\ \midrule
             \textbf{Total}     & 11115  \\ \bottomrule
         \end{tabular}
-        \caption{Distribution of classes with our dataset.}
         \label{fig:dataset:class-dist}
     \end{subfigure}
     \caption{Description of our dataset, including the size of programs (a), the extent of obfuscation (b), and the total number of samples in each class (c).}
@@ -57,8 +57,9 @@ The dataset is then split to produce a training set, and evaluation set at a rat
 
 \subsection{Obfuscation Experiment Dataset}\label{ssec:secondary-dataset}
 
-\begin{figure}[h]
+\begin{table}[h]
     \centering
+    \caption{Distribution of classes with our obfuscation experiment dataset.}
     \begin{tabular}{@{}ll@{}}
         \toprule
         \textbf{Class}      & \textbf{Count} \\ \midrule
@@ -66,9 +67,8 @@ The dataset is then split to produce a training set, and evaluation set at a rat
         Benign              & 61   \\ \midrule
         \textbf{Total}      & 121  \\ \bottomrule
     \end{tabular}
-    \caption{Distribution of classes with our obfuscation experiment dataset.}
     \label{fig:obfs-ds-class-dist}
-\end{figure}
+\end{table}
 
 \noindent
 To investigate the impact of obfuscation on malware detection, we also curate a secondary dataset, consisting of unobfuscated executables. We use the work presented in \citep{rokonSourceFinderFindingMalware2020} to identify github repositories containing malicious source code. The authors provide a list of URLs to these repositories, from which we select windows programs that provide an executable and with no mention of obfuscation in its description or codebase. Benign samples consist of Windows system binaries not present in our original dataset. We identify a collection of approximately 60 windows XP system binaries which are free of obfuscation for this secondary dataset. This gives a selection of 121 programs, each of which are free of obfuscation for use in our later experiment into the resiliance of machine learning algorithms to obfuscation. 
@@ -78,7 +78,7 @@ To investigate the impact of obfuscation on malware detection, we also curate a 
 \begin{figure}[H]
     \centering
     \includegraphics{confusion-matrix.pdf}
-    \caption{Confusion Matrix outlining the kinds of classification results in malware detection.}
+    \caption{Confusion Matrix describing the kinds of classification results in malware detection.}
     \label{fig:confusion-matrix}
 \end{figure}
 
@@ -107,7 +107,7 @@ Precision and recall both operate on the class-level, therefore to reduce these 
         Malicious           & 0.1428                        & 0.0931                     \\
         Benign              & 0.0931                        & 0.1217                     \\ \bottomrule
         \end{tabular}
-        \caption{Cross-class external function similarity}
+        \caption{Cross-class external function similarity.}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.4\textwidth}
@@ -118,9 +118,9 @@ Precision and recall both operate on the class-level, therefore to reduce these 
         Malicious           & 0.2249                        & 0.1606                     \\
         Benign              & 0.1606                        & 0.1643                     \\ \bottomrule
         \end{tabular}
-        \caption{Cross-class DLL similarity}
+        \caption{Cross-class DLL similarity.}
     \end{subfigure}
-    \caption{Similarity between classes based on external functions and DLLs}
+    \caption{Cosine similarity between classes based on external functions and DLLs.}
     \label{fig:similarity}
 \end{figure}
 
@@ -157,6 +157,7 @@ For each opcode sequence, the model predicts two values, the likelihood of the s
 
 \begin{table}[h]
     \centering
+    \caption{RoBERTa sequence classification model parameters}
     \begin{tabular}{@{}lr@{}}
         \toprule
         \textbf{Parameter}      & \textbf{Value} \\ \midrule
@@ -169,7 +170,6 @@ For each opcode sequence, the model predicts two values, the likelihood of the s
         Hidden Dropout Rate     & 0.01  \\
         Attention Dropout Rate  & 0.001 \\ \bottomrule
     \end{tabular}
-    \caption{RoBERTa model parameters}
     \label{tab:model-params}
 \end{table}
 
@@ -180,15 +180,15 @@ For each opcode sequence, the model predicts two values, the likelihood of the s
     \begin{subfigure}[t]{0.45\textwidth}
         \centering 
         \includegraphics[width=\textwidth]{malware-img-benign.png} 
-        \caption{Image Representation of a Benign Executable}
+        \caption{Image representation of a benign executable.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.45\textwidth}
         \centering 
         \includegraphics[width=\textwidth]{malware-img-mal.png} 
-        \caption{Image Representation of a Malicious Executable}
+        \caption{Image representation of a malicious executable.}
     \end{subfigure}
-    \caption{Image Representation of Executables in our Dataset}
+    \caption{How images can be used to represent programs.}
     \label{fig:img-rep}
 \end{figure}
 

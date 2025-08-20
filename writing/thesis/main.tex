@@ -46,9 +46,11 @@
 \usepackage[compact]{titlesec}
 \usepackage{lipsum}
 
+% Modify algorithmic environment, replace "Require" and "Ensure" with "Input" and "Output" respectively 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
+% Change font to something prettier 
 \setmainfont[
   Ligatures=TeX,
   Numbers={OldStyle, Proportional},
@@ -56,7 +58,7 @@
 \setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
 \setmathfont[Scale=MatchUppercase]{Libertinus Math}
 
-
+% force LaTeX to avoid widows and orphans
 \widowpenalty=10000
 \clubpenalty=10000
 
@@ -67,7 +69,6 @@
 %% Upright (normal) numbers here
 \titleformat{\subsection}{\large}{\thesubsection}{.6em}{\flatcaps}
 %% Below, both heading should form sentences
-% \titleformat{\subsubsection}{}{\thesubsubsection}{.6em}{}{\itshape}
 \titleformat{\subsubsection}{\bfseries\itshape}{\thesubsubsection}{.6em}{}
 \titleformat{\paragraph}[runin]{\flatcaps}{\theparagraph}{0pt}{}
 
@@ -75,6 +76,7 @@
 \titlespacing*{\subsection}{0pt}{1\baselineskip}{1\baselineskip}
 \titlespacing*{\subsubsection}{0pt}{8pt}{5pt}
 
+% Indicate if a chapter doesn't exist 
 \newcommand{\includeSection}[1]{%
   \noindent
   \IfFileExists{#1}{%
@@ -84,6 +86,7 @@
   }%
 }
 
+% Modify spacing 
 \frenchspacing
 
 \addbibresource{../references.bib}
@@ -91,6 +94,7 @@
 
 
 \begin{document}
+
 
 \begin{titlepage}
     \begin{center}
@@ -104,8 +108,8 @@
 
         \large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of Master of Research in Advanced Artificial Intelligence}\\[0.5cm] % University 
         \textit{in the}\\[0.5cm]
-        University of Sussex\\[0.1cm]
-        School of Engineering and Informatics\\ [1cm]
+        School of Engineering and Informatics\\ [0.1cm]
+        University of Sussex\\[1cm]
     
         \begin{minipage}{.45\linewidth}
             \begin{flushleft} %\large
@@ -140,6 +144,8 @@
 \end{titlepage}
 
 \begin{flushleft}
+    \vspace*{1cm}
+
     {\Huge \textbf{Statement Of Originality}} 
 
     \vspace*{1cm}
@@ -406,7 +412,7 @@ All of the code used in this investigation are publicly available on our GitHub 
 \section{Disassembly Extraction and Processing}
 
 \begin{algorithm}
-\caption{Extract Disassembly from an Executable}
+\caption{Generate and extract disassembly from an executable}
 \label{algo:disasm-extraction}
 \begin{algorithmic}[1]
 \Require Path to executable \(P\)
@@ -431,7 +437,7 @@ All of the code used in this investigation are publicly available on our GitHub 
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Extract Opcodes from Assembly Instructions}
+\caption{Extract opcodes from disassembly}
 \label{algo:opcode-sequence-extraction}
 \begin{algorithmic}[1]
 \Require List of assembly instructions \(I\)
@@ -449,7 +455,7 @@ All of the code used in this investigation are publicly available on our GitHub 
 \section{Conversion of Executable Programs to Greyscale Images}\label{apdx:prog-to-img}
 
 \begin{algorithm}[H]
-\caption{Converts a program to an image}
+\caption{Convert a program to an image}
 \begin{algorithmic}[1]
 \Require Program \(P \in {[0, 255]}^L\) of \(L\) bytes 
 \Ensure Matrix \(M \in [0, 255]^{d \times d}\)
@@ -464,7 +470,7 @@ All of the code used in this investigation are publicly available on our GitHub 
 \end{algorithm}
 
 
-\section{Genetic Algorithm}
+\section{Genetic Algorithm}\label{apdx:ga}
 
 \begin{algorithm}[H]
 \caption{Apply a random mutation to a genotype}
@@ -499,7 +505,7 @@ All of the code used in this investigation are publicly available on our GitHub 
 \end{algorithm}
 
 \begin{algorithm}[H]
-\caption{Simulate Evolution in a Population}
+\caption{Simulate evolution over a population}
 \label{algo:simulate-single}
 \begin{algorithmic}[1]
 \Require The fittest member of the previous population \(G \in \{0, 1\}^N\), Population size \(N_p\), Mutation rate \(p_m\)
@@ -564,109 +570,117 @@ Windows executables are defined in the portable executable file format. These fi
 
 The file begins with a DOS (Disk Operating System) header for compatibility reasons~\citep{bridgePEFormat2025}, which is followed by the PE header, containing the information necessary for the programs execution. This includes the number of sections and symbols, and the instruction set used by the program. The section headers contain further metadata about the sections which comprise the program, and reference their location in memory. It also stores a pointer to a table referencing any external functions used by the program, such as the Windows API\@, and other dynamically linked objects, known as DLLs~\citep{ainapureDynamicLinkLibrary2025}. 
 
+\section{Word Count}
+
+The word-count of this document, as reported by \texttt{texcount}, is shown in the following table. Note that this excludes all text found within the appendicies
+
+\begin{table}[H]
+    \centering
+\begin{tabular}{@{}llrrrl@{}}
+\toprule
+\multicolumn{1}{c}{\multirow{2}{*}{\textbf{Chapter}}} &  & \multicolumn{3}{c}{\textbf{Word Count}} &  \\ \cmidrule(lr){3-5}
+\multicolumn{1}{c}{} &  & \multicolumn{1}{l}{Body Text} & \multicolumn{1}{l}{Header Text} & \multicolumn{1}{l}{Outside Text} &  \\ \midrule
+% Abstract & & 87 & 5 & 0 
+Introduction &  & 910 & 17 & 0 &  \\
+Background &  & 2994 & 12 & 52 &  \\
+Methods &  & 2197 & 16 & 113 &  \\
+Results &  & 2081 & 16 & 215 &  \\
+Discussion &  & 2716 & 16 & 215 &  \\ \midrule
+\textbf{Total} &  & 10898 & 77 & 595 &  \\ \bottomrule
+\end{tabular}
+\end{table}
+
 \chapter{Supplimental Results}
 
-\section{Obfuscated Benign Sequence Classification Metrics}
+\section{Obfuscated Benign Model}
 
-\begin{table}[h]
+\subsubsection{Classification Metrics}
+
+\begin{table}[H]
+    \caption{Classification metrics of obfuscated benign sequence classification models.}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llllllllllll}
 \toprule
 \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Model}}} &  & \multicolumn{4}{c}{\textbf{Sequence Level}} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\textbf{File Level}} & \vspace{2pt} \\ \cline{3-6} \cline{8-11}
 \multicolumn{1}{c}{} &  & Accuracy & F1-Score & Precision & Recall & \textbf{} & Accuracy & F1-Score & Precision & Recall &  \\ \midrule
-From Scratch &  & 0.8584 & 0.8587 & 0.8596 & 0.8584 &  &  &  &  &  &  \\
-From Pretrained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  &  &  &  &  &  \\
-\begin{tabular}[c]{@{}l@{}}From Pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8471 & 0.8471 & 0.8472 & 0.8471 &  &  &  &  &  &  \\ \bottomrule
+From Scratch &  & 0.8584 & 0.8587 & 0.8596 & 0.8584 &  & 0.9638 & 0.9638 & 0.9656 & 0.9637 &  \\
+From Pretrained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  & 0.9647 & 0.9647 & 0.9667 & 0.9647 &  \\
+\begin{tabular}[c]{@{}l@{}}From Pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8471 & 0.8471 & 0.8472 & 0.8471 &  & 0.9600 & 0.9600 & 0.9610 & 0.9599 &  \\ \bottomrule
 \end{tabular}%
 }
 \end{table}
 
+\subsubsection{Representational Similarity Analysis}
 
-\section{Partially Obfuscated Benign Sequence Classification Metrics}
-\begin{table}[h]
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-ob-pretrained-scratch.png}
+        \caption{RSA of the pretrained and non-pretrained models.}
+        \label{fig:rsa-ob-pretrained-scratch}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-ob-pretrained-frozen.png}
+        \caption{RSA of the pretrained and frozen models.}
+        \label{fig:rsa-ob-pretrained-frozen}
+    \end{subfigure}
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-ob-frozen-scratch.png}
+        \caption{RSA of the frozen and non-pretrained models}
+        \label{fig:rsa-ob-pretrained-frozen}
+    \end{subfigure}
+    \caption{Representational Similarity Analysis (RSA) of the obfuscated benign models with Centered Kernel Alignment.}
+    \label{fig:rsa-cka-ob}
+\end{figure}
+
+\section{Partially Obfuscated Benign Model}
+
+\subsubsection{Classification Metrics}
+
+\begin{table}[H]
+    \caption{Classification metrics of partially obfuscated benign sequence classification models.}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llllllllllll}
 \toprule
 \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Model}}} &  & \multicolumn{4}{c}{\textbf{Sequence Level}} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\textbf{File Level}} & \vspace{2pt} \\ \cline{3-6} \cline{8-11}
 \multicolumn{1}{c}{} &  & Accuracy & F1-Score & Precision & Recall & \textbf{} & Accuracy & F1-Score & Precision & Recall &  \\ \midrule
 From Scratch &  & 0.8282 & 0.8256 & 0.8310 & 0.8282 &  &  &  &  &  &  \\
-From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  &  &  &  &  &  \\
-\begin{tabular}[c]{@{}l@{}}From Pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8053 & 0.7987 & 0.8169 & 0.8053 &  &  &  &  &  &  \\ \bottomrule
+From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.9215 & 0.9140 &  \\
+\begin{tabular}[c]{@{}l@{}}From Pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8053 & 0.7987 & 0.8169 & 0.8053 &  & 0.8260 & 0.8245 & 0.8335 & 0.8245 &  \\ \bottomrule
 \end{tabular}%
 }
 \end{table}
 
-\newpage
 
-\section{Representational Similarity Analysis of Obfuscated Benign Sequence Classification Models}
+\subsubsection{Representational Similarity Analysis}
 
-\begin{figure}[ht!]
+\begin{figure}[H]
     \centering
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width=\textwidth]{rsa-cka-ob-pretrained-scratch.png}
-        \caption{RSA of the pretrained and non-pretrained models.}
-        \label{fig:rsa-ob-pretrained-scratch}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width=\textwidth]{rsa-cka-ob-pretrained-frozen.png}
-        \caption{RSA of the pretrained model and our pretrained model with frozen attention layer weights.}
-        \label{fig:rsa-ob-pretrained-frozen}
-    \end{subfigure}
-    \centering
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width=\textwidth]{rsa-cka-ob-frozen-scratch.png}
-        \caption{RSA of the pretrained model with frozen attention layer weights and the non-pretrained model.}
-        \label{fig:rsa-ob-pretrained-frozen}
-    \end{subfigure}
-    \caption{Representational Similarity Analysis (RSA) of our obfuscated benign models using Centered Kernel Alignment.}
-    \label{fig:rsa-cka-ob}
-\end{figure}
-
-\newpage
-
-\section{Representational Similarity Analysis of Partially Obfuscated Benign Sequence Classification Models}
-
-
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}{0.4\textwidth}
+    \begin{subfigure}[t]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-pob-pretrained-scratch.png}
         \caption{RSA of the pretrained and non-pretrained models.}
         \label{fig:rsa-pob-pretrained-scratch}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.4\textwidth}
+    \begin{subfigure}[t]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-pob-pretrained-frozen.png}
-        \caption{RSA of the pretrained model and our pretrained model with frozen attention layer weights.}
+        \caption{RSA of the pretrained and frozen models.}
         \label{fig:rsa-pob-pretrained-frozen}
     \end{subfigure}
     \centering
-    \begin{subfigure}{0.4\textwidth}
+    \begin{subfigure}[b]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-pob-frozen-scratch.png}
-        \caption{RSA of the pretrained model with frozen attention layer weights and the non-pretrained model.}
+        \caption{RSA of the frozen and non-pretrained models.}
         \label{fig:rsa-pob-pretrained-frozen}
     \end{subfigure}
-    \caption{Representational Similarity Analysis (RSA) of our partially obfuscated benign models using Centered Kernel Alignment.}
+    \caption{Representational Similarity Analysis (RSA) of the partially obfuscated benign models with Centered Kernel Alignment.}
     \label{fig:rsa-cka-pob}
 \end{figure}
 
 
 \chapter{Acknowledgements}
-
-
-% I would like to express my deepest thanks to my supervisor, Dr Temitayo Olugbade for her invaluable guidance, support and insightful feedback while completing this dissertation. Her expertise, encouragement and mentorship were invaluable and without her, this work would not have been possible. 
-
-% I also would like to extend my thanks to all the lecturers and teaching staff at the University of Sussex for their dedication and commitment to providing an excellent academic environment. It has been a pleasure to study under all of them for the past four years. 
-
-% To my classmates, whose camaraderie and solidarity have made this journey enjoyable and fulfilling. I wish them all the best of luck in their future endeavors. I would like to also thank Jack Speat for always being there to help, I wish him the best of luck with his PhD. 
-
-% To all the committee members of Hacksussex, it has been a pleasure to help organise excellent student-led events and competitions across campus with you all. Their support and solidarity for my project were invaluable. 
-
-% The PAL team deserves special recognition for always being available to provide support and assistance over the course of this project. Their responsiveness and willingness to help have been greatly appreciated.
-
-% Last but not least, I would like to express my deepest gratitude to my family for their unwavering support, understanding, and encouragement throughout this academic pursuit. Their love and belief in me have been instrumental throughout my time at the University of Sussex. My sister, Agnes, deserves special thanks for always being available to provide help and support when needed. 
-
 
 This research would not have been possible without the guidance and support of my supervisor, Dr Jeff Mitchell. His expertise and advice has proven to be invaluable, and I am extremely greatful for it. 
 
@@ -679,7 +693,6 @@ I'd also like to acknowledge my classmates, whose camaraderie and solidarity hav
 I would also like to thank my housemate Byron, for putting up with me over this past year, and for providing his much needed and appreciated support, boundless kindness, and unwavering understanding. 
 
 Last but not least, I would like to express my deepest gratitude to my family for their unwavering support, understanding, and encouragement throughout this academic pursuit. Their love and belief in me have been instrumental throughout my time at the University of Sussex. My sister, Agnes, deserves special thanks for always being available to provide help and support when needed, and for proofreading my work. I wish her the best of luck in her final year. 
-
 
 %TC:endignore
 \end{document}

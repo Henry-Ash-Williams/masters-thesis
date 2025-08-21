@@ -11,24 +11,30 @@
     \begin{tabular}{llllll}
         \toprule
         \textbf{Algorithm} & \textbf{Feature} & \textbf{Accuracy} & \textbf{F1 Score} & \textbf{Precision} & \textbf{Recall} \\ \midrule
-        \multirow{2}{*}{\textbf{Support Vector Classifier}} & DLL & 0.89 & 0.89 & 0.89 & 0.89 \\
-        & Function & 0.92 & 0.92 & 0.92 & 0.92 \\ \midrule
-        \multirow{2}{*}{\textbf{Logistic Regression}} & DLL & 0.87 & 0.87 & 0.87 & 0.87 \\
-        & Function & 0.91 & 0.91 & 0.92 & 0.91 \\ \midrule
-        \multirow{2}{*}{\textbf{Decision Tree}} & DLL & 0.88 & 0.88 & 0.89 & 0.89 \\
-        & Function & 0.93 & 0.93 & 0.93 & 0.93 \\ \bottomrule
+        \multirow{2}{*}{\textbf{Support Vector Classifier}} & DLL & 0.8859 & 0.8856 & 0.8856 & 0.8856 \\
+        & Function & 0.9248 & 0.9248 & 0.9266 & 0.9262 \\ \midrule
+        \multirow{2}{*}{\textbf{Logistic Regression}} & DLL & 0.8682 & 0.8682 & 0.8687 & 0.8695 \\
+        & Function & 0.9438 & 0.9438 & 0.9442 & 0.9447 \\ \midrule
+        \multirow{2}{*}{\textbf{Decision Tree}} & DLL & 0.8877 & 0.8876 & 0.8876 & 0.8885 \\
+        & Function & 0.9406 & 0.9406 & 0.9415 & 0.9417 \\ \bottomrule
     \end{tabular}%
     \label{tab:baseline-results}
 \end{table}
 
 \noindent
-The results of our baseline approaches are presented in \cref{tab:baseline-results}, and indicate that all methods tested are comparible in terms of performance. When trained on non-unique external function usage, these methods achieve an F1 score of approximately 0.9. External library usage however, incurs a minor degradation in classification performance, as the same methods achieve an F1 score of approximately 0.88. Therefore, we can assume that the usage of external functions is a better indicator of a programs intent. 
+The results of our baseline approaches are presented in \cref{tab:baseline-results}. These results indicate that across each of the machine learning algorithms tested, the external function features clearly offer better performance as opposed to library level information. We find that the logistic regression, and decision tree algorithms, using the external function feature vector are comparable in terms of accuracy, and the support vector classifier offers worse performance by a margin of 0.02 in its f1 score. 
 
-This can be explained by our earlier analysis of executable similarity. We found that the average pairwise similarity between malicious and benign executables based on the function level information was much lower than that of the DLL information. This indicates that malicious and benign samples overlap to some extent in terms of which external libraries are used by each. Function level information however demonstrates a lower similarity, suggesting that malicious and benign functions typically use different functions. 
+When the library level information are considered however, we find that both the support vector machine and the decision tree algorithms provide similar performance of approximately 0.88 f1 score. The logistic regression algorithm however, is marginally worse at identifying malware by 2\%. 
+
+However, these models are particularly vulnerable to obfuscation as they rely of features extracted from the import table of an executable. Binary packing fully obfuscates this information, as it is found within the encoded portion of the packed executable, therefore unable to be extracted using static methods. Therefore, should we try to evaluate these models on a set of packed executables, the feature vectors used to represent executables would be empty, making it impossible to identify malicious programs. 
+
+% and indicate that all methods tested are comparible in terms of performance. When trained on non-unique external function usage, these methods achieve an F1 score of approximately 0.9. External library usage however, incurs a minor degradation in classification performance, as the same methods achieve an F1 score of approximately 0.88. Therefore, we can assume that the usage of external functions is a better indicator of a programs intent. 
+
+%This can be explained by our earlier analysis of executable similarity. We found that the average pairwise similarity between malicious and benign executables based on the function level information was much lower than that of the DLL information. This indicates that malicious and benign samples overlap to some extent in terms of which external libraries are used by each. Function level information however demonstrates a lower similarity, suggesting that malicious and benign functions typically use different functions. 
 
 %Therefore, the API methods used by the programs within our dataset exhibit more variation across benign and malicious samples than external libraries and are thus a better feature for classification. 
 
-Our results indicate that the best algorithm for classification was the decision tree classifier, trained on external function information. In addition to providing the best performance of all baseline methods tested in this experiment, decision tree algorithms have the added benefit of being interpretable. This means that we can visualise the internal mechanisms of the algorithm, providing additional insight into what makes a file malicious according to this model. 
+%Our results indicate that the best algorithm for classification was the decision tree classifier, trained on external function information. In addition to providing the best performance of all baseline methods tested in this experiment, decision tree algorithms have the added benefit of being interpretable. This means that we can visualise the internal mechanisms of the algorithm, providing additional insight into what makes a file malicious according to this model. 
 
 \section{Sequence Classification}
 
@@ -73,13 +79,13 @@ These sequence level tasks however are not representative of our models performa
 \end{table}
 
 \noindent
-Both image classification models demonstrate comparible performance to our baseline approaches, as shown in \cref{tab:image-classifier-model-results}. In addition to this, they also outperform both the non-pretrained and the frozen attention weight sequence classification models. However, they are both beaten by the pretrained sequence classification model in file level tasks. Images used by this model contains the entire executable, including the metadata stored in the executable header, static data, and the code itself. Our sequence classification models however, only use the opcodes of the instructions to determine a programs classification. Therefore, pretrained sequence classification models are more accurately identify malware, with less information, and by integrating this aforementioned information used by image classification models, we may be able to further improve the sequence classification models ability to recognise malicious programs.
+Our results demonstrate that both image classification models do not outperform our baseline, as shown in \cref{tab:image-classifier-model-results}. Furthermore, despite outperforming the scratch and frozen RoBERTa opcode sequence classification models in file level tasks, the pretrained model achieves a better F1 score by apprximately 0.014. This suggests that both conventional machine learning algorithms, and custom pretrained language models offer a more powerful solution to this problem.
 
-We have also shown that there is a significant discrepancy in the size of executables across classes in our dataset. As we are required to resize images to a constant resolution of 320\(\times\)320 pixels, artifacts originating from the resizing algorithm may be more pervasive in a single class. This could allow the model to develop an suboptimal solution to the problem as it may rely on the presence of these artifacts to distinguish between malicious and benign software. Therefore, we train another model which is trained on a subset of our original dataset, which has a more consistent distribution of executable sizes across classes. A genetic algorithm was used to identify this subset~(\cref{apdx:ga}), and the resulting collection has distributional distance of zero, and an approximately equal ratio of malicious to benign samples (\cref{fig:filtered-ds-size}). However, the models trained on this dataset demonstrate performance in line with the model trained on the full dataset, demonstrating that this is not the case. 
+The same model was also trained on a subset of the original dataset, found by the genetic algorithm outlined in \cref{apdx:ga}. We theorise that, due to the discrepancy in the size of programs in both classes, the model would use rescaling artifacts as an indicator of an executables class. The subset of our original dataset has an approximately equal distribution in program size between malicious and benign executables, as shown in \cref{fig:filtered-ds-size}, and maintains an acceptable class balance between the two. However, we find that the model trained on this filtered dataset, has very little impact on its performance when evaluated on the original dataset. This indicates that the model is not learning to identify malicious and benign programs based on any artifacts that may originate from rescaling.  
 
-% These results suggest that this is not be the case, as the size of a program has very little impact on its classification. 
 
-% Furthermore, the architecture of these models make them highly efficient. We are able to achieve comprable performance to that of the sequence classification models, with only approximately 20\% of the paramters. This enable these models to be run on devices with lower computational resources, with only a minor decrease in performance. In addition to this, the entire program is classified at once, as opposed to our RoBERTa model, which iterates over each sequence that make up its code. Therefore, this model is much faster to perform inference.  
+
+
 
 \begin{figure}
     \centering
@@ -89,6 +95,8 @@ We have also shown that there is a significant discrepancy in the size of execut
 \end{figure}
 
 \section{Obfuscation Experiment}
+
+To better understand how these approaches learn to distinguish between malicious and benign programs, we conduct an investigation into how their performances changes as obfuscation becomes more prevalant in a dataset of unobfuscated programs. Both the RoBERTa model, and the Image Classification models are tested, however we are unable to test the performance of our baseline approaches, as the tool used to obfuscate programs prevents feature extraction.  
 
 \subsection{Sequence Classification}
 
@@ -117,7 +125,7 @@ We have also shown that there is a significant discrepancy in the size of execut
     \label{fig:base-obf-results}
 \end{figure}
 
-We find that our sequence classification models seem to heavily rely on obfuscation as an indicator of a programs intent. This can be seen in \Cref{fig:seq-obf-file-level-base}, where an increased presence of obfuscated malicious samples corresponds with an increase in classification accuracy. When only bengin files are obfuscated however, we see no meaningful trend. 
+We find that our sequence classification models seem to heavily rely on obfuscation as an indicator of a programs intent. This can be seen in \Cref{fig:seq-obf-file-level-base}, where an increased presence of obfuscated malicious samples corresponds with an increase in classification accuracy. When only benign files are obfuscated however, we see no meaningful trend. 
 
 % suggesting that there may have been a handful of obfuscated samples in our benign dataset. This idea is reinforced by the fact that we see greater classification accuracy when all files are obfusctaed as opposed to when only malicious samples are obfuscated. However, it may also be possible that when we apply obfuscation across all samples in the dataset, there is a higher likelihood of any given sample being obfuscated due to the larger sample size. Therefore, it may be that when we apply obfuscation across all samples, as opposed to a single class, more of a single class has been obfuscated which drives an increase in the classification accuracy, particularly with malicious programs. 
 
@@ -155,11 +163,11 @@ We also see that across all models tested in this experiment, the trends are lar
     \label{fig:rsa-cka-base}
 \end{figure}
 
-We then repeat this experiment on two identical groups of models trained on modified datasets to see if data augmentation can produce models which are more resiliant to obfuscation. The first of these datasets has had all of its benign samples obfuscated prior to opcode extraction, and the second contains both the obfuscated and regular benign samples. We refer to these as our obfuscated bengin and partially obfuscated datasets respectively.  
+We then repeat this experiment on two identical groups of models trained on modified datasets to see if data augmentation can produce models which are more resiliant to obfuscation. The first of these datasets has had all of its benign samples obfuscated prior to opcode extraction, and the second contains both the obfuscated and regular benign samples. We refer to these as our obfuscated benign and partially obfuscated datasets respectively.  
 
 \subsubsection{Obfuscated Benign}
 
-The models trained on the this dataset all demonstrate increased classification accuracy when only bengin samples are obfuscated. When only malicious programs are obfuscated however, its accuracy decreases. In addition to this, when all samples are targets for obfuscation, the file level accuracy remains relatively consistent at approximately 50\%, suggesting random choice as shown in \cref{fig:seq-obf-file-level-ob}. Furthermore, the sequence classification metrics demonstrate that accuracy also remains consistent as we increase the number of obfuscated benign samples, whereas it decreases as more malicious samples are obfuscated. The certainty of the models in these predictions indicate that increasing the presence of obfuscation leads to greater uncertainty. 
+The models trained on the this dataset all demonstrate increased classification accuracy when only benign samples are obfuscated. When only malicious programs are obfuscated however, its accuracy decreases. In addition to this, when all samples are targets for obfuscation, the file level accuracy remains relatively consistent at approximately 50\%, suggesting random choice as shown in \cref{fig:seq-obf-file-level-ob}. Furthermore, the sequence classification metrics demonstrate that accuracy also remains consistent as we increase the number of obfuscated benign samples, whereas it decreases as more malicious samples are obfuscated. The certainty of the models in these predictions indicate that increasing the presence of obfuscation leads to greater uncertainty. 
 
 % This is to be expected, as the obfuscated benign samples used to train the model are generated using UPX, the same tool used to generate obfuscated samples in our experiment. Therefore, the model learns to recognise this form of obfuscation, as it is indicative of benign samples according to its training data. When all samples are obfuscated, the model is not able to accurately distinguish between the classes in the dataset, as it expects only benign samples to be obfuscated. Thus, when both classes are obfuscated, it is effectively guessing which class it belongs to. This can also be seen in its certainty, where the KL-Divergence decreases significantly as we increase the presence of obfuscation as shown in \cref{fig:seq-obf-certainty-ob}, suggesting the predicted class distribution approaches random selection with increased presence of obfuscation across both classes. 
 
@@ -184,7 +192,7 @@ The models trained on the this dataset all demonstrate increased classification 
         \caption{Confidence in model predictions}
         \label{fig:seq-obf-certainty-ob}
     \end{subfigure}
-    \caption{Impact of obfuscation on the performance of file and sequence level classification, and certainty of the RoBERTa opcode sequence classification models trained on the obfuscated bengin dataset.}
+    \caption{Impact of obfuscation on the performance of file and sequence level classification, and certainty of the RoBERTa opcode sequence classification models trained on the obfuscated benign dataset.}
     \label{fig:seq-obf-results-ob}
 \end{figure}
 

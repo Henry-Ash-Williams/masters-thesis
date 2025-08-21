@@ -104,7 +104,7 @@
         \textsc{\Large Masters Thesis}
         % \hrulefill\\%[0.5cm] % Thesis type
 
-        \Huge \textbf{On the Effectiveness of Deep Learning Techniques for Malware Detection and their Resiliance to Obfuscation}\\[1.5cm] % Thesis title
+        \Huge \textbf{On the Effectiveness of Deep Learning Techniques for Malware Detection and their Resilience to Obfuscation}\\[1.5cm] % Thesis title
 
         \large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of Master of Research in Advanced Artificial Intelligence}\\[0.5cm] % University 
         \textit{in the}\\[0.5cm]
@@ -572,7 +572,7 @@ The file begins with a DOS (Disk Operating System) header for compatibility reas
 
 \section{Word Count}
 
-The word-count of this document, as reported by \texttt{texcount}, is shown in the following table. Note that this excludes all text found within the appendicies
+The word-count of this document, as reported by \texttt{texcount}\footnote{\url{https://github.com/Henry-Ash-Williams/masters-thesis/blob/master/writing/thesis/count-words.sh}}, is shown in the following table. Note that this excludes all text found within the appendicies. 
 
 \begin{table}[H]
     \centering
@@ -646,7 +646,7 @@ From Pretrained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  & 0.9647 & 0.9647 & 0.
 \toprule
 \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Model}}} &  & \multicolumn{4}{c}{\textbf{Sequence Level}} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\textbf{File Level}} & \vspace{2pt} \\ \cline{3-6} \cline{8-11}
 \multicolumn{1}{c}{} &  & Accuracy & F1-Score & Precision & Recall & \textbf{} & Accuracy & F1-Score & Precision & Recall &  \\ \midrule
-From Scratch &  & 0.8282 & 0.8256 & 0.8310 & 0.8282 &  &  &  &  &  &  \\
+From Scratch &  & 0.8282 & 0.8256 & 0.8310 & 0.8282 &  & 0.8050 & 0.7965 & 0.8551 & 0.8012  &  \\
 From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.9215 & 0.9140 &  \\
 \begin{tabular}[c]{@{}l@{}}From Pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8053 & 0.7987 & 0.8169 & 0.8053 &  & 0.8260 & 0.8245 & 0.8335 & 0.8245 &  \\ \bottomrule
 \end{tabular}%

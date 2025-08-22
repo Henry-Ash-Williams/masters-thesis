@@ -680,6 +680,100 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 \end{figure}
 
 
+\section{Additional Obfuscation Experiment Results}\label{apdx:addition-obfs-results}
+
+\subsubsection{Base}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-base-f1-score.png}
+        \caption{File-level F1 score}
+        \label{fig:seq-obf-file-level-base-f1}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-base-f1-score.png}
+        \caption{Sequence level F1 score}
+        \label{fig:seq-obf-seq-level-base-f1}
+    \end{subfigure}
+
+    \caption{Impact of obfuscation on the f1 score at both the sequence, and file level, on our base RoBERTa sequence classification models.}
+    \label{fig:base-obf-results-f1}
+\end{figure}
+
+\subsubsection{Obfuscated Benign}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-ob-f1-score.png}
+        \caption{File-level F1 score}
+        \label{fig:seq-obf-file-level-ob-f1}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-ob-f1-score.png}
+        \caption{Sequence level F1 score}
+        \label{fig:seq-obf-seq-level-ob-f1}
+    \end{subfigure}
+
+    \caption{Impact of obfuscation on the f1 score at both the sequence, and file level, on our obfuscated benign RoBERTa sequence classification models.}
+    \label{fig:ob-obf-results-f1}
+\end{figure}
+
+
+\subsubsection{Partially Obfuscated Benign}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-pob-f1-score.png}
+        \caption{File-level F1 score}
+        \label{fig:seq-obf-file-level-pob-f1}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-pob-f1-score.png}
+        \caption{Sequence level F1 score}
+        \label{fig:seq-obf-seq-level-pob-f1}
+    \end{subfigure}
+
+    \caption{Impact of obfuscation on the f1 score at both the sequence, and file level, on our partially obfuscated benign RoBERTa sequence classification models.}
+    \label{fig:pob-obf-results-f1}
+\end{figure}
+
+\section{Prevalance of Obfuscation}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-portion-base.png}
+        \caption{Percentage of files obfuscated at each step on the base model trial}
+        \label{fig:seq-obf-portion-base}
+    \end{subfigure}
+
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-portion-ob.png}
+        \caption{Percentage of files obfuscated at each step on the obfuscated benign model trial}
+        \label{fig:seq-obf-portion-ob}
+    \end{subfigure}
+    
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-portion-pob.png}
+        \caption{Percentage of files obfuscated at each step on the partially obfuscated benign model trial}
+        \label{fig:seq-obf-portion-pob}
+    \end{subfigure}
+
+    \caption{Amount of sucessfully obfuscated files at each step.}
+    \label{fig:seq-obf-portion}
+\end{figure}
+
+
+
 \chapter{Acknowledgements}
 
 This research would not have been possible without the guidance and support of my supervisor, Dr Jeff Mitchell. His expertise and advice has proven to be invaluable, and I am extremely greatful for it. 

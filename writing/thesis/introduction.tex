@@ -8,7 +8,7 @@ Malware is one of the most significant threats faced by users in the current dig
 
 Therefore, detecting malware before it can cause damage is of high priority to security professionals. However, following the introduction of anti-virus software, malware developers of have used various evasion techniques to avoid detection. This has led to a cat-and-mouse like game, where cybercriminals adopt new forms of evasion techniques, and security researchers developing new techniques to handle these new forms of obufscation. This makes conventional approaches to malware detection challenging, due to its constantly evolving nature. 
 
-Machine learning however offers a potential means of dealing with this by finding ways to detect malware in spite of evasion techniques. In this investigation, we use various approaches from a number of machine learning domains, such as linear modelling, natural langauge processing, and image processing to investigate both their performance at detecting malware targeting the windows operating system, and their resilience to obfuscation. 
+Machine learning however offers a potential means of dealing with this by finding ways to detect malware in spite of evasion techniques. In this investigation, we use various approaches from a number of machine learning domains, such as linear modelling, natural language processing, and image processing to investigate both their performance at detecting malware targeting the windows operating system, and their resilience to obfuscation. 
 
 We evaluate both a RoBERTa-based language model trained on sequences of assembly instruction, and Convolutional Neural Network using image representations of programs to identify malware. These are both considered static approaches where feature are extracted without executing the program. Dynamic methods on the other hand, observe the behavior of a program, and are typically more capable than static methods. However, they often incur a significant overhead in their complexity, as an environment where a potentially malicious program can be safely executed is required. This is typically a remote server hosting a virtual machine that isolates the execution, preventing it from causing harm. However, to communicate with this safe execution environment, an internet connection is required. In comparison, static approaches are able to operate in environments where an internet connection is not guaranteed. Therefore, in light of their disadvantages, static methods are still relevant in domain. 
 
@@ -19,7 +19,7 @@ The research questions we seek to answer in this work are as follows:
 \begin{enumerate}[label=\textbf{RQ\arabic*}:]
     \item \emph{Are modern natural language processing techniques, such as language models and pretraining effective at identifying malware?}
     \item \emph{Does pretraining improve the accuracy and reliability of malware detection models based on techniques from natural language processing?}
-    \item \emph{To what extent are static malware detection models resiliant to obfuscation?}
+    \item \emph{To what extent are static malware detection models resilient to obfuscation?}
 \end{enumerate}
 
 

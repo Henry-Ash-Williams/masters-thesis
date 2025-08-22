@@ -1,0 +1,40 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:142.0) Gecko/20100101 Firefox/142.0" version="28.1.0">
+  <diagram name="Page-1" id="tthX0g6KGaH_OVvuafZU">
+    <mxGraphModel dx="766" dy="465" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="1" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="IDqHeQAe3vKuCn6ZHMGS-9" value="&lt;div&gt;True Positive&lt;/div&gt;&lt;div&gt;(\(TP\))&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Linux Libertine O;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="80" y="80" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="IDqHeQAe3vKuCn6ZHMGS-10" value="&lt;div&gt;False Negative&lt;/div&gt;&lt;div&gt;(\(FN\))&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Linux Libertine O;fillColor=#f8cecc;strokeColor=#b85450;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="240" y="80" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="IDqHeQAe3vKuCn6ZHMGS-11" value="&lt;div&gt;False Positive&lt;/div&gt;&lt;div&gt;(\(FP\))&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Linux Libertine O;fillColor=#f8cecc;strokeColor=#b85450;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="80" y="240" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="IDqHeQAe3vKuCn6ZHMGS-12" value="&lt;div&gt;True Negative&lt;/div&gt;&lt;div&gt;(\(FN\))&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Linux Libertine O;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="240" y="240" width="150" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="IDqHeQAe3vKuCn6ZHMGS-13" value="Malicious" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Linux Libertine O;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="80" y="40" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IDqHeQAe3vKuCn6ZHMGS-14" value="Benign" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Linux Libertine O;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="240" y="40" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IDqHeQAe3vKuCn6ZHMGS-17" value="Predicted" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Linux Libertine O;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="80" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aGKk1cHKAbma3BMZWxaY-1" value="Malicious" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Linux Libertine O;fontSize=16;rotation=270;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="300" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aGKk1cHKAbma3BMZWxaY-2" value="Benign" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Linux Libertine O;fontSize=16;rotation=270;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="140" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aGKk1cHKAbma3BMZWxaY-3" value="Actual" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Linux Libertine O;fontSize=16;rotation=270;" parent="1" vertex="1">
+          <mxGeometry x="-140" y="220" width="310" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

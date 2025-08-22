@@ -7,7 +7,7 @@
 
 \begin{table}[h]
     \centering
-    \caption{Performance of our baseline methods for malware detection based on the import tables of executables}
+    \caption{Performance of baseline methods for malware detection using the import tables of executables}
     \begin{tabular}{llllll}
         \toprule
         \textbf{Algorithm} & \textbf{Feature} & \textbf{Accuracy} & \textbf{F1 Score} & \textbf{Precision} & \textbf{Recall} \\ \midrule
@@ -56,9 +56,9 @@ However, these models are particularly vulnerable to obfuscation as they rely of
 \end{table}
 
 \noindent
-In \cref{tab:malberta-base-results} we present both the sequence level, and file level classifiction metrics of our machine-code langauge models. We find that in sequence level tasks, where the model is tasked with classifying a subsequence of opcodes as either malicious or benign, the pretrained model offers the best performance. When this pretraining stage is skipped, performance degrades by approximately 3\%, indicating the prior understanding of opcode sequences is necessary to more accurately identify malicious sequences. In comparison to our baseline approaches presented in \cref{tab:baseline-results}, only the pretrained model offers similar performance. 
+In \cref{tab:malberta-base-results} we present both the sequence level, and file level classification metrics of our machine-code langauge models. We find that in sequence level tasks, where the model is tasked with classifying a subsequence of opcodes as either malicious or benign, the pretrained model offers the best performance. When this pretraining stage is skipped, performance degrades by approximately 3\%, indicating the prior understanding of opcode sequences is necessary to more accurately identify malicious sequences. In comparison to our baseline approaches presented in \cref{tab:baseline-results}, only the pretrained model offers similar performance. 
 
-In addition to this, the performance of the same pretrained model is impacted significantly when the parameters of its attention layers are frozen. These weights encode the understanding of langaue developed during its pretraining stage to create an encoded representation of a sequence, which is then used by a classification head to determine its classficiation. In fine-tuning tasks, these initial layer weights may be frozen to reduce the computational cost, and the amount of training data used during training the model. However, we see that freezing the attention layers has a significantly negative implication on the models performance. 
+In addition to this, the performance of the same pretrained model is impacted significantly when the parameters of its attention layers are frozen. These weights encode the understanding of language developed during its pretraining stage to create an encoded representation of a sequence, which is then used by a classification head to determine its classification. In fine-tuning tasks, these initial layer weights may be frozen to reduce the computational cost, and the amount of training data used during training the model. However, we see that freezing the attention layers has a significantly negative implication on the models performance. 
 
 These sequence level tasks however are not representative of our models performance in real world tasks. Therefore, to understand how they perform in real-world malware detection, we are required to reduce multiple sequence classifications across an entire program, into a single file-level classification. By taking the mean of each, un-normalised pair of class logits, we are able to find this file-level classification. From this, we find that the pretrained model achieves the best file-level performance, with an F1 score of 0.94, outperforming our baseline approaches by a small margin. This increase in performance between sequence level and file level tasks is also seen in the non-pretrained model to a lesser extent. However, the model with frozen attention layers exhibits a decrease between sequence level, and file level performance.
 
@@ -79,7 +79,7 @@ These sequence level tasks however are not representative of our models performa
 \end{table}
 
 \noindent
-Our results demonstrate that both image classification models do not outperform our baseline, as shown in \cref{tab:image-classifier-model-results}. Furthermore, despite outperforming the scratch and frozen RoBERTa opcode sequence classification models in file level tasks, the pretrained model achieves a better F1 score by apprximately 0.014. This suggests that both conventional machine learning algorithms, and custom pretrained language models offer a more powerful solution to this problem.
+Our results demonstrate that both image classification models do not outperform our baseline, as shown in \cref{tab:image-classifier-model-results}. Furthermore, despite outperforming the scratch and frozen RoBERTa opcode sequence classification models in file level tasks, the pretrained model achieves a better F1 score by approximately 0.014. This suggests that both conventional machine learning algorithms, and custom pretrained language models offer a more powerful solution to this problem.
 
 The same model was also trained on a subset of the original dataset, found by the genetic algorithm outlined in \cref{apdx:ga}. We theorise that, due to the discrepancy in the size of programs in both classes, the model would use rescaling artifacts as an indicator of an executables class. The subset of our original dataset has an approximately equal distribution in program size between malicious and benign executables, as shown in \cref{fig:filtered-ds-size}, and maintains an acceptable class balance between the two. However, we find that the model trained on this filtered dataset, has very little impact on its performance when evaluated on the original dataset. This indicates that the model is not learning to identify malicious and benign programs based on any artifacts that may originate from rescaling.  
 
@@ -96,7 +96,7 @@ The same model was also trained on a subset of the original dataset, found by th
 
 \section{Obfuscation Experiment}
 
-To better understand how these approaches learn to distinguish between malicious and benign programs, we conduct an investigation into how their performances changes as obfuscation becomes more prevalant in a dataset of unobfuscated programs. Both the RoBERTa model, and the Image Classification models are tested, however we are unable to test the performance of our baseline approaches, as the tool used to obfuscate programs prevents feature extraction.  
+To better understand how these approaches learn to distinguish between malicious and benign programs, we conduct an investigation into how their performances changes as obfuscation becomes more prevalent in a dataset of unobfuscated programs. Both the RoBERTa model, and the Image Classification models are tested, however we are unable to test the performance of our baseline approaches, as the tool used to obfuscate programs prevents feature extraction.  
 
 \subsection{Sequence Classification}
 
@@ -104,14 +104,14 @@ To better understand how these approaches learn to distinguish between malicious
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-file-level-base.png}
-        \caption{File-level classification metrics}
+        \caption{File-level performance}
         \label{fig:seq-obf-file-level-base}
     \end{subfigure}
 
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-seq-level-base.png}
-        \caption{Sequence level classification metrics}
+        \caption{Sequence-level performance}
         \label{fig:seq-obf-seq-level-base}
     \end{subfigure}
 
@@ -137,26 +137,26 @@ To better understand how our models handle obfuscation, we quantify the certaint
     D_{KL}\left(p~||~q\right) = \sum_{x \in \mathcal{X}} p\left(x\right) \log \left(\frac{p\left(x\right)}{q\left(x\right)}\right)\label{eq:kl_div}
 \end{equation}
 
-We also see that across all models tested in this experiment, the trends are largely similar. For example, our results show that as the presence of obfuscated malicious samples increase, the classification increases accordingly. This trend is seen in all of the models used in this experiment, however the extent of the trend varies between them. This suggests that our models are learning similar representations, yet are limited by other factors such as a reduced prior understanding of the langauge, and insufficient model complexity. To visualise this, we perform representational similarity analysis (RSA) on the activations of our models at each layer using Centered Kernel Alignment (CKA, shown in \cref{apdx:cka}) as outlined in~\citep{kornblithSimilarityNeuralNetwork2019}. This metric quantifies the correspondance between hidden representations of data across models trained from different initialisations. This is shown in \cref{fig:rsa-cka-base}, and indicates that the similarity of representations in the attention layers of the pretrained and non-pretrained models decrease with the number of layers, and that the representations at the classification heads are very similar. Our frozen model however, demonstrates a higher extent of representational similarity in the attention layers, and significant disimilarity at the classification head. 
+We also see that across all models tested in this experiment, the trends are largely similar. For example, our results show that as the presence of obfuscated malicious samples increase, the classification increases accordingly. This trend is seen in all the models used in this experiment, however the extent of the trend varies between them. This suggests that our models are learning similar representations, yet are limited by other factors such as a reduced prior understanding of the langauge, and insufficient model complexity. To visualise this, we perform representational similarity analysis (RSA) on the activation's of our models at each layer using Centered Kernel Alignment (CKA, shown in \cref{apdx:cka}) as outlined in~\citep{kornblithSimilarityNeuralNetwork2019}. This metric quantifies the correspondence between hidden representations of data across models trained from different initialisations. This is shown in \cref{fig:rsa-cka-base}, and indicates that the similarity of representations in the attention layers of the pretrained and non-pretrained models decrease with the number of layers, and that the representations at the classification heads are very similar. Our frozen model however, demonstrates a higher extent of representational similarity in the attention layers, and significant dissimilarity at the classification head. 
 
 
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[t]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-base-pretrained-scratch.png}
-        \caption{RSA of the pretrained and non-pretrained models.}
+        \caption{RSA of pretrained and non-pretrained models.}
         \label{fig:rsa-pretrained-scratch}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-base-pretrained-frozen.png}
-        \caption{RSA of the pretrained model and our pretrained model with frozen attention layer weights.}
+        \caption{RSA of pretrained and frozen models.}
         \label{fig:rsa-pretrained-frozen}
     \end{subfigure}
     \centering
     \begin{subfigure}[b]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-base-frozen-scratch.png}
-        \caption{RSA of the pretrained model with frozen attention layer weights and the non-pretrained model.}
+        \caption{RSA of frozen, and non pretrained models.}
         \label{fig:rsa-pretrained-frozen}
     \end{subfigure}
     \caption{Representational Similarity Analysis (RSA) of our baseline models using Centered Kernel Alignment.}
@@ -167,7 +167,7 @@ We then repeat this experiment on two identical groups of models trained on modi
 
 \subsubsection{Obfuscated Benign}
 
-The models trained on the this dataset all demonstrate increased classification accuracy when only benign samples are obfuscated. When only malicious programs are obfuscated however, its accuracy decreases. In addition to this, when all samples are targets for obfuscation, the file level accuracy remains relatively consistent at approximately 50\%, suggesting random choice as shown in \cref{fig:seq-obf-file-level-ob}. Furthermore, the sequence classification metrics demonstrate that accuracy also remains consistent as we increase the number of obfuscated benign samples, whereas it decreases as more malicious samples are obfuscated. The certainty of the models in these predictions indicate that increasing the presence of obfuscation leads to greater uncertainty. 
+The models trained on this dataset all demonstrate increased classification accuracy when only benign samples are obfuscated. When only malicious programs are obfuscated however, its accuracy decreases. In addition to this, when all samples are targets for obfuscation, the file level accuracy remains relatively consistent at approximately 50\%, suggesting random choice as shown in \cref{fig:seq-obf-file-level-ob}. Furthermore, the sequence classification metrics demonstrate that accuracy also remains consistent as we increase the number of obfuscated benign samples, whereas it decreases as more malicious samples are obfuscated. The certainty of the models in these predictions indicate that increasing the presence of obfuscation leads to greater uncertainty. 
 
 % This is to be expected, as the obfuscated benign samples used to train the model are generated using UPX, the same tool used to generate obfuscated samples in our experiment. Therefore, the model learns to recognise this form of obfuscation, as it is indicative of benign samples according to its training data. When all samples are obfuscated, the model is not able to accurately distinguish between the classes in the dataset, as it expects only benign samples to be obfuscated. Thus, when both classes are obfuscated, it is effectively guessing which class it belongs to. This can also be seen in its certainty, where the KL-Divergence decreases significantly as we increase the presence of obfuscation as shown in \cref{fig:seq-obf-certainty-ob}, suggesting the predicted class distribution approaches random selection with increased presence of obfuscation across both classes. 
 
@@ -175,14 +175,14 @@ The models trained on the this dataset all demonstrate increased classification 
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-file-level-ob.png}
-        \caption{File-level classification metrics}
+        \caption{File-level performance}
         \label{fig:seq-obf-file-level-ob}
     \end{subfigure}
 
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-seq-level-ob.png}
-        \caption{Sequence level classification metrics}
+        \caption{Sequence-level performance}
         \label{fig:seq-obf-seq-level-ob}
     \end{subfigure}
 
@@ -202,21 +202,21 @@ The models trained on the this dataset all demonstrate increased classification 
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-file-level-pob.png}
-        \caption{File-level classification metrics}
+        \caption{File-level performance}
         \label{fig:seq-obf-file-level-pob}
     \end{subfigure}
 
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-seq-level-pob.png}
-        \caption{Sequence level classification metrics}
+        \caption{Sequence-level performance}
         \label{fig:seq-obf-seq-level-pob}
     \end{subfigure}
 
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-certainty-pob.png}
-        \caption{Certainty (KL-Divergence between logits and uniform distribution)}
+        \caption{Confidence in model predictions}
         \label{fig:seq-obf-certainty-pob}
     \end{subfigure}
     \caption{Impact of obfuscation on the performance of file and sequence level classification, and certainty of the RoBERTa opcode sequence classification models trained on the partially obfuscated benign dataset.}
@@ -229,15 +229,15 @@ The models trained on the this dataset all demonstrate increased classification 
 
 Models trained on the partially obfuscated benign dataset demonstrate more consistent file-level classification accuracy when only malicious samples are obfuscated as opposed to the fully obfuscated benign models, which decrease under the same conditions. However, this is not the case for the frozen model, as we see a significant decrease in accuracy with increasing presence of obfuscated malicious samples. 
 
-Furthermore, as was the case in the obfuscated benign models, accuracy does increase with the number of obfuscated benign samples in both the pretrained, and frozen models. The model trained from a random initialisation however, exhibits a unique trend in classification metrics between different obfuscation targets. In comparison to the other models tested in this experiment, where we see highly similar trends between different models trained on the same data, that differ only in their extent. However, in this case, we see that the classification accuracy is similar across obfuscation targets as opposed to the other models, which increase when all samples, and benign samples are targets for obfuscation, while remaining consistent or decreasing with increased obfuscation likelihood.
+Furthermore, as was the case in the obfuscated benign models, accuracy does increase with the number of obfuscated benign samples in both the pretrained, and frozen models. The model trained from a random initialisation however, exhibits a unique trend in classification metrics between different obfuscation targets. In comparison to the other models tested in this experiment, where we see highly similar trends between different models trained on the same data, that differ only in their extent. However, in this case, we see a unique trend in the model trained from scratch, where classification accuracy marginally increases across each obfuscation target. The pretrained, and frozen pretrained models however, show a significant increase in accuracy when benign samples are more commonly obfuscated.
 
-However, sequence level accuracy tells a different story. Between all models, we see sequence level accuracy decrease as the number of obfuscated malicious samples increase. We also see that the observed increase in accuracy with the number of obfuscated benign samples is less pronounced than the file level metrics. As we increase the number of obfuscated samples in both classes, there is no discernable trend. 
+However, sequence level accuracy tells a different story. Between all models, we see sequence level accuracy decrease as the number of obfuscated malicious samples increase. We also see that the observed increase in accuracy with the number of obfuscated benign samples is less pronounced than the file level metrics. As we increase the number of obfuscated samples in both classes, there is no discernible trend. 
 
 Furthermore, the KL divergence representing the models confidence, decreases with obfuscation likelihood. This can also be seen in the obfuscated benign models. 
 
-\subsection{Image Classifer}
+\subsection{Image Classifier}
 
-The impact of obfuscation on our image classification models is shown in \Cref{fig:img-obfs-results}. We find that both of the image based malware detection models are more likely to identify malicious software based on the presence of obfuscation. In both cases, we see that the presence of obfuscation increases across our malicious samples is positively correlated with the classification accuracy. In comparison to this, an increased prevalance of obfuscation in benign samples leads to a degradation in performance. Furthermore, when obfuscation is applied across all samples in this dataset, we see no meaningful trend in classification accuracy as obfuscation becomes more common. 
+The impact of obfuscation on our image classification models is shown in \Cref{fig:img-obfs-results}. We find that both of the image based malware detection models are more likely to identify malicious software based on the presence of obfuscation. In both cases, we see that the presence of obfuscation increases across our malicious samples is positively correlated with the classification accuracy. In comparison to this, an increased prevalence of obfuscation in benign samples leads to a degradation in performance. Furthermore, when obfuscation is applied across all samples in this dataset, we see no meaningful trend in classification accuracy as obfuscation becomes more common. 
 
 \begin{figure}
     \centering 

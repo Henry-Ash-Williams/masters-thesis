@@ -133,7 +133,7 @@
             \textbf{Abstract} \\ 
 
             \begin{flushleft}
-                \small Malicious software is an extremely pervasive threat faced by both individuals and organisations, that has the potential to cause significant damage to computer systems. We explore the usage of deep learning techniques for automated identification of malware, and evaluate how resiliant these approaches are to obfuscation techniques used to bypass existing malware detection services. We present a natural langauge processing based approach, using the BERT architecture for malicious opcode sequence classification, and an image-based approach using the EfficientNet architecture. We find that these static malware detection approaches consider obfuscation as highly indicative of malware, leading to misclassification of obfuscated benign executables.
+                \small Malicious software is an extremely pervasive threat faced by both individuals and organisations, that has the potential to cause significant damage to computer systems. We explore the usage of deep learning techniques for automated identification of malware, and evaluate how resilient these approaches are to obfuscation techniques used to bypass existing malware detection services. We present a natural language processing based approach, using the BERT architecture for malicious opcode sequence classification, and an image-based approach using the EfficientNet architecture. We find that these static malware detection approaches consider obfuscation as highly indicative of malware, leading to misclassification of obfuscated benign programs.
             \end{flushleft}
         \end{minipage}
 
@@ -403,7 +403,7 @@
 
 %TC:ignore
 \appendix 
-\chapter{Supplimental Information}
+\chapter{Supplemental Information}
 
 \section{Code Availability}
 
@@ -572,7 +572,7 @@ The file begins with a DOS (Disk Operating System) header for compatibility reas
 
 \section{Word Count}
 
-The word-count of this document, as reported by \texttt{texcount}\footnote{\url{https://github.com/Henry-Ash-Williams/masters-thesis/blob/master/writing/thesis/count-words.sh}}, is shown in the following table. Note that this excludes all text found within the appendicies. 
+The word-count of this document, as reported by \texttt{texcount}\footnote{\url{https://github.com/Henry-Ash-Williams/masters-thesis/blob/master/writing/thesis/count-words.sh}}, is shown in the following table. Note that this excludes all text found within the appendices. 
 
 \begin{table}[H]
     \centering
@@ -582,15 +582,15 @@ The word-count of this document, as reported by \texttt{texcount}\footnote{\url{
 \multicolumn{1}{c}{} &  & \multicolumn{1}{l}{Body Text} & \multicolumn{1}{l}{Header Text} & \multicolumn{1}{l}{Outside Text} &  \\ \midrule
 % Abstract & & 87 & 5 & 0 
 Introduction &  & 910 & 17 & 0 &  \\
-Background &  & 2994 & 12 & 52 &  \\
-Methods &  & 2197 & 16 & 113 &  \\
-Results &  & 2081 & 16 & 215 &  \\
-Discussion &  & 2716 & 16 & 215 &  \\ \midrule
-\textbf{Total} &  & 10898 & 77 & 595 &  \\ \bottomrule
+Background &  & 2986 & 12 & 35 &  \\
+Methods &  & 2195 & 16 & 110 &  \\
+Results &  & 1717 & 16 & 199 &  \\
+Discussion &  & 3471 & 15 & 78 &  \\ \midrule
+\textbf{Total} &  & 11366 & 81 & 422 &  \\ \bottomrule
 \end{tabular}
 \end{table}
 
-\chapter{Supplimental Results}
+\chapter{Supplemental Results}
 
 \section{Obfuscated Benign Model}
 
@@ -682,7 +682,7 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 
 \section{Additional Obfuscation Experiment Results}\label{apdx:addition-obfs-results}
 
-\subsubsection{Base}
+\subsection{Base}
 
 \begin{figure}[H]
     \centering
@@ -703,7 +703,7 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
     \label{fig:base-obf-results-f1}
 \end{figure}
 
-\subsubsection{Obfuscated Benign}
+\subsection{Obfuscated Benign}
 
 \begin{figure}[H]
     \centering
@@ -725,7 +725,7 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 \end{figure}
 
 
-\subsubsection{Partially Obfuscated Benign}
+\subsection{Partially Obfuscated Benign}
 
 \begin{figure}[H]
     \centering
@@ -746,7 +746,16 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
     \label{fig:pob-obf-results-f1}
 \end{figure}
 
-\section{Prevalance of Obfuscation}
+\subsection{Image-Classifier}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=\textwidth]{img-obf-file-level-f1-score.png}
+    \caption{Impact of obfuscation on the F1 score of our image classification malware detection model.}
+    \label{fig:img-obfs-f1-score}
+\end{figure}
+
+\section{Prevalence of Obfuscation}
 
 \begin{figure}[H]
     \centering
@@ -774,9 +783,11 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 
 
 
+
+
 \chapter{Acknowledgements}
 
-This research would not have been possible without the guidance and support of my supervisor, Dr Jeff Mitchell. His expertise and advice has proven to be invaluable, and I am extremely greatful for it. 
+This research would not have been possible without the guidance and support of my supervisor, Dr Jeff Mitchell. His expertise and advice has proven to be invaluable, and I am extremely grateful for it. 
 
 I would also like to express my gratitude to both Dr Ivor Simpson, and Dr Peter Wijeratne for organising this course. It has been the most challenging, yet deeply rewarding year of my life thus far, and has contributed greatly to my knowledge and professional development. 
 

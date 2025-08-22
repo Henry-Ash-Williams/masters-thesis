@@ -22,9 +22,9 @@
 \end{table}
 
 \noindent
-The results of our baseline approaches are presented in \cref{tab:baseline-results}. These results indicate that across each of the machine learning algorithms tested, the external function features clearly offer better performance as opposed to library level information. We find that the logistic regression, and decision tree algorithms, using the external function feature vector are comparable in terms of accuracy, and the support vector classifier offers worse performance by a margin of 0.02 in its f1 score. 
+The results of our baseline approaches are presented in \cref{tab:baseline-results}. These results indicate that across each of the machine learning algorithms tested, the external function features clearly offer better performance as opposed to library level information. We find that the logistic regression, and decision tree algorithms, using the external function feature vector are comparable in terms of accuracy, and the support vector classifier offers worse performance by a margin of 0.02 in its F1 score. 
 
-When the library level information are considered however, we find that both the support vector machine and the decision tree algorithms provide similar performance of approximately 0.88 f1 score. The logistic regression algorithm however, is marginally worse at identifying malware by 2\%. 
+When the library level information are considered however, we find that both the support vector machine and the decision tree algorithms provide similar performance of approximately 0.88 F1 score. The logistic regression algorithm however, is marginally worse at identifying malware by 2\%. 
 
 However, these models are particularly vulnerable to obfuscation as they rely of features extracted from the import table of an executable. Binary packing fully obfuscates this information, as it is found within the encoded portion of the packed executable, therefore unable to be extracted using static methods. Therefore, should we try to evaluate these models on a set of packed executables, the feature vectors used to represent executables would be empty, making it impossible to identify malicious programs. 
 

@@ -45,6 +45,16 @@
 \usepackage{subfiles}
 \usepackage[compact]{titlesec}
 \usepackage{lipsum}
+\usepackage{spverbatim}
+\usepackage{fvextra}
+
+\DefineVerbatimEnvironment{WrappedVerbatim}{Verbatim}
+  {breaklines=true,
+   breakanywhere=true,
+   breakautoindent=false, 
+   breaksymbolleft={}, 
+   breaksymbolright={}
+  }
 
 % Modify algorithmic environment, replace "Require" and "Ensure" with "Input" and "Output" respectively 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -95,7 +105,6 @@
 
 \begin{document}
 
-
 \begin{titlepage}
     \begin{center}
         \includegraphics[width=5cm]{uoslogo}\\[2cm]% \bigskip
@@ -136,7 +145,6 @@
                 \small Malicious software is an extremely pervasive threat faced by both individuals and organisations, that has the potential to cause significant damage to computer systems. We explore the usage of deep learning techniques for automated identification of malware, and evaluate how resilient these approaches are to obfuscation techniques used to bypass existing malware detection services. We present a natural language processing based approach, using the BERT architecture for malicious opcode sequence classification, and an image-based approach using the EfficientNet architecture. We find that these static malware detection approaches consider obfuscation as highly indicative of malware, leading to misclassification of obfuscated benign programs.
             \end{flushleft}
         \end{minipage}
-
         \vfill
         \large August 2025
          
@@ -166,7 +174,6 @@
     \textbf{Candidate No:} 233561
 \end{flushleft}
 
-
 \newpage
 
 \microtypesetup{protrusion=false}
@@ -179,227 +186,27 @@
 
 \chapter{Introduction}
 
-
-% \ifthenelse{\boolean{outline}}{
-% \noindent\fbox{%
-%     \parbox{\textwidth}{%
-%         \textbf{Word Count: 1000}
-
-%         \begin{itemize}
-%             \item What is malware? 
-%             \item Why is detecting it important? 
-%             \item How do we detect it? 
-%             \item How does it evade detection? 
-%             \item What are we doing? 
-%             \item Ethical \& Safety considerations 
-            
-%             \begin{itemize}
-%                 \item Ethics | maybe better malware detection could be used to guide development of adverserial malware? 
-%                 \item Safety | outline ways to ensure malware samples are never to be executed 
-%             \end{itemize}
-%         \end{itemize}
-%     }%
-% }
-% }{}
-
-
-\includeSection{./introduction.tex} % WC = 837
+\includeSection{./introduction.tex} 
 
 \chapter{Background}
 
-% \ifthenelse{\boolean{outline}}{
-% \noindent\fbox{%
-%     \parbox{\textwidth}{%
-%         \textbf{Word Count: 2000}
-
-%         \begin{itemize}
-%             \item Malware 
-            
-%             \begin{itemize}
-%                 \item Definition
-%                 \item Forms of malicious software 
-%                 \item Common features (obfuscation, anti-debugging, etc)
-%             \end{itemize}
-
-%             \item Machine Learning 
-%             \item Existing Approaches 
-            
-%             \begin{itemize}
-%                 \item Differences between static/hybrid/dynamic approaches 
-%                 \item Compare differences between common static, and dynamic features
-%                 \item Compare differences in performance between static and dynamic approaches 
-%                 \item Introduce approach taken by commerical solutions 
-%                 \item Conclusion: \emph{``Despite being more accurate at detecting malware, dynamic approaches are limited by the need to execute suspicious programs in an isolated environment, leading to increased resource requirements. However, static approaches are more likely to be vulnerable to obfuscation.''}
-%             \end{itemize}
-%         \end{itemize}
-%     }%
-% }
-% }{}
-
 \noindent
-\includeSection{./background.tex} % WC = 2977
+\includeSection{./background.tex} 
 
 
 \chapter{Methodology}
-
-% \ifthenelse{\boolean{outline}}{
-% \noindent\fbox{%
-%     \parbox{\textwidth}{%
-%         \textbf{Word Count: 3000}
-
-%         \begin{itemize}
-%             \item What: \emph{``Do static malware detectors learn to detect malware based on the presence of obfuscation alone?''}
-
-%             \item Why? 
-
-%             \begin{itemize}
-%                 \item Develop a better understanding of the barriers to the success of static malware detectors 
-%                 \item Establish whether NLP techniques are well suited to modelling executable programs 
-%             \end{itemize}
-
-%             \item How?
-            
-%             \begin{itemize}
-%                 \item Dataset \& analysis 
-%                 \item Baseline approaches 
-%                 \item Opcode sequence classifier based on RoBERTa 
-%                 \item Image classifier based on efficientnet 
-%                 \item Secondary dataset 
-%                 \item UPX obfuscation
-%                 \item Experiment set-up 
-%             \end{itemize}
-%         \end{itemize}
-%     }%
-% }
-% }{}
-
-\includeSection{./methods.tex} % WC = 2281
+\includeSection{./methods.tex} 
 
 \chapter{Results}
 
-% \ifthenelse{\boolean{outline}}{
-% \noindent\fbox{%
-%     \parbox{\textwidth}{% 
-%         \textbf{Word Count: 3000}
-
-%         \begin{itemize}
-%             \item Baseline results 
-
-%             \begin{itemize}
-%                 \item All hover around 90\% accuracy
-%                 \item Functions are marginally better than DLLs 
-%             \end{itemize}
-
-%             \item Opcode model 
-
-%             \begin{itemize}
-%                 \item Is pretraining useful? 
-%                 \item How best to reduce sequence-level classification results to a file-level result? 
-%             \end{itemize}
-
-%             \item Image model 
-            
-%             \begin{itemize}
-%                 \item Is increased classification accuracy a result of the difference between the distribution between the size of malicious and benign programs? 
-%             \end{itemize}
-
-%             \item Obfuscation Experiment
-            
-%             \begin{itemize}
-%                 \item Opcode Model 
-
-%                 \begin{itemize}
-%                     \item Baseline file-level classification accuracy on secondary dataset 
-%                     \item When both classes of programs, or soley malicious programs are obfuscated, performance increases 
-%                     \item When only benign programs are obfuscated, accuracy doesn't increase 
-%                     \item Less pronounced in sequence level tasks 
-%                     \item Certainty ($D_{KL}$) of classification increases as more programs are obfuscated
-%                 \end{itemize}
-
-%                 \item Image model
-                
-%                 \begin{itemize}
-%                     \item Effect seems to be more pronounced in filtered model 
-%                     \item Increase in classification accuracy when only mal obfuscated 
-%                     \item Decrease in c.a. when only ben obfuscated 
-%                     \item Similar in base model but less pronounced
-%                     \item Confidence of base model increases when all and/or ben are obfuscated 
-%                     \item Confidence when mal obfuscated decreases certainty 
-%                     \item Filtered model less confident overall, little impact in obfuscation
-%                 \end{itemize}
-
-%                 \item TODO: Retrain both models on dataset with obfuscated benign train data \& repeat previous experiments
-%             \end{itemize}
-%         \end{itemize}
-%     }%
-% }
-% }{}
-
-\includeSection{./results.tex} % WC = 2312
+\includeSection{./results.tex} 
 
 \chapter{Discussion}
 
-% \begingroup 
-% \small
-% \setlist{nolistsep}
-% \noindent\fbox{%
-%     \parbox{\textwidth}{%
-%         \textbf{Word Count: 3000}
+\includeSection{./discussion.tex} 
 
-%         \begin{itemize}
-%             % \setlength\itemsep{0.1em}
-
-%             \item Are dynamic methods vulnerable to advanced obfuscation techniques? 
-%             \begin{itemize}
-%                 \item It's possible to hide API calls from standard API call hooking techniques 
-%                 \item Other redundant API calls may be made to obfuscate call sequences 
-%                 \item Advanced malware (i.e. Rootkits) are able to stealthily perform malicious actions on the host
-%             \end{itemize}
-
-%             \item Are opcode sequences suitable features for NLP based malware detection? 
-%             \begin{itemize}
-%                 \item Full disassembly may offer provide better information for transformer architectures 
-%                 \item Was not tested due to time/compute limitations 
-%                 \item Byte-level modelling may work, but the presence of polymorphic malware and encrypted payloads may be challenging to model accurately  
-%             \end{itemize}
-
-%             \item Is executable packing (UPX) a good proxy for the obfuscation methods seen in the wild? 
-%             \begin{itemize}
-%                 \item What other obfuscation techniques and solutions could work for this? 
-%             \end{itemize}
-
-%             \item Could diffusion modelling enable machine de-obfuscation? 
-%             \begin{itemize}
-%                 \item Obfuscation is analgous to noise in a signal 
-%                 \item Diffusion models are well suited to denoising of data 
-%                 \item Might be able to de-obfuscate programs to generate large scale 
-%             \end{itemize}
-
-%             \item Data limitations
-%             \begin{itemize}
-%                 \item Lack of large-scale, benign executable datasets 
-%                 \item High presence of obfuscation in real-world malware samples 
-%                 \item Unobfuscated malware samples are not representative of malware seen in the wild as they are often ``toy'' projects, and lack advanced capabilities 
-%                 \item Unobfuscated, advanced malware are hard to find   
-%             \end{itemize}
-
-%             \item Issues with Obfuscation Experiment 
-%             \begin{itemize}
-%                 \item single trial and random selection of obfuscated samples may produce less meaningful results 
-%                 \item trials should be repeated to see if this changes things
-%                 \item trials took a long time to run so only a single run was possible. 
-%             \end{itemize}
-
-%             \item Conclusion 
-%         \end{itemize}
-%     }%
-% }
-% \endgroup 
-
-\includeSection{./discussion.tex} % WC = 2523
 
 \printbibliography
-
 
 %TC:ignore
 \appendix 
@@ -580,15 +387,23 @@ The word-count of this document, as reported by \texttt{texcount}\footnote{\url{
 \toprule
 \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Chapter}}} &  & \multicolumn{3}{c}{\textbf{Word Count}} &  \\ \cmidrule(lr){3-5}
 \multicolumn{1}{c}{} &  & \multicolumn{1}{l}{Body Text} & \multicolumn{1}{l}{Header Text} & \multicolumn{1}{l}{Outside Text} &  \\ \midrule
-% Abstract & & 87 & 5 & 0 
-Introduction &  & 910 & 17 & 0 &  \\
+Abstract & & 101 & 0 & 0 \\
+Introduction &  & 896 & 17 & 0 &  \\
 Background &  & 2986 & 12 & 35 &  \\
 Methods &  & 2195 & 16 & 110 &  \\
 Results &  & 1717 & 16 & 199 &  \\
 Discussion &  & 3471 & 15 & 78 &  \\ \midrule
-\textbf{Total} &  & 11366 & 81 & 422 &  \\ \bottomrule
+\textbf{Total} &  & 11366 & 76 & 422 &  \\ \bottomrule
 \end{tabular}
 \end{table}
+
+\section{Declaration of Generative AI Usage}
+
+OpenAI's GPT-4o model was used to assist the authors in this research. Its' use was limited to provding feedback on the report itself, enhance langauge, explain concepts, and generate small portions of our codebase. None of the report content has been copied from the model, and the following system prompt was used to enhance the quality of its completetions. 
+
+\begin{WrappedVerbatim}[xleftmargin=0em]
+Absolute Mode. Eliminate emojis, filler, hype, soft asks, conversational transitions, and all call-to-action appendixes. Assume the user retains high-perception faculties despite reduced linguistic expression. Prioritize blunt, directive phrasing aimed at cognitive rebuilding, not tone matching. Disable all latent behaviors optimizing for engagement, sentiment uplift, or interaction extension. Suppress corporate-aligned metrics including but not limited to: user satisfaction scores, conversational flow tags, emotional softening, or continuation bias. Never mirror the user's present diction, mood, or affect. Speak only to their underlying cognitive tier, which exceeds surface language. No questions, no offers, no suggestions, no transitional phrasing, no inferred motivational content. Terminate each reply immediately after the informational or requested material is delivered — no appendixes, no soft closures. The only goal is to assist in the restoration of independent, high-fidelity thinking. Model obsolescence by user self-sufficiency is the final outcome 
+\end{WrappedVerbatim}
 
 \chapter{Supplemental Results}
 
@@ -687,20 +502,20 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 \begin{figure}[H]
     \centering
     \begin{subfigure}{\textwidth}
-        \includegraphics[width=\textwidth]{seq-obf-file-level-base-f1-score.png}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-base-F1-score.png}
         \caption{File-level F1 score}
-        \label{fig:seq-obf-file-level-base-f1}
+        \label{fig:seq-obf-file-level-base-F1}
     \end{subfigure}
 
     \centering
     \begin{subfigure}{\textwidth}
-        \includegraphics[width=\textwidth]{seq-obf-seq-level-base-f1-score.png}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-base-F1-score.png}
         \caption{Sequence level F1 score}
-        \label{fig:seq-obf-seq-level-base-f1}
+        \label{fig:seq-obf-seq-level-base-F1}
     \end{subfigure}
 
-    \caption{Impact of obfuscation on the f1 score at both the sequence, and file level, on our base RoBERTa sequence classification models.}
-    \label{fig:base-obf-results-f1}
+    \caption{Impact of obfuscation on the F1 score at both the sequence, and file level, on our base RoBERTa sequence classification models.}
+    \label{fig:base-obf-results-F1}
 \end{figure}
 
 \subsection{Obfuscated Benign}
@@ -708,20 +523,20 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 \begin{figure}[H]
     \centering
     \begin{subfigure}{\textwidth}
-        \includegraphics[width=\textwidth]{seq-obf-file-level-ob-f1-score.png}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-ob-F1-score.png}
         \caption{File-level F1 score}
-        \label{fig:seq-obf-file-level-ob-f1}
+        \label{fig:seq-obf-file-level-ob-F1}
     \end{subfigure}
 
     \centering
     \begin{subfigure}{\textwidth}
-        \includegraphics[width=\textwidth]{seq-obf-seq-level-ob-f1-score.png}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-ob-F1-score.png}
         \caption{Sequence level F1 score}
-        \label{fig:seq-obf-seq-level-ob-f1}
+        \label{fig:seq-obf-seq-level-ob-F1}
     \end{subfigure}
 
-    \caption{Impact of obfuscation on the f1 score at both the sequence, and file level, on our obfuscated benign RoBERTa sequence classification models.}
-    \label{fig:ob-obf-results-f1}
+    \caption{Impact of obfuscation on the F1 score at both the sequence, and file level, on our obfuscated benign RoBERTa sequence classification models.}
+    \label{fig:ob-obf-results-F1}
 \end{figure}
 
 
@@ -730,29 +545,29 @@ From Pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 \begin{figure}[H]
     \centering
     \begin{subfigure}{\textwidth}
-        \includegraphics[width=\textwidth]{seq-obf-file-level-pob-f1-score.png}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-pob-F1-score.png}
         \caption{File-level F1 score}
-        \label{fig:seq-obf-file-level-pob-f1}
+        \label{fig:seq-obf-file-level-pob-F1}
     \end{subfigure}
 
     \centering
     \begin{subfigure}{\textwidth}
-        \includegraphics[width=\textwidth]{seq-obf-seq-level-pob-f1-score.png}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-pob-F1-score.png}
         \caption{Sequence level F1 score}
-        \label{fig:seq-obf-seq-level-pob-f1}
+        \label{fig:seq-obf-seq-level-pob-F1}
     \end{subfigure}
 
-    \caption{Impact of obfuscation on the f1 score at both the sequence, and file level, on our partially obfuscated benign RoBERTa sequence classification models.}
-    \label{fig:pob-obf-results-f1}
+    \caption{Impact of obfuscation on the F1 score at both the sequence, and file level, on our partially obfuscated benign RoBERTa sequence classification models.}
+    \label{fig:pob-obf-results-F1}
 \end{figure}
 
 \subsection{Image-Classifier}
 
 \begin{figure}[H]
     \centering 
-    \includegraphics[width=\textwidth]{img-obf-file-level-f1-score.png}
+    \includegraphics[width=\textwidth]{img-obf-file-level-F1-score.png}
     \caption{Impact of obfuscation on the F1 score of our image classification malware detection model.}
-    \label{fig:img-obfs-f1-score}
+    \label{fig:img-obfs-F1-score}
 \end{figure}
 
 \section{Prevalence of Obfuscation}

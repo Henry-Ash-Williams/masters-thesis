@@ -139,7 +139,6 @@ To better understand how our models handle obfuscation, we quantify the certaint
 
 We also see that across all models tested in this experiment, the trends are largely similar. For example, our results show that as the presence of obfuscated malicious samples increase, the classification increases accordingly. This trend is seen in all the models used in this experiment, however the extent of the trend varies between them. This suggests that our models are learning similar representations, yet are limited by other factors such as a reduced prior understanding of the langauge, and insufficient model complexity. To visualise this, we perform representational similarity analysis (RSA) on the activation's of our models at each layer using Centered Kernel Alignment (CKA, shown in \cref{apdx:cka}) as outlined in~\citep{kornblithSimilarityNeuralNetwork2019}. This metric quantifies the correspondence between hidden representations of data across models trained from different initialisations. This is shown in \cref{fig:rsa-cka-base}, and indicates that the similarity of representations in the attention layers of the pretrained and non-pretrained models decrease with the number of layers, and that the representations at the classification heads are very similar. Our frozen model however, demonstrates a higher extent of representational similarity in the attention layers, and significant dissimilarity at the classification head. 
 
-
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[t]{0.4\textwidth}

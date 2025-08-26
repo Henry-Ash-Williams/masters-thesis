@@ -386,13 +386,13 @@ The word-count of this document, as reported by \texttt{texcount}\footnote{\url{
 \toprule
 \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Chapter}}} &  & \multicolumn{3}{c}{\textbf{Word Count}} &  \\ \cmidrule(lr){3-5}
 \multicolumn{1}{c}{} &  & \multicolumn{1}{l}{Body Text} & \multicolumn{1}{l}{Header Text} & \multicolumn{1}{l}{Outside Text} &  \\ \midrule
-Abstract & & 101 & 0 & 0 \\
-Introduction &  & 896 & 17 & 0 &  \\
-Background &  & 2986 & 12 & 35 &  \\
-Methods &  & 2195 & 16 & 110 &  \\
-Results &  & 1717 & 16 & 199 &  \\
-Discussion &  & 3471 & 15 & 78 &  \\ \midrule
-\textbf{Total} &  & 11366 & 76 & 422 &  \\ \bottomrule
+Abstract & & 87 & 0 & 0 \\
+Introduction &  & 908 & 17 & 0 &  \\
+Background &  & 3018 & 12 & 35 &  \\
+Methods &  & 2202 & 16 & 110 &  \\
+Results &  & 1732 & 16 & 199 &  \\
+Discussion &  & 3466 & 15 & 78 &  \\ \midrule
+\textbf{Total} &  & 14413 & 81 & 422 &  \\ \bottomrule
 \end{tabular}
 \end{table}
 
@@ -418,8 +418,8 @@ Absolute Mode. Eliminate emojis, filler, hype, soft asks, conversational transit
 \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Model}}} &  & \multicolumn{4}{c}{\textbf{Sequence Level}} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\textbf{File Level}} & \vspace{2pt} \\ \cline{3-6} \cline{8-11}
 \multicolumn{1}{c}{} &  & Accuracy & F1-Score & Precision & Recall & \textbf{} & Accuracy & F1-Score & Precision & Recall &  \\ \midrule
 From Scratch &  & 0.8584 & 0.8587 & 0.8596 & 0.8584 &  & 0.9638 & 0.9638 & 0.9656 & 0.9637 &  \\
-From pre-trained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  & 0.9647 & 0.9647 & 0.9667 & 0.9647 &  \\
-\begin{tabular}[c]{@{}l@{}}From pre-trained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8471 & 0.8471 & 0.8472 & 0.8471 &  & 0.9600 & 0.9600 & 0.9610 & 0.9599 &  \\ \bottomrule
+From pretrained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  & 0.9647 & 0.9647 & 0.9667 & 0.9647 &  \\
+\begin{tabular}[c]{@{}l@{}}From pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8471 & 0.8471 & 0.8472 & 0.8471 &  & 0.9600 & 0.9600 & 0.9610 & 0.9599 &  \\ \bottomrule
 \end{tabular}%
 }
 \end{table}
@@ -430,7 +430,7 @@ From pre-trained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  & 0.9647 & 0.9647 & 0
     \centering
     \begin{subfigure}[t]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-ob-pretrained-scratch.png}
-        \caption{RSA of the pre-trained and non-pre-trained models.}
+        \caption{RSA of the pre-trained and non-pretrained models.}
         \label{fig:rsa-ob-pre-trained-scratch}
     \end{subfigure}
     \hfill
@@ -442,7 +442,7 @@ From pre-trained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  & 0.9647 & 0.9647 & 0
     \centering
     \begin{subfigure}[b]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-ob-frozen-scratch.png}
-        \caption{RSA of the frozen and non-pre-trained models}
+        \caption{RSA of the frozen and non-pretrained models}
         \label{fig:rsa-ob-pre-trained-frozen}
     \end{subfigure}
     \caption{Representational Similarity Analysis (RSA) of the obfuscated benign models with Centered Kernel Alignment.}
@@ -461,8 +461,8 @@ From pre-trained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  & 0.9647 & 0.9647 & 0
 \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Model}}} &  & \multicolumn{4}{c}{\textbf{Sequence Level}} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\textbf{File Level}} & \vspace{2pt} \\ \cline{3-6} \cline{8-11}
 \multicolumn{1}{c}{} &  & Accuracy & F1-Score & Precision & Recall & \textbf{} & Accuracy & F1-Score & Precision & Recall &  \\ \midrule
 From Scratch &  & 0.8282 & 0.8256 & 0.8310 & 0.8282 &  & 0.8050 & 0.7965 & 0.8551 & 0.8012  &  \\
-From pre-trained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.9215 & 0.9140 &  \\
-\begin{tabular}[c]{@{}l@{}}From pre-trained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8053 & 0.7987 & 0.8169 & 0.8053 &  & 0.8260 & 0.8245 & 0.8335 & 0.8245 &  \\ \bottomrule
+From pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.9215 & 0.9140 &  \\
+\begin{tabular}[c]{@{}l@{}}From pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8053 & 0.7987 & 0.8169 & 0.8053 &  & 0.8260 & 0.8245 & 0.8335 & 0.8245 &  \\ \bottomrule
 \end{tabular}%
 }
 \end{table}
@@ -473,7 +473,7 @@ From pre-trained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0
     \centering
     \begin{subfigure}[t]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-pob-pretrained-scratch.png}
-        \caption{RSA of the pre-trained and non-pre-trained models.}
+        \caption{RSA of the pre-trained and non-pretrained models.}
         \label{fig:rsa-pob-pre-trained-scratch}
     \end{subfigure}
     \hfill
@@ -485,7 +485,7 @@ From pre-trained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0
     \centering
     \begin{subfigure}[b]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-pob-frozen-scratch.png}
-        \caption{RSA of the frozen and non-pre-trained models.}
+        \caption{RSA of the frozen and non-pretrained models.}
         \label{fig:rsa-pob-pre-trained-frozen}
     \end{subfigure}
     \caption{Representational Similarity Analysis (RSA) of the partially obfuscated benign models with Centered Kernel Alignment.}

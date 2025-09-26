@@ -1,295 +1,904 @@
-%!LW recipe=xelatex ➞ bibtex ➞ xelatex`×2
+\documentclass[conference,compsoc]{IEEEtran}
+% \IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+%Template version as of 6/27/2024
 
-\documentclass[a4paper, 12pt, UKenglish]{report}
-
-\newlength{\alphabet}
-\settowidth{\alphabet}{\normalfont abcdefghijklmnopqrstuvwxyz}
-
-\usepackage[l2tabu,orthodox]{nag}
-\usepackage[all,warning]{onlyamsmath}
-\usepackage{inputenc}
-\usepackage{fontenc}
-\usepackage{babel}
-\usepackage[babel=true]{microtype}
-\usepackage[backend=bibtex,natbib,style=authoryear,maxcitenames=1]{biblatex} 
-\usepackage[textwidth=2.3\alphabet,margin=2cm]{geometry}
-\usepackage{hyperref} 
-\usepackage{enumitem}
-\usepackage{siunitx} 
-\usepackage{graphicx} 
-\usepackage[super]{nth} 
-\usepackage{tabularx} 
-\usepackage{ltablex} 
-\usepackage{csquotes}
-\usepackage{longtable} 
-\usepackage{subcaption} 
+\usepackage{cite}
 \usepackage{booktabs}
-\usepackage{xcolor}
 \usepackage{multirow}
-\usepackage{listings}
-\usepackage{caption}
-\usepackage{ifthen}
-\usepackage{etoolbox}
-\usepackage{fancyvrb}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{cleveref}
-\usepackage{float}
-\usepackage{wrapfig}
-\usepackage{tocbibind}
-\usepackage{tocloft}
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{fontspec}
-\usepackage{unicode-math}
-\usepackage{subfiles}
-\usepackage[compact]{titlesec}
-\usepackage{lipsum}
-\usepackage{spverbatim}
-\usepackage{fvextra}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{subfig}
 
-\DefineVerbatimEnvironment{WrappedVerbatim}{Verbatim}
-  {breaklines=true,
-   breakanywhere=true,
-   breakautoindent=false, 
-   breaksymbolleft={}, 
-   breaksymbolright={}
-  }
 
 % Modify algorithmic environment, replace "Require" and "Ensure" with "Input" and "Output" respectively 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
-% Change font to something prettier 
-\setmainfont[
-  Ligatures=TeX,
-  Numbers={OldStyle, Proportional},
-]{Linux Libertine O}
-\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
-\setmathfont[Scale=MatchUppercase]{Libertinus Math}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
-% force LaTeX to avoid widows and orphans
-\widowpenalty=10000
-\clubpenalty=10000
+\bibliographystyle{IEEEtran}
 
-%% "Proper" small caps
-\newcommand{\flatcaps}[1]{\textsc{\MakeLowercase{#1}}}
-%% 'compact' reduces the space above and below headings to a single blank line
-\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
-%% Upright (normal) numbers here
-\titleformat{\subsection}{\large}{\thesubsection}{.6em}{\flatcaps}
-%% Below, both heading should form sentences
-\titleformat{\subsubsection}{\bfseries\itshape}{\thesubsubsection}{.6em}{}
-\titleformat{\paragraph}[runin]{\flatcaps}{\theparagraph}{0pt}{}
 
-\titlespacing*{\section}{0pt}{2\baselineskip}{1\baselineskip}
-\titlespacing*{\subsection}{0pt}{1\baselineskip}{1\baselineskip}
-\titlespacing*{\subsubsection}{0pt}{8pt}{5pt}
-
-% Indicate if a chapter doesn't exist 
-\newcommand{\includeSection}[1]{%
-  \noindent
-  \IfFileExists{#1}{%
-    \subfile{#1}%
-  }{%
-    \texttt{#1} does not exist%
-  }%
-}
-
-% Modify spacing 
-\frenchspacing
-
-\addbibresource{../references.bib}
 \graphicspath{{./assets}}
 
 
 \begin{document}
 
-\begin{titlepage}
-    \begin{center}
-        \includegraphics[width=5cm]{uoslogo}\\[2cm]% \bigskip
-        %\vspace*{.05\textheight}
-        % \hrulefill
-        \textsc{\Large Masters Thesis}
-        % \hrulefill\\%[0.5cm] % Thesis type
 
-        \Huge \textbf{On the Effectiveness of Deep Learning Techniques for Malware Detection and their Resilience to Obfuscation}\\[1.5cm] % Thesis title
+\title{On the Effectiveness of Deep Learning Techniques for Malware Detection and their Resilience to Obfuscation\\
+}
 
-        \large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of Master of Research in Advanced Artificial Intelligence}\\[0.5cm] % University 
-        \textit{in the}\\[0.5cm]
-        School of Engineering and Informatics\\ [0.1cm]
-        University of Sussex\\[1cm]
-    
-        \begin{minipage}{.45\linewidth}
-            \begin{flushleft} %\large
-            \emph{Author:}\\
-            Henry Williams% Author name - remove the \href bracket to remove the link
-            \end{flushleft}
-        \end{minipage}
-        \hfill
-        \begin{minipage}{.45\linewidth}
-            \begin{flushright} %\large
-            \emph{Supervisor:} \\
-            %\href{http://www.sussex.ac.uk/profiles/168614}{\mySupervisor}%\\ % Supervisor name - remove the \href bracket to remove the link  
-            Jeff Mitchell% Supervisor name
-            \end{flushright}
-        \end{minipage}
+\author{\IEEEauthorblockN{1\textsuperscript{st} Henry Williams}
+\IEEEauthorblockA{\textit{Department of Engineering and Informatics} \\
+\textit{University of Sussex}\\
+Brighton, United Kingdom \\
+hw452@sussex.ac.uk}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Jeff Mitchell}
+\IEEEauthorblockA{\textit{Department of Engineering and Informatics} \\
+\textit{University of Sussex}\\
+Brighton, United Kingdom \\
+J.J.Mitchell@sussex.ac.uk}
+}
 
-        \vspace{0.5cm}
+\maketitle
 
-        \begin{minipage}{0.8\linewidth}
-            \centering 
-            \textbf{Abstract} \\ 
-
-            \begin{flushleft}
-                \small Malicious software is an extremely pervasive threat faced by both individuals and organisations, that has the potential to cause significant damage to computer systems. We explore the usage of deep learning techniques for automated identification of malware, and evaluate how resilient these approaches are to obfuscation techniques used to bypass existing malware detection services. We present a natural language processing inspired approach, using the BERT architecture for malicious opcode sequence classification, and an image-based approach using the EfficientNet architecture that achieve 0.94 and 0.93 accuracy respectively. We also find that these static malware detection approaches consider obfuscation as highly indicative of malware, leading to misclassification of obfuscated benign programs. 
-            \end{flushleft}
-        \end{minipage}
-        \vfill
-        \large August 2025
-         
-    \end{center}
-\end{titlepage}
-
-%TC:ignore
-\begin{flushleft}
-    \vspace*{1cm}
-
-    {\Huge \textbf{Statement Of Originality}} 
-
-    \vspace*{1cm}
-
-    This report is submitted as part requirement for the degree of Masters of Research in Advanced Artificial Intelligence at the University of Sussex. It is the product of my own labour, except where indicated in the text. The report may be freely copied and distributed provided the source is acknowledged. I hereby give permission for a copy of this report to be loaned out to students in future years
-    
-    \vspace*{1cm}
-    
-    Signed,
-    
-    \vspace*{0.5cm}
-
-    \includegraphics[width=0.4\textwidth]{signature.png}
-    
-    \vspace*{0.5cm}
-
-    \textbf{Henry Williams} \\
-    \textbf{Candidate No:} 233561
-\end{flushleft}
-%TC:endignore
-
-\newpage
-
-\microtypesetup{protrusion=false}
-
-\tableofcontents
-\listoffigures
-\listoftables
-
-\microtypesetup{protrusion=true}
-
-\chapter{Introduction}
-
-\includeSection{./introduction.tex} 
-
-\chapter{Background}
-
-\includeSection{./background.tex} 
-
-\chapter{Methodology}
-
-\includeSection{./methods.tex} 
-
-\chapter{Results}
-
-\includeSection{./results.tex} 
-
-\chapter{Discussion}
-
-\includeSection{./discussion.tex} 
+\begin{abstract}
+   
+Malicious software is an extremely pervasive threat faced by both individuals and organisations, that has the potential to cause significant damage to computer systems. We explore the usage of deep learning techniques for automated identification of malware, and evaluate how resilient these approaches are to obfuscation techniques used to bypass existing malware detection services. We present a natural language processing inspired approach, using the BERT architecture for malicious opcode sequence classification, and an image-based approach using the EfficientNet architecture that achieve 0.94 and 0.93 accuracy respectively. We also find that these static malware detection approaches consider obfuscation as highly indicative of malware, leading to misclassification of obfuscated benign programs. 
+\end{abstract}
 
 
-\printbibliography
+\section{Introduction}
 
-%TC:ignore
-\appendix 
-\chapter{Supplemental Information}
+Malware is one of the most significant threats faced by users in the current digital landscape. The increasingly sophisticated nature of these programs, in terms of both their capabilities and their stealth, mean that this threat is only increasing as we become evermore reliant on digital infrastructure in our daily lives. 
 
-\section{Code Availability}
+Therefore, detecting malware before it can cause damage is of high priority to security professionals. However, following the introduction of anti-virus software, malware developers have begun using various evasion techniques to avoid detection. This has led to a cat-and-mouse like game, where cyber-criminals adopt new forms obfuscation, and security researchers develop new techniques to handle them. This makes conventional approaches to malware detection challenging, due to its constantly evolving nature. 
 
-All of the code used in this investigation are publicly available on our GitHub repository\footnote{\url{https://github.com/Henry-Ash-Williams/masters-thesis}}. The dataset can be made available upon request, however due to copyright limitations we are unable to distribute benign samples. 
+Machine learning however offers a potential means of dealing with this by finding ways to detect malware in spite of any evasion techniques. In this investigation, we evaluate various approaches across a number of machine learning domains, such as linear modelling, natural language processing, and image processing to investigate both their performance at detecting Windows malware, and their reliance on obfuscation. 
 
-\section{Disassembly Extraction and Processing}
+We develop a BERT-based language model trained on sequences of assembly instructions, and a Convolutional Neural Network (CNN) using image representations of executables to identify malware. These are both considered static approaches as their features are extracted from the structure of the program, as opposed to behavioral characteristics observed during execution. These dynamic methods are typically more capable than static methods. However, they often incur a significant overhead in their complexity, as an environment where potentially malicious software can be safely executed is required. This typically takes the form of a remote virtual machine that isolates the programs execution, preventing it from causing harm. However, to communicate with this sandbox, an internet connection is required. In comparison, static approaches are able to operate in environments where an internet connection is not guaranteed. Therefore, in light of their disadvantages, static methods are still relevant in domain as they can be used in resouce constrained environments. 
 
-\begin{algorithm}
+Due to the highly pervasive nature of obfuscation in modern malware, we theorise that static approaches rely heavily on the presence of obfuscation as an indicator for malware. However, obfuscation is not exclusive to malicious programs, as legitimate software developers may use it to protect their intellectual property from reverse engineering. Therefore, to better understand how static approaches identify malware, we conduct an additional experiment that aims to evaluate how our models distinguish between benign, and malicious programs. 
+
+The research questions we seek to answer in this work are as follows: 
+
+\begin{enumerate}[label=\textbf{RQ\arabic*}:]
+    \item \emph{Are modern natural language processing techniques, such as language models and pre-training effective at identifying malware?}
+    \item \emph{Does pre-training improve the accuracy and reliability of malware detection models based on techniques from natural language processing?}
+    \item \emph{To what extent are static malware detection models resilient to obfuscation?}
+\end{enumerate}
+
+
+% \section{Professional Considerations}
+
+% This research is conducted in strict accordance with the BCS Code of Conduct~\cite{britishcomputingsocietyBCSCodeConduct2022}, ensuring adherence to the ethical, legal, and professional standards expected of computing professionals. The work is structured to protect the public interest, maintain professional competence and integrity, uphold obligations to the relevant authority, and safeguard the reputation of the profession.
+
+% \subsubsection{Public Interest}
+
+% We conduct our research with regard to the safety, rights, and welfare of the public to ensure our work is in their interest. Samples of malicious programs will be handled in a secure environment, with safeguards to protect against execution on both our own hardware, and that of others to avoid accidental infection. Furthermore, proprietary programs subject to copyright law will not be distributed to ensure the intellectual property rights of third parties are respected. Our research is conducted without discrimination on the basis of ethnicity, sex, religion, age or other protected characteristics. Finally, all materials used to conduct this investigation will be made publicly available to support transparency, reproducibility, and to benefit the wider research community. 
+
+% To ensure the malware used in this investigation are unable to infect any machines used to conduct our research, we prevent them from being executed using the \texttt{chmod} program. This is a tool in UNIX based systems that modifies the permissions associated with a file, and can prevent files from being executed by the operating system. 
+
+% \subsubsection{Professional Competence and Integrity}
+
+% We conduct our research within the verified level of competence of the authors, and avoid misrepresenting our skills and expertise. The project itself contributes to the continued professional development of our skills in Artificial Intelligence, and Cybersecurity. We employ established best practices in both fields where appropriate, and comply with all relevant UK legislation, including data protection, intellectual property, and cyber-security. Diverse perspectives are actively sought, and the authors welcome constructive criticism to ensure the quality and robustness of our work. No element of this research will cause harm to the property, reputation, or the livelihood of others through false or negligent actions.
+
+% \subsubsection{Duty to the Relevant Authority}
+
+% To ensure the duty of the authors to relevant authorities, we conduct this research in compliance with the policies and procedures of the University of Sussex, and any other relevant governing bodies. Any potential conflicts of interest are avoided, and disclosed in cases where they are unavoidable. We accept any professional responsibilities for our work, and that of others involved with this project. Results and findings will be reported accurately and truthfully, without distortion, omission, or misrepresentation. 
+
+% \subsubsection{Duty to the Profession}
+ 
+
+% The authors acknowledge their responsibilities to uphold the credibility and reputation of the computing profession, and we pledge to take no actions that will take it into disrepute.
+
+
+\section{Background}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{malware-stats.pdf}
+    \caption{Observed growth in the number of unique instances of malware over time \cite{av-test-theindependentit-securityinstituteAVATLASMalwarePUA2025}.}
+    \label{fig:malware-in-the-wild}
+\end{figure}
+
+\noindent
+Malicious software, also known as malware, is defined as any software that has an adverse impact on the typical operation of a digital system. This could include the extraction of sensitive information, hijacking of system resources, and modification of information. They are considered one of the most pervasive threats faced by both individuals and organisations in the current digital threat landscape \cite{europeanunionagencyforcybersecurityENISAThreatLandscape2024,aleneziEvolutionMalwareThreats2020}. 
+
+This threat can been seen in infamous cyberattacks such as the 2022 Viasat hack~\cite{quiquetAnalysisViasatCyber2023}, and the 2017 WannaCry incident~\cite{nationalauditofficenaoInvestigationWannaCryCyber2017,akbanovWannaCryRansomwareAnalysis2019}. In both of these cases, sophisticated malware were used to disrupt critical infrastructure, including communication systems across Europe, and the services used by the National Health Service.
+
+In recent years, both the sophistication~\cite{aleneziEvolutionMalwareThreats2020,baeznerStuxnet2017c} and prevalence~(\ref{fig:malware-in-the-wild}) of malware have increased . Therefore, there has been a great deal of interest into advanced techniques for the reliable detection of malware~\cite{m.ComprehensiveSurveyDeep2023,manirihoSystematicLiteratureReview2024,aboaojaMalwareDetectionIssues2022} within the information security field. In this chapter, we provide a background on characteristics commonly associated with malware, and discuss various techniques proposed by security researchers to better handle this threat.
+
+\subsection{Malware}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{../assets/malware-taxonomy.pdf}
+    \caption{Categories of Malware, including both the means of propagation and behaviour.}
+    \label{fig:malware-taxonomy}
+\end{figure}
+
+\noindent
+As outlined in the previous section, malware is a form of software that has a detrimental impact on the expected operation of an infected system. However, both this and more formal definitions, such as the one presented in~\cite{kramerGeneralDefinitionMalware2010a}, fail to define what is meant by harmful. Therefore, we define ``harmful'' behaviour as any actions in violation of the Confidentiality-Integrity-Availability (CIA) triad~\cite{cochranCIATriadSafeguarding2024}. This is a principle that aims to guide the development of security policies to ensure the security of digital systems, and the information stored on them. It states that a system must be inaccessible to unauthorised users (Confidential), accessible to authorised users (Available), and are protected against the modification or deletion of information that it stores (Integrity). Malware provides a comprehensive means of violating this triad of security principles, and it is for this reason we use it in our definition.
+
+Malware is categorised based on its behaviour, and how it spreads between hosts. We present the following taxonomy based on the work of~\cite{manirihoSystematicLiteratureReview2024} shown in~\ref{fig:malware-taxonomy} that outline the different kinds of malicious behaviours, and propagation techniques. Note that categories within this taxonomy are not mutually exclusive, as malware often belong to multiple categories at once. 
+
+\begin{itemize}
+    \item \textbf{Worm} --- Malicious software that automatically propagates throughout a network. 
+    \item \textbf{Virus} --- Programs that modify other programs to replicate themselves throughout an infected host. 
+    \item \textbf{Trojans} --- Malware that disguises itself as a legitimate program to infect a host.
+    \item \textbf{Backdoor} --- Malware that provides covert remote access to infected systems. 
+    \item \textbf{Ransomware} --- Malware that denies access to systems or information until a fee is paid.
+    \item \textbf{Spyware} --- Malware that spy on the user without their knowledge, often extracting information such as credentials, keyboard logs, and live screenshots of the user's activity. 
+    \item \textbf{Botnet} --- Malware that integrate infected systems into a coordinated network of agents. 
+    \item \textbf{Rootkit} --- Malware providing privileged access to an infected system.
+    \item \textbf{Adware} --- Malware that display advertisements on the host machine.
+    \item \textbf{Crypto-miner} --- Malware that hijack the user's hardware to mine cryptocurrencies.
+\end{itemize}
+
+\subsubsection{Evasion Techniques}
+
+The earliest forms of malware detection used a collection of unique signatures associated with malicious programs\cite{a.saeedSurveyMalwareMalware2013}. To counter this, the developers of malicious software began using evasion techniques that aim to deceive these systems, thereby maximising the amount of damage their software is able to do before it is identified and removed. These include obfuscation, and environmentally aware execution. In the following sections, we briefly discuss these techniques, and how they are effective in allowing malware to bypass detection by these early signature based methods.
+
+
+\noindent
+\textbf{Obfuscation}
+
+\begin{figure}[h!]
+    \centering 
+    \includegraphics[width=0.5\textwidth]{../assets/binary-packing.pdf}
+    \caption{Binary packing for compression and obfuscation of executables}
+    \label{fig:binary-packing}
+\end{figure}
+
+\noindent
+Obfuscation refers to the act of making something more challenging to understand to an external observer. In the context of malware, this includes techniques which alter the syntactic structure of a program to make it more difficult to understand, while maintaining its original behavioural characteristics. 
+
+Register re-assignment is one of the earliest forms of obfuscation in which the registers used by the program are randomly reallocated~\cite{balakrishnanCodeObfuscationLiterature2005}. Registers are small areas of memory within the CPU that store information used during the program's execution. By changing which registers are used to store this information, the physical structure of the program is changed without impacting its behaviour. This defeats simple malware detection solutions that use the unique cryptographic hash of a program as its signature. This is because a unique representation of a program will give a distinct hash that has not yet been seen, and therefore will not be recognised as malicious.
+
+We can also modify the structure of a program by inserting instructions, or functions which either have no impact on the program state, or are never executed. This is known as dead-code insertion, and is a relatively common form of obfuscation, as it can provide many distinct representations of the same program. However, so-called ``dead-code'' can easily be identified and removed, by either human experts, or static analysis techniques such as the control flow graph~\cite{allenControlFlowAnalysis1970}.
+
+Code transposition modifies the order of code the program~\cite{christodorescuStaticAnalysisExecutables2004} to obscure its signatures by moving small units of code known as basic blocks. To ensure the program behaves as expected, all references to the relocated sections are updated to its new location. This again evades detection by these early signature based methods, as many unique representations of the same program can be generated. 
+
+Despite the ability of these techniques to trick early anti-malware approaches, more sophisticated approaches are more resilient to these forms of obfuscation. These approaches use an intermediate representation, that normalise the structure of a program resulting in an identical representation for both unobfuscated, and obfuscated executables. To deceive these advanced approaches, more sophisticated forms of obfuscation are needed. One such example of this is known as binary packing, where the malicious portion of code is encoded and stored as data within another program that decoded and executes the payload~(\ref{fig:binary-packing}). Encoding can take many forms, such as encryption or compression, but they typically make it challenging to retrieve the decoded payload without running the program. However, the portion of the packed binary responsible for decoding and execution will often remain constant, meaning it can be used for identification. Some malware developers employ the aforementioned obfuscation techniques to obscure the decoder and avoid detection which are known as Oligomorphic and Polymorphic malware~\cite{youMalwareObfuscationTechniques2010}. 
+
+\subsubsection{Environmental Awareness}
+
+
+The techniques demonstrate the challenges of relying on the static structure of a program to determine its nature, and it is for this reason that dynamic features are considered to be more robust at identifying malicious programs. This is because the behaviour of a program is invariant to these forms of obfuscation. Dynamic features are observed at execution time and can include sequences of system API calls, modifications to the filesystem and system configuration, and internet traffic. However, these require running a potentially malicious program, which could have harmful effects on the host system. Therefore, the execution of a potentially malicious program will occur within a sandbox, an environment where harmful actions can occur with no implications on the security of the system. This sandbox is typically a virtual machine that is representative of the software's intended target. 
+
+To deceive these approaches, the malware developers will have their code check if it is running within a virtual machine before it executes. Common indicators of a virtual machine include system hardware characteristics (CPU core count, RAM size, etc), the presence of shared libraries used to communicate between the sandbox and its host, and the number of processes running on the system. If the program determines that it is likely to be running within a sandbox, it will refuse to execute the malicious portion of the code, and will exit. This prevents the observer from gaining any information about its behavioural characteristics, preventing the creation of dynamic malicious signatures. 
+
+
+\subsection{Related Work}
+
+Malware detection is a challenging problem, and many approaches have been proposed since the first forms of malicious software were seen in the 1980s. The earliest form of malware detection used a database containing unique signatures of malicious programs. While similar signature based approaches are still in use today, there is much interest in advanced methods, that are robust to evasion techniques, and able to identify novel forms of malware~\cite{m.ComprehensiveSurveyDeep2023,merabetSurveyMalwareDetection2019,aboaojaMalwareDetectionIssues2022,idikamathurSurveyMalwareDetection2007}. These advanced techniques employ a wide variety of technologies, such as multiple sequence alignment of API call sequences~\cite{kiNovelApproachDetect2015}, machine learning~\cite{kambojDetectionMalwareDownloaded2023}, and deep learning.
+
+These techniques typically fall into one of two categories, based on how the features used to classify programs are extracted, which are as follows. 
+
+\begin{itemize}
+    \item \textbf{Static} --- Features extracted from the structure of a program
+    \item \textbf{Dynamic} --- Features extracted during the execution of the program
+\end{itemize}
+
+Static approaches use features extracted from the contents of an executable as opposed to its behaviour during execution. Common features used to identify malware include greyscale images of the executable~\cite{niMalwareIdentificationUsing2018,jainConvolutionalNeuralNetworks2020,habibiPerformanceEvaluationCNN2023}, printable strings~\cite{tianAutomatedClassificationSystem2009,singhDetectionMaliciousSoftware2020,schultzDataMiningMethods2001a}, and sequences of instructions~\cite{kakisimSequentialOpcodeEmbeddingbased2022,wangDeepLearningRegularization2021,daremVisualizationDeeplearningbasedMalware2021}. 
+
+In~\cite{schultzDataMiningMethods2001a}, the authors use static features such as printable ASCII strings to train various machine learning classifiers to detect malware. In their experiments, they found that the Naive Bayes algorithm was best suited to the problem, achieving 97\% classification accuracy. This was one of the first papers that explore the application of machine learning in this domain, and the high accuracy of their experiment shows its potential over conventional signature and heuristic methods. However, the dataset used in this work was small, and featured an unbalanced class distribution of 3265 malicious programs, and only 1001 benign which would likely have an adverse effect on the generalisability of their proposed models. Furthermore, malware often obfuscate strings that are decoded during execution, which would be sufficient to defeat their proposed approach. 
+
+Much of the literature relating to static malware detection use convolutional neural networks (CNN) to distinguish between image-based representations of malicious and benign executables~\cite{niMalwareIdentificationUsing2018,jainConvolutionalNeuralNetworks2020,habibiPerformanceEvaluationCNN2023}. In~\cite{aslanNewMalwareClassification2021}, the authors represent executables as greyscale images, and train a CNN to identify images of malicious programs. While their proposed approach is able to effectively distinguish between the different types of programs, CNNs require constant input size. Therefore, resizing of the program's image representation is necessary. Malicious programs are often smaller than benign programs, meaning that in datasets where there is significant variation in size between classes, compression artifacts may be more prevalent in once class, leading to the model developing an insufficient solution. In~\cite{sharmaMalwareDetectionUsing2019}, the authors also use a CNN to detect malware. Instead of using a 2-dimensional CNN however, the authors opt to use a 1-dimensional variant. This led to better performance than other CNN based approaches, as the vertical spatial dependence, which is largely irrelevant in malware detection, is removed. However, it still has the same requirement as the previously discussed approach, which could lead to a partial solution. 
+
+Instruction sequences have also been explored as static features in malware detection. For example, in~\cite{attaluriProfileHiddenMarkov2009,runwalOpcodeGraphSimilarity2012}, the authors utilise hidden Markov models and demonstrate promising performance. As these models consider what actions are being performed by the host system without having to execute the program, they offer a solution that we believe to be more resilient to obfuscation than other static approaches. 
+
+Extending upon the idea of using instruction sequences for malware detection,~\cite{demirciStaticMalwareDetection2022} outline an approach in which they use a stacked, bidirectional Long-Short Term Memory (BiLSTM) model and pre-trained language models such as BERT~\cite{devlinBERTPretrainingDeep2019a}, and GPT-2~\cite{radfordLanguageModelsAre2019}. In their investigation, the BiLSTM model was able to achieve 98\% classification accuracy whereas the pre-trained transformer models achieved only 78\% and 77\% for BERT and GPT-2 respectively. Transformer models have been shown to be a powerful technique for sequence classification problems, and as such, this result is surprising. We believe this of the pre-training corpora used for the transformer models, which are comprised of mostly English texts. The understanding of these models would therefore be limited to languages similar to English, and may struggle to understand the intricacies of assembly language, impacting their ability to reliably classify malware. The Bi-LSTM model on the other hand, is trained from a random initialisation, and is therefore able to develop a better understanding of malicious characteristics in opcode sequences.  
+
+Previous research has also established the use of pre-trained language models in malware detection using the metadata of an executable. In~\cite{rahaliMalBERTMalwareDetection2021}, the authors fine-tune BERT on text gathered from the manifest file found in android applications. This file contains information pertaining to the activities, background tasks, event listeners, and permissions granted to an application. Their model was able to achieve 97\% binary classification accuracy, in comparison to~\cite{demirciStaticMalwareDetection2022} which was only able to achieve 77\% with the same model using opcode sequences. We believe this discrepancy to be a result of the language found in these manifest files being more closely related to the pre-training corpora of BERT. This would enable their model to better understand the information found in the manifest, and its use in distinguishing between benign and malicious executables. Their approach however, is limited to environments where a file containing metadata are required, such as mobile operating systems, making it unsuitable for desktop malware detection, where such metadata files are not always present. 
+
+Our exploration of the literature relating to this field demonstrate that the performance of static malware detection approaches vary depending on the features used by the model, method of classification, availability of data, among other factors. However, it is well established that they are particularly vulnerable to obfuscation. In~\cite{bacciImpactCodeObfuscation2018}, the authors investigate the impact of obfuscation on the performance of static and dynamic malware detectors on android devices. They found that while dynamic methods are not significantly impacted by the presence of obfuscation, static techniques are more affected. However, by training static methods on obfuscated programs, it is possible to mitigate this problem to some extent. 
+
+Furthermore, dynamic methods generally tend to be more capable than static methods~\cite{damodaranComparisonStaticDynamic2017}. This is somewhat to be expected, as behaviour is more indicative of malicious actions, especially when obfuscation is used to hide a program's intent. However, dynamic methods require a sandbox to execute a program for analysis, without causing damage to a host. This typically takes the form of a remote, virtual machine as running such a sandbox locally would have a significant computational cost. As a result of this, dynamic methods require both significant compute resources, and an internet connection, which is not guaranteed. It is for this reason that static methods, that can identify potentially malicious programs, without an internet connection is needed for enhanced protection from this threat. 
+
+In addition to the high resource requirements associated with dynamic feature extraction, sophisticated evasion techniques such as environmentally aware execution provide malware developers with the capabilities to obscure the dynamic features by preventing execution within virtual machines used to extract dynamic features. Furthermore, novel obfuscation techniques, such as the one proposed by~\cite{liAPIASONovelAPI2023}, is able to obscure which system API calls are made by a program. This is a widely used dynamic feature for detecting malware, and the proposed technique enables the malware to call these system APIs without triggering system hooks used to track which methods are called during a program's execution. Therefore, despite offering better performance than static methods, dynamic methods are also vulnerable to evasion techniques.
+
+\subsubsection{Datasets}
+
+Research into malware detection depends on the availability of large scale, high quality datasets containing both malicious and benign software. However, very few of these datasets exist, and those that do often provide features derived from the programs as opposed to the executables themselves. For example, the EMBER dataset~\cite{andersonEMBEROpenDataset2018} contains over a million samples of static features derived from each executable, however the binaries themselves are not distributed. Other datasets, such as BODMAS \cite{yangBODMASOpenDataset2021}, despite offering fewer samples than EMBER,  provide access to the executables. However, due to copyright limitations, only malicious binaries are provided. 
+
+% When curating these datasets, malicious samples are easy to download en-masse through websites such as VirusShare\footnote{\url{https://virusshare.com}} and VirusExchange\footnote{\url{https://virus.exchange/}}. These websites store large collections of malware seen in-the-wild by security professionals. However, similar large scale collections of benign software are less available, likely due to copyright protections. We have seen a number of approaches for curation of benign software in the literature. For example, by downloading android applications from the Google Play store \cite{karbabMalDozerAutomaticFramework2018}, scraping free software websites \cite{liDMalNetDynamicMalware2022}, and extracting system executables. These approaches however are somewhat limited by the number of programs available on both free software websites, and the system itself. Furthermore, these executables are not guaranteed to be free of malware. Another promising approach for collecting benign Windows software is the downloading of repositories used by Windows package managers such as Chocolatey and Winget as they provide many packages that have been verified as being free of malware. However, they often distribute installers rather than the executables themselves, meaning each package has to be installed before it can be used in the dataset. 
+
+When curating these datasets, malicious samples are easy to download en-masse through websites such as VirusShare and VirusExchange. These websites store large collections of malware seen in-the-wild by security professionals. However, similar large scale collections of benign software are less available, likely due to copyright protections. We have seen a number of approaches for curation of benign software in the literature. For example, by downloading android applications from the Google Play store \cite{karbabMalDozerAutomaticFramework2018}, scraping free software websites \cite{liDMalNetDynamicMalware2022}, and extracting system executables. These approaches however are somewhat limited by the number of programs available on both free software websites, and the system itself. Furthermore, these executables are not guaranteed to be free of malware. Another promising approach for collecting benign Windows software is the downloading of repositories used by Windows package managers such as Chocolatey and Winget as they provide many packages that have been verified as being free of malware. However, they often distribute installers rather than the executables themselves, meaning each package has to be installed before it can be used in the dataset. 
+
+\subsection{Future Research Directions}
+
+Our analysis of the literature relating to this field, has found that there are a number of promising areas of investigation. Static approaches, while less robust to structural obfuscation, are less resource intensive and are able to run on a users machine without an internet connection. Dynamic features on the other hand, offer better performance than their static counterparts, yet are still vulnerable to advanced evasion techniques that may render them less effective. Furthermore, the requirements associated with dynamic feature extraction are a significant barrier to their deployment, and demonstrate the need for efficient and effective static methods for detecting malware. 
+
+Furthermore, we identify a gap in the literature relating to the use of modern natural language processing techniques such as pre-training transformer models for malware detection on textual representations of executables. While these models have been used in this context, they use the natural language features of these programs, such as the ASCII strings, and program metadata. We will investigate the use of these techniques when trained to develop an understanding of the program itself to see if these modern NLP techniques are suited to reasoning about executables with the end goal of identifying malware.
+
+In addition to this, we will also investigate the resilience of static approaches to obfuscation, as it seems that the it is present in most malware seen in the wild. This may cause static malware detection models to recognise harmful software based on the presence of obfuscation. This will develop a better understanding of the issues associated with static malware detection, driving further developments in the field.
+
+
+\section{Methodology}
+
+
+
+\noindent
+In this investigation, we evaluate the effectiveness of a custom BERT-based model in static malware detection. The model is trained to distinguish between malicious and benign opcode sequences using modern natural language processing techniques such as pre-training, which are then used to identify malicious programs. We compare this model against both linear models, such as decision trees, and other static machine learning methods seen in the literature, such as Convolutional Neural Networks. Finally, we evaluate to what extent the opcode sequence classification, and the CNN image classification models rely on the presence of obfuscation as an indicator of malicious software.
+
+\subsection{Dataset}\label{sec:dataset}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{size-dist.png}
+        \caption{Distribution of executable size across classes.}
+        \label{fig:dataset:size-dist}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{obfuscation-dist.png}
+        \caption{Distribution of code analysis coverage across classes.}
+        \label{fig:dataset:obf-dist}
+    \end{subfigure}
+    % \hfill
+    \vspace{1em}
+    \\
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \caption{Distribution of classes with our dataset.}
+        \begin{tabular}{@{}ll@{}}
+            \toprule
+            \textbf{Class}     & \textbf{Count} \\ \midrule
+            Malicious & 5792   \\
+            Benign    & 5323   \\ \midrule
+            \textbf{Total}     & 11115  \\ \bottomrule
+        \end{tabular}
+        \label{fig:dataset:class-dist}
+    \end{subfigure}
+    \caption{Description of our dataset, including the size of programs (a), the extent of obfuscation (b), and the total number of samples in each class (c).}
+    \label{fig:dataset}
+\end{figure}
+
+% Our dataset consists of 11115 Windows PE32 files (See \ref{apdx:pe}), with a class distribution shown in \ref{fig:dataset:class-dist}. Malicious files are gathered from VirusShare\footnote{\url{https://virusshare.com/about}}, which contains samples from real-world cybersecurity incidents, providing approximately 90 million samples of which nearly 6000 were randomly selected. The benign executables were collected from the personal devices of the authors, and were scanned using Microsoft defender to ensure no mislabelled samples were present. This includes various software packages, games, developer tools, system programs, and other miscellaneous executables to ensure the dataset is representative of the kinds of benign programs commonly seen on the machines of potential end users.
+
+Our dataset consists of 11115 Windows PE32 files (See \ref{apdx:pe}), with a class distribution shown in \ref{fig:dataset:class-dist}. Malicious files are gathered from VirusShare, which contains samples from real-world cybersecurity incidents, providing approximately 90 million samples of which nearly 6000 were randomly selected. The benign executables were collected from the personal devices of the authors, and were scanned using Microsoft defender to ensure no mislabelled samples were present. This includes various software packages, games, developer tools, system programs, and other miscellaneous executables to ensure the dataset is representative of the kinds of benign programs commonly seen on the machines of potential end users.
+
+We opt to investigate Windows malware detection due to the operating systems widespread usage, and therefore high availability of malware targeting it. Malware targeting other operating systems, such as Linux of MacOS do exist, but there are significantly fewer samples, meaning the availability of data is reduced.
+
+The dataset demonstrates wide variation in characteristics between classes. For example, we find that malicious programs are often much smaller than benign executables, as shown in \ref{fig:dataset:size-dist}. We believe this to be because benign programs typically provide more functionality, such as graphical user interfaces, telemetry, and compatibility, which increase the size of the program. Malicious software on the other hand, are developed with a single goal in mind, reducing its size.
+
+We hypothesize that both our dataset, and other datasets containing malicious software will demonstrate variation in the prevalence of obfuscation between malicious and benign executable classes. To investigate this, we perform static analysis of the samples in our dataset using Rizin \cite{rizinorganizationRizin2025} to find the code analysis coverage. This metric gives the ratio of code analysed by the tool, to the total amount of code in an executable. In obfuscated programs, this result is typically much lower than non-obfuscated executables as it is unable to perform its analysis due to the non-standard structure. The results of this analysis are presented in \ref{fig:dataset:obf-dist}, which supports our hypothesis, and indicates malicious samples are more frequently obfuscated than benign samples.  
+
+The dataset is then split to produce a training set, and evaluation set at a ratio of 80\% to 20\% of samples respectively. To ensure consistent class distribution between these sets, samples are shuffled prior to splitting. 
+
+\subsubsection{Obfuscation Experiment Dataset}\label{ssec:secondary-dataset}
+
+% \begin{table}[h]
+%     \centering
+%     \caption{Distribution of classes with our secondary dataset.}
+%     \begin{tabular}{@{}ll@{}}
+%         \toprule
+%         \textbf{Class}      & \textbf{Count} \\ \midrule
+%         Malicious           & 60   \\
+%         Benign              & 61   \\ \midrule
+%         \textbf{Total}      & 121  \\ \bottomrule
+%     \end{tabular}
+%     \label{fig:obfs-ds-class-dist}
+% \end{table}
+
+\noindent
+To investigate the impact of obfuscation on malware detection, we also curate a secondary dataset, consisting of unobfuscated executables. We use the work presented in \cite{rokonSourceFinderFindingMalware2020} to identify GitHub repositories containing malicious source code. The authors provide a list of URLs to these repositories, from which we select Windows programs that provide an executable and with no mention of obfuscation in its description or codebase. Benign samples consist of windows system binaries not present in our original dataset. We identify a collection of approximately 60 Windows XP system binaries which are free of obfuscation for this secondary dataset. This gives a selection of 121 programs, each of which are free of obfuscation for use in our later experiment into the resilience of machine learning algorithms to obfuscation. 
+
+\subsection{Metrics}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\textwidth]{confusion-matrix.pdf}
+    \caption{Confusion Matrix describing the kinds of classification results in malware detection.}
+    \label{fig:confusion-matrix}
+\end{figure}
+
+In our investigation, malware detection is presented as a binary classification problem, where our models aim to distinguish between malicious and benign software. To quantify the performance of the various approaches tested in this investigation, we find the accuracy, F1-score, precision, and recall~\ref{eq:metrics}. These metrics are based on the different kinds of results a binary classifier can produce, shown in \ref{fig:confusion-matrix}. 
+
+Accuracy is the ratio of correct classifications to the number of samples tested, where a score of ``1'' would be a perfect classifier for a given set of samples. However, the value of this metric can be misleading in unbalanced datasets. 
+
+Precision and recall both operate on the class-level, therefore to reduce these metrics to a single number, we typically take the average of these values for each class in the dataset, known as macro-averaging. Precision is defined as the ratio between the number of correctly identified samples, to the total number of samples predicted as belonging to a given class. Recall on the other hand is the number of correct predictions, to the number of samples in given class. F1 score, acts as an aggregation of these values, and is given by the harmonic mean.
+
+\begin{align}
+    \text{Accuracy} &= \frac{TP + TN}{TP + TN + FP + FN}\nonumber\\
+    \text{Precision} &= \frac{TP}{TP + FP} \refstepcounter{equation} \tag{\theequation}\label{eq:metrics}\\
+    \text{Recall} &= \frac{TP}{TP + FN}\nonumber\\ 
+    \text{F1-Score} &=  \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}\nonumber
+\end{align}
+
+
+\subsection{Baseline}
+
+\begin{figure}[h]
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \begin{tabular}{@{}l|rr@{}}
+        \toprule
+        \textbf{Similarity} & \multicolumn{1}{l}{Malicious} & \multicolumn{1}{l}{Benign} \\ \midrule
+        Malicious           & 0.1428                        & 0.0931                     \\
+        Benign              & 0.0931                        & 0.1217                     \\ \bottomrule
+        \end{tabular}
+        \caption{Cross-class external function similarity.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \begin{tabular}{@{}l|rr@{}}
+        \toprule
+        \textbf{Similarity} & \multicolumn{1}{l}{Malicious} & \multicolumn{1}{l}{Benign} \\ \midrule
+        Malicious           & 0.2249                        & 0.1606                     \\
+        Benign              & 0.1606                        & 0.1643                     \\ \bottomrule
+        \end{tabular}
+        \caption{Cross-class DLL similarity.}
+    \end{subfigure}
+    \caption{Cosine similarity between classes based on external functions and DLLs.}
+    \label{fig:similarity}
+\end{figure}
+
+\noindent 
+We firstly establish a baseline using conventional machine learning algorithms on the lookup table associated with each program. This lookup table tells the program where external references, such as libraries and functions exist in memory. These external references offer functionality that would otherwise be inaccessible to the program. For example, to interact with the file-system, the lookup table will include a reference to \texttt{KERNEL32.dll}, which provides the address of the functions needed to create, read, and write to the file-system. We can extract all functions and libraries used by an executable with other static analysis tools such as Radare2~\cite{radareorganizationRadare22025}. References to functions that occur once across the dataset are removed as approximately half of all functions are seen exactly once across the entire dataset. This gives two binary feature vectors for each sample in the dataset, telling the classifiers which external functions, and libraries are used by the program. We test 3 machine learning algorithms to establish this baseline, which are support vector classifiers, logistic regression, and decision trees. 
+
+We also use the feature vectors to quantify the similarity of programs in our dataset with the pairwise cosine similarity function (\ref{eq:cosine-sim}). We then find the average similarity between classes which are presented in \ref{fig:similarity}. From this, we can assume that functions and libraries used by the malicious programs are more similar than the ones used by benign programs. Furthermore, functions used by malicious programs are vastly different to functions used by benign programs. 
+
+\begin{equation}
+    S\left(\mathbf{A},\mathbf{B}\right) := \cos\left(\theta\right)=\frac{\mathbf {A} \cdot \mathbf {B}}{\|\mathbf {A} \|\|\mathbf {B} \|}\label{eq:cosine-sim}
+\end{equation}
+
+\subsection{RoBERTa for Opcode Sequence Classification}
+
+% \begin{figure}[h]
+%     \centering
+%     \begin{BVerbatim}
+% ret lea mov add add lea mov add add nop
+%     \end{BVerbatim}
+%     \caption{An example sequence of opcodes}
+%     \label{fig:opcode-sequence}
+% \end{figure}
+
+\noindent
+In recent years, transformer-based architectures for natural language processing have been shown to be highly effective across a wide variety of language based tasks. A significant advancement within the field was the development of the Bidirectional Encoded Representation from Transformers model, known as BERT~\cite{devlinBERTPretrainingDeep2019a}. This model uses an encoder-only architecture, based on the multi-head self-attention mechanism~\cite{vaswaniAttentionAllYou2023a} in conjunction with a pre-training stage to develop a comprehensive understanding of language. Pre-training consists of two tasks, masked language modelling where the model predicts hidden tokens based on their surrounding context, and next sentence prediction. The pre-trained model can then be fine-tuned on a downstream problem such as sequence classification, question answering, and general language understanding. At the time of publication, it achieved state-of-the-art performance in the General Language Understanding Evaluation (GLUE), Stanford Question Answering Dataset (SQuAD), and Situations With Adversarial Generations (SWAG) benchmarks and has been used extensively throughout the natural language processing field. Fine-tuning of the pre-trained model allows researchers to solve complex tasks with fewer training samples, short training periods, and less intensive compute requirements. RoBERTa extends upon the original BERT model by expanding the scale of the model, removing the next sentence prediction task from its pre-training stage, optimising the hyperparameters, and training on a larger corpus. 
+
+We develop a custom RoBERTa model, trained on opcode sequences for malware detection. Opcodes refer to the operation to be performed by the CPU, such as \texttt{add}, \texttt{cmp}, \texttt{mov}, written in a human readable form. To generate these sequences, we use Radare2 to extract the disassembly of a program (See \ref{algo:disasm-extraction}), and remove the operands of each instruction (\ref{algo:opcode-sequence-extraction}) to reduce the vocabulary size and therefore the computational resources needed to train the model. This gives a sequence of opcodes representing each program within our dataset, as shown in \ref{fig:opcode-sequence}. The sequences are then tokenized at the word level where each opcode is assigned a single token. 
+
+We train four of these models that each take a tokenized opcode sequence of a fixed length. The first model is trained in masked language modelling, which is then used to train a sequence classification model, referred to as the ``pretrained'' model throughout this report. We also train another pre-trained sequence classification model which has had the weights in its attention layers frozen, referred to as the ``frozen'' model to determine if the representations produced by the attention layers are sufficient for distinguishing between malicious and benign opcode sequences. Finally, we also train a RoBERTa sequence classification model from a random initialisation, to assess if the pre-training step is necessary, referred to as the ``base'' model.  
+
+Our models share the architecture shown in \ref{tab:model-params} that was found to be the optimal configuration after an extensive hyperparameter sweep of 90 runs. Training was performed with a single Nvidia A40 GPU, and 16GB of ram with a batch size of 128 for a single epoch, using the AdamW optimizer, and Cross-Entropy loss function provided by Pytorch.
+
+For each opcode sequence, the model predicts two values, the likelihood of the sequence being malicious, or benign where the larger of these two values is its predicted class. However, the full opcode sequence of a program is too long to be used as the models input. Therefore, we split the full sequence of opcodes into multiple sub-sequences of a fixed length, and aggregate the logits to classify a program. We test both raw logit mean aggregation, softmax logit mean aggregation, and majority voting, and found raw logit mean aggregation to be most effective. 
+
+\begin{table}[h]
+    \centering
+    \caption{RoBERTa sequence classification model parameters}
+    \begin{tabular}{@{}lr@{}}
+        \toprule
+        \textbf{Parameter}      & \textbf{Value} \\ \midrule
+        Sequence Length         & 32    \\
+        Hidden Layer Size       & 512   \\
+        Hidden Layers           & 7     \\
+        Attention Heads         & 4     \\
+        Intermediate Layer Size & 2048  \\
+        Activation Function     & GELU  \\
+        Hidden Dropout Rate     & 0.01  \\
+        Attention Dropout Rate  & 0.001 \\ \bottomrule
+    \end{tabular}
+    \label{tab:model-params}
+\end{table}
+
+\subsection{CNN for Image Classification}
+
+\begin{figure}
+    \centering 
+    \begin{subfigure}[t]{0.25\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{malware-img-benign.png} 
+        \caption{Image representation of a benign executable.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.25\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{malware-img-mal.png} 
+        \caption{Image representation of a malicious executable.}
+    \end{subfigure}
+    \caption{How images can be used to represent programs.}
+    \label{fig:img-rep}
+\end{figure}
+
+In addition to the RoBERTa sequence classification model, we also evaluate an image based approach. We use the EfficientNet-B0 CNN architecture \cite{tanEfficientNetRethinkingModel2020}, due to its computational efficiency and high performance on image classification problems. The model is trained from a random initialisation, and the final layer of the model is modified to output a binary class likelihood values. Programs are converted to greyscale images using the procedure outlined in \ref{apdx:prog-to-img}, converted to RGB, and resized to 320\(\times\)320 pixels before it is used by the model, as shown in \ref{fig:img-rep}.
+
+As previously established, the size of benign programs is typically much higher than malicious programs. Therefore, benign images are resized to a greater extent to that of malicious images. Resizing an image will introduce artifacts to the image, such as anti-aliasing or blurring. Thus, benign images may have more prevalent artifacts than malicious images which could be used by the model to learn a suboptimal solution. To prevent this from occurring, we train the same model on a subset of the dataset where the distribution of program size between classes are more similar, known as the ``filtered'' model. We use a genetic algorithm that minimises the Kullback-Leibler divergence $D_{KL}$ between the distributions of program size for each class of program by modelling it as a Knapsack problem~\cite{khuriZeroOneMultiple1994}. We also encourage the algorithm to select a subset with an approximately equal number of malicious and benign samples to ensure class balance. 
+
+We train both the base model, and the filtered model trained for 20 epochs, with the binary cross entropy loss function and a batch size of 32. Training was conducted using an Apple M2 Pro CPU, leveraging the metal performance shaders backend for hardware acceleration, with 16GB of RAM using the AdamW optimiser. 
+
+\subsection{Obfuscation}
+
+In modern malware, obfuscation is highly pervasive. As a result of this, we believe that static malware detection methods learn to identify obfuscation as opposed to other malicious characteristics. However, obfuscation is not exclusive to malicious programs, as legitimate software developers use similar techniques to protect their intellectual property. Should this be the case, legitimate benign software that have been obfuscated may be misidentified as malicious, thereby degrading the effectiveness of these approaches in real world deployment. 
+
+We investigate this by observing how the models performance changes as we increase the presence of obfuscation within the unobfuscated dataset. We perform three trials for each model, that vary which kinds of program are to be obfuscated. For example, only malicious, benign, and all programs. At each step, we obfuscate a certain percentage of programs within the dataset and this percentage increases by 10\% upon completion. We collect the logits for each sequence, which are used to calculate both the sequence level, and the file level metrics. We also perform this experiment on the image classification model to see if these models are better suited to obfuscation resilient malware detection.
+
+Obfuscation is performed using a tool known as UPX~\cite{markusf.x.j.oberhumerUPX2025}, which is a binary packing tool. We chose this tool due to its extensive compatibility with Windows executables. Furthermore, a number of our malicious executables have been identified as using this tool for obfuscation, and it has also been used to compress and obfuscate benign files. Therefore, we feel that it is a suitable tool to replicate the forms of obfuscation used by both malicious and legitimate software developers seen in the wild without having to implement our own obfuscation tooling.
+
+
+\section{Results}
+
+\subsection{Baseline}
+
+% \begin{table}[h]
+%     \centering
+%     \caption{Performance of baseline methods for malware detection using the import tables of executables}
+%     \begin{tabular}{llllll}
+%         \toprule
+%         \textbf{Algorithm} & \textbf{Feature} & \textbf{Accuracy} & \textbf{F1 Score} & \textbf{Precision} & \textbf{Recall} \\ \midrule
+%         \multirow{2}{*}{\textbf{Support Vector Classifier}} & DLL & 0.8859 & 0.8856 & 0.8856 & 0.8856 \\
+%         & Function & 0.9248 & 0.9248 & 0.9266 & 0.9262 \\ \midrule
+%         \multirow{2}{*}{\textbf{Logistic Regression}} & DLL & 0.8682 & 0.8682 & 0.8687 & 0.8695 \\
+%         & Function & 0.9438 & 0.9438 & 0.9442 & 0.9447 \\ \midrule
+%         \multirow{2}{*}{\textbf{Decision Tree}} & DLL & 0.8877 & 0.8876 & 0.8876 & 0.8885 \\
+%         & Function & 0.9406 & 0.9406 & 0.9415 & 0.9417 \\ \bottomrule
+%     \end{tabular}%
+%     \label{tab:baseline-results}
+% \end{table}
+
+\noindent
+The results of our baseline approaches are presented in \ref{tab:baseline-results}. These results indicate that across each of the machine learning algorithms tested, the external function features clearly offer better performance over the library level features. We find that the logistic regression, and decision tree algorithms, using the external function feature vector are comparable in terms of accuracy, and the support vector classifier offers worse performance by a margin of 0.02 in its F1 score. 
+
+When the library level information are considered however, we find that both the support vector machine and the decision tree algorithms provide similar performance of approximately 0.88 F1 score. The logistic regression algorithm however, is marginally worse at identifying malware by 2\%. 
+
+However, these models are particularly vulnerable to obfuscation as they rely of features extracted from the import table of an executable. Binary packing fully obfuscates this information, as it is found within the encoded portion of the packed executable, therefore unable to be extracted using static methods. Therefore, should we try to evaluate these models on a set of packed executables, the feature vectors used to represent executables would be empty, making it impossible to identify malicious programs. 
+
+% and indicate that all methods tested are comparible in terms of performance. When trained on non-unique external function usage, these methods achieve an F1 score of approximately 0.9. External library usage however, incurs a minor degradation in classification performance, as the same methods achieve an F1 score of approximately 0.88. Therefore, we can assume that the usage of external functions is a better indicator of a programs intent. 
+
+%This can be explained by our earlier analysis of executable similarity. We found that the average pairwise similarity between malicious and benign executables based on the function level information was much lower than that of the DLL information. This indicates that malicious and benign samples overlap to some extent in terms of which external libraries are used by each. Function level information however demonstrates a lower similarity, suggesting that malicious and benign functions typically use different functions. 
+
+%Therefore, the API methods used by the programs within our dataset exhibit more variation across benign and malicious samples than external libraries and are thus a better feature for classification. 
+
+%Our results indicate that the best algorithm for classification was the decision tree classifier, trained on external function information. In addition to providing the best performance of all baseline methods tested in this experiment, decision tree algorithms have the added benefit of being interpretable. This means that we can visualise the internal mechanisms of the algorithm, providing additional insight into what makes a file malicious according to this model. 
+
+\subsection{Sequence Classification}
+
+% \begin{table}[h]
+%     \centering
+%     \caption{Performance of our RoBERTa model for opcode sequence classification and malware detection}
+%     \resizebox{\textwidth}{!}{%
+%     \begin{tabular}{llllllllllll}
+%         \toprule
+%         \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Model}}} &  & \multicolumn{4}{c}{\textbf{Sequence Level}} & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\textbf{File Level}} & \vspace{2pt}\\ \cline{3-6} \cline{8-11}
+%         \multicolumn{1}{c}{} &  & Accuracy & F1-Score & Precision & Recall & \textbf{} & Accuracy & F1-Score & Precision & Recall &  \\  \midrule
+%         From Scratch &  & 0.8756 & 0.8742 & 0.8798 & 0.8756 &  & 0.8976 & 0.8971 & 0.9095 & 0.8989 &  \\
+%         From pretrained &  & 0.9010 & 0.9002 & 0.9042 & 0.9010 &  & 0.9452 & 0.9452 & 0.9479 & 0.9458 &  \\
+%         \begin{tabular}[c]{@{}l@{}}From pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8302 & 0.8265 & 0.8409 & 0.8302 & & 0.8076 & 0.8037 & 0.8393 & 0.8098 &  \\ 
+%         \bottomrule
+%         \end{tabular}%
+%     }
+%     \label{tab:malberta-base-results}
+% \end{table}
+
+\noindent
+In \ref{tab:malberta-base-results} we present both the sequence level, and file level classification metrics of our machine-code language models. We find that in sequence level tasks, where the model is tasked with classifying a subsequence of opcodes as either malicious or benign, the pre-trained model offers the best performance. When this pre-training stage is skipped, performance degrades by approximately 3\%, indicating the prior understanding of opcode sequences is necessary to more accurately identify malicious sequences. In comparison to our baseline approaches presented in \ref{tab:baseline-results}, only the pre-trained model offers similar performance. 
+
+In addition to this, the performance of the same pre-trained model is impacted significantly when the parameters of its attention layers are frozen. These weights encode the understanding of language developed during its pre-training stage to create an encoded representation of a sequence, which is then used by a classification head to determine its classification. In certain fine-tuning tasks, these initial layer weights are frozen to reduce the computational cost, and the amount of data used to train the model. However, we see that freezing the attention layers has a significantly negative impact on the models performance. 
+
+These sequence level tasks however are not representative of our models performance in real world tasks. Therefore, to understand how they perform in real-world malware detection, we are required to reduce multiple sequence classifications across an entire program, into a single file-level classification. By taking the mean of each, un-normalised pair of class logits, we are able to find this file-level classification. From this, we find that the pre-trained model achieves the best file-level performance, with an F1 score of 0.94, outperforming our baseline approaches by a small margin. This increase in performance between sequence level and file level tasks is also seen in the non-pretrained model to a lesser extent. However, the model with frozen attention layers exhibits a decrease between sequence level, and file level performance.
+
+
+\subsection{Image Classification}
+
+% \begin{table}[h]
+%     \centering
+%     \caption{Performance of the image classification models for malware detection}
+%     \begin{tabular}{@{}lllll@{}}
+%         \toprule
+%         \textbf{Dataset} & \textbf{Accuracy} & \textbf{F1-Score} & \textbf{Precision} & \textbf{Recall} \\ \midrule
+%         Full & 0.9316 & 0.9315 & 0.9314 & 0.9322 \\
+%         Filtered & 0.9306 & 0.9306 & 0.9309 & 0.9306 \\ \bottomrule
+%     \end{tabular}
+%     \label{tab:image-classifier-model-results}
+% \end{table}
+
+\noindent
+Our results demonstrate that both image classification models do not outperform our baseline, as shown in \ref{tab:image-classifier-model-results}. Furthermore, despite outperforming the scratch and frozen RoBERTa opcode sequence classification models in file level tasks, the pre-trained model achieves a better F1 score by approximately 0.014. This suggests that both conventional machine learning algorithms, and custom pre-trained language models offer a more powerful solution to this problem.
+
+The same model was also trained on a subset of the original dataset, found by the genetic algorithm outlined in \ref{apdx:ga}. We theorise that, due to the discrepancy in the size of programs in both classes, the model would use rescaling artifacts as an indicator of an executables class. The subset of our original dataset has an approximately equal distribution in program size between malicious and benign executables, as shown in \ref{fig:filtered-ds-size}, and maintains an acceptable class balance between the two. However, we find that the model trained on this filtered dataset, has very little impact on its performance when evaluated on the original dataset. This indicates that the model is not learning to identify malicious and benign programs based on any artifacts that originate from rescaling.  
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{filtered-dataset-size-dist.png}
+    \caption{Distribution of executable size in the filtered dataset}
+    \label{fig:filtered-ds-size}
+\end{figure}
+
+\subsection{Obfuscation Experiment}
+
+To better understand how these approaches learn to distinguish between malicious and benign programs, we conduct an investigation into how their performances changes as obfuscation becomes more prevalent in a dataset of unobfuscated programs. Both the RoBERTa model, and the Image Classification models are tested, however we are unable to test the performance of our baseline approaches, as the tool used to obfuscate programs prevents feature extraction.  
+
+\subsubsection{Sequence Classification}
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-base.png}
+        \caption{File-level performance}
+        \label{fig:seq-obf-file-level-base}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-base.png}
+        \caption{Sequence-level performance}
+        \label{fig:seq-obf-seq-level-base}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-certainty-base.png}
+        \caption{Confidence in model predictions}
+        \label{fig:seq-obf-certainty-base}
+    \end{subfigure}
+    \caption{Impact of obfuscation on the performance of file and sequence level classification, and certainty of the RoBERTa opcode sequence classification models.}
+    \label{fig:base-obf-results}
+\end{figure*}
+
+We find that our sequence classification models seem to heavily rely on obfuscation as an indicator of a programs intent. This can be seen in \ref{fig:seq-obf-file-level-base}, where an increased presence of obfuscated malicious samples corresponds with an increase in classification accuracy. When only benign files are obfuscated however, we see no meaningful trend. 
+
+
+However, when sequence level accuracy is considered, this trend is pronounced to a lesser extent, as shown in \ref{fig:seq-obf-seq-level-base}. We do see an a positive correlation between classification accuracy and obfuscation likelihood across all samples. However when obfuscation is applied to a single class of programs in the dataset, no correlation is seen. 
+
+To better understand how our models handle obfuscation, we quantify the certainty in their predictions by taking the Kullback-Leibler Divergence (\ref{eq:kl_div}) between the models output, and the uniform distribution. This metric tells us how confident a model is in its predictions, by measuring the distributional difference between its predicted class likelihood distribution, and a uniform distribution representing the model picking at random. We find that certainty increases significantly across all trials as we increase the prevalence of obfuscation as shown in \ref{fig:seq-obf-certainty-base}. This suggests that the model considers obfuscation as highly indicative of a samples class. 
+
+\begin{equation}
+    D_{KL}\left(p~||~q\right) = \sum_{x \in \mathcal{X}} p\left(x\right) \log \left(\frac{p\left(x\right)}{q\left(x\right)}\right)\label{eq:kl_div}
+\end{equation}
+
+We also see that across all models tested in this experiment, the trends are largely similar. For example, our results show that as the presence of obfuscated malicious samples increase, the classification increases accordingly. This trend is seen in all the models used in this experiment, however the extent of the trend varies between them. This suggests that our models are learning similar representations, yet are limited by other factors such as a reduced prior understanding of the language, and insufficient model complexity. To visualise this, we perform representational similarity analysis (RSA) on the activation's of our models at each layer using Centered Kernel Alignment (CKA, shown in \ref{apdx:cka}) as outlined in~\cite{kornblithSimilarityNeuralNetwork2019}. This metric quantifies the correspondence between hidden representations of data across models trained from different initialisations. This is shown in \ref{fig:rsa-cka-base}, and indicates that the similarity of representations in the attention layers of the pre-trained and non-pretrained models decrease with the number of layers, and that the representations at the classification heads are very similar. Our frozen model however, demonstrates a higher extent of representational similarity in the attention layers, and significant dissimilarity at the classification head. 
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[t]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-base-pretrained-scratch.png}
+        \caption{RSA of pre-trained and non-pretrained models.}
+        \label{fig:rsa-pre-trained-scratch}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-base-pretrained-frozen.png}
+        \caption{RSA of pre-trained and frozen models.}
+        \label{fig:rsa-pre-trained-frozen}
+    \end{subfigure}
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{rsa-cka-base-frozen-scratch.png}
+        \caption{RSA of frozen, and non pre-trained models.}
+        \label{fig:rsa-pre-trained-frozen}
+    \end{subfigure}
+    \caption{Representational Similarity Analysis (RSA) of our baseline models using Centered Kernel Alignment.}
+    \label{fig:rsa-cka-base}
+\end{figure}
+
+We then repeat this experiment on two identical groups of models trained on modified datasets to see if data augmentation can produce models which are more resilient to obfuscation. The first of these datasets has had all of its benign samples obfuscated prior to opcode extraction, and the second contains both the obfuscated and regular benign samples. We refer to these as our obfuscated benign and partially obfuscated datasets respectively.  
+
+\subsubsection{Obfuscated Benign}
+
+The models trained on this dataset all demonstrate increased classification accuracy when only benign samples are obfuscated. When only malicious programs are obfuscated however, its accuracy decreases. In addition to this, when all samples are targets for obfuscation, the file level accuracy remains relatively consistent at approximately 50\%, suggesting random choice as shown in \ref{fig:seq-obf-file-level-ob}. Furthermore, the sequence classification metrics demonstrate that accuracy also remains consistent as we increase the number of obfuscated benign samples, whereas it decreases as more malicious samples are obfuscated. The certainty of the models in these predictions indicate that increasing the presence of obfuscation leads to reduced confidence in its predictions.
+
+% This is to be expected, as the obfuscated benign samples used to train the model are generated using UPX, the same tool used to generate obfuscated samples in our experiment. Therefore, the model learns to recognise this form of obfuscation, as it is indicative of benign samples according to its training data. When all samples are obfuscated, the model is not able to accurately distinguish between the classes in the dataset, as it expects only benign samples to be obfuscated. Thus, when both classes are obfuscated, it is effectively guessing which class it belongs to. This can also be seen in its certainty, where the KL-Divergence decreases significantly as we increase the presence of obfuscation as shown in \ref{fig:seq-obf-certainty-ob}, suggesting the predicted class distribution approaches random selection with increased presence of obfuscation across both classes. 
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-ob.png}
+        \caption{File-level performance}
+        \label{fig:seq-obf-file-level-ob}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-ob.png}
+        \caption{Sequence-level performance}
+        \label{fig:seq-obf-seq-level-ob}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-certainty-ob.png}
+        \caption{Confidence in model predictions}
+        \label{fig:seq-obf-certainty-ob}
+    \end{subfigure}
+    \caption{Impact of obfuscation on the performance of file and sequence level classification, and certainty of the RoBERTa opcode sequence classification models trained on the obfuscated benign dataset.}
+    \label{fig:seq-obf-results-ob}
+\end{figure*}
+
+\subsubsection{Partially Obfuscated Benign}
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-file-level-pob.png}
+        \caption{File-level performance}
+        \label{fig:seq-obf-file-level-pob}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-seq-level-pob.png}
+        \caption{Sequence-level performance}
+        \label{fig:seq-obf-seq-level-pob}
+    \end{subfigure}
+
+    \centering
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{seq-obf-certainty-pob.png}
+        \caption{Confidence in model predictions}
+        \label{fig:seq-obf-certainty-pob}
+    \end{subfigure}
+    \caption{Impact of obfuscation on the performance of file and sequence level classification, and certainty of the RoBERTa opcode sequence classification models trained on the partially obfuscated benign dataset.}
+    \label{fig:seq-obf-results-pob}
+\end{figure*}
+
+
+
+Models trained on the partially obfuscated benign dataset demonstrate more consistent file-level classification accuracy when only malicious samples are obfuscated as opposed to the fully obfuscated benign models, which decrease under the same conditions~(\ref{fig:seq-obf-results-pob}). However, this is not the case for the frozen model, as we see a significant decrease in accuracy with increasing presence of obfuscated malicious samples. 
+
+Furthermore, as was the case in the obfuscated benign models, accuracy increases with the number of obfuscated benign samples in both the pre-trained, and frozen models. The model trained from a random initialisation however, exhibits a unique trend in its accuracy across different obfuscation targets where it increases consistently across all targets. In comparison to the other models tested in this experiment, where we see highly similar trends between different models trained on the same data, that differ only in their extent. However, in this case, we see a unique trend in the model trained from scratch, where classification accuracy marginally increases consistently across each obfuscation target. The pre-trained, and frozen pre-trained models however, show a significant increase in accuracy when benign samples are more commonly obfuscated.
+
+However, sequence level accuracy tells a different story. Between all models, we see sequence level accuracy decrease as the number of obfuscated malicious samples increase. We also see that the observed increase in accuracy with the number of obfuscated benign samples is less pronounced than the file level metrics. Futhermore, as we increase the number of obfuscated samples in both classes, there is no discernible trend in the models accuracy. 
+
+We also see the model confidence, decreasing with obfuscation likelihood across all targets. This can also be seen in the obfuscated benign models. 
+
+\subsubsection{Image Classifier}
+
+The impact of obfuscation on our image classification models is shown in \ref{fig:img-obfs-results}. We find that both of the image based malware detection models are more likely to identify malicious software based on the presence of obfuscation. In both cases, we see that the presence of obfuscation increases across our malicious samples is positively correlated with the classification accuracy. In comparison to this, an increased prevalence of obfuscation in benign samples leads to a degradation in performance. Furthermore, when obfuscation is applied across all samples in this dataset, we see no meaningful trend in classification accuracy as obfuscation becomes more common. 
+
+\begin{figure*}
+    \centering 
+    \begin{subfigure}{0.9\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{img-obf-file-level.png}
+        \caption{Classification accuracy}
+    \end{subfigure}
+    \begin{subfigure}{0.9\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{img-obf-certainty.png}
+        \caption{Confidence in model predictions}
+    \end{subfigure}
+    \caption{Impact of obfuscation on the performance of image-based malware detection models, and the confidence of the model in its predictions.}
+    \label{fig:img-obfs-results}
+\end{figure*}
+
+\section{Discussion}
+
+\noindent
+In this research, we assess the suitability of deep learning techniques for static malware detection, and the reliance of these approaches on obfuscation. We evaluate three solutions to this problem, consisting of linear machine learning models, transformer based sequence classification models, and an image classification model using a CNN. Each of these approaches differ in the amount information provided to the model. For example, our baseline models use very little information when compared to the information used by CNN and Transformer based approaches. 
+
+Linear models comprise our baseline against which all other approaches are compared. We test a logistic regression, decision trees, and support vector machine with a radial basis function (RBF) kernel. Each of these models are trained on information extracted from the import tables of programs in our dataset, informing the models as to which external functions or libraries are used by an executable. 
+
+The sequence classification models use modern natural language processing techniques, such as transformer based language models and pre-training. We use a RoBERTa, an optimised variation of the widespread BERT architecture, trained on sequences of assembly opcodes. We assess the impact of pre-training by training two sequence classification models, one using a pre-trained language model, and another trained from a random initialisation. We also train the pre-trained model which has had all parameters in its attention layers frozen to assess if the representations of the pre-trained model are sufficient at identifying malicious opcode sequences, reducing the computational cost of training. 
+
+Convolutional Neural Networks, specifically the EfficientNet architecture, offer a more computationally efficient approach to this problem. This model is trained on image representations of the executables in our dataset. We test this model, and a model trained on a subset of the dataset with a more similar distribution in the size of programs between classes. This was conducted to determine if the model uses rescaling artifacts to distinguish between malicious and benign programs, as the latter are typically larger than malware. 
+
+We then test these models on a secondary dataset of un-obfuscated programs, and increase the presence of obfuscation in each class to see if the presence of obfuscation indicative of malware. In this chapter, we provide our interpretation of the results, its relation to the work of others, and the limitations of this investigation. 
+
+\subsection{Interpretation of Results}
+
+\subsubsection{Baseline}
+
+\begin{figure}
+    \centering 
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{tsne-dll.png} 
+    \end{subfigure}
+    \hfill 
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{tsne-function.png} 
+    \end{subfigure}
+    \caption{Comparison between the functions and DLLs used by malicious and benign programs.}
+    \label{fig:baseline-tsne}
+\end{figure}
+
+We find that for each of the approaches which are used to establish our baseline, function level features outperform library level features, by a significant margin. On average, the difference between the same model trained on external function usage, and external library usage, the accuracy of the model using the external function feature vector increases by approximately 5\%. We believe this is because malicious and benign programs are more likely to both use certain external libraries, whereas the functions found within these libraries are more likely to be distinct between malicious and benign executables. This can be seen in \ref{fig:similarity}, where the average pairwise cosine similarity between DLLs used by malicious and benign programs is much higher than the external function-level similarity. Furthermore, in \ref{fig:baseline-tsne} a TSNE plot is presented of executables using each respective feature vector. We note a greater extent of overlap between malicious and benign programs in the DLL visualisation. The visualisation for the feature vector however, demonstrates that the functions used by malicious and benign programs overlap to a lesser extent. 
+
+Of these baseline methods, we find that the logistic regression algorithm achieves the best performance with the external function feature vector of approximately 94\%. In comparison to \cite{schultzDataMiningMethods2001a}, in which the DLL and function usage was used to identify novel malware with a rule based classification algorithm known as RIPPER, our results demonstrate improved performance. In this work, models using the DLL usage information achieved 83\% accuracy, and 89\% for function usage which seems to support our findings, despite being lower overall. We believe these results are an effect of the substantially smaller dataset, leading to decreased model performance. 
+
+We are unable to evaluate these methods in our obfuscation experiment however, as the binary packing algorithm used by UPX obscures the import table of a program. This makes it impossible to use static analysis to extract the import table, used for our feature vectors meaning it would be empty for an obfuscated executable. Therefore, as we increase the presence of obfuscation in the dataset, the models accuracy would approach 50\%, meaning the model is effectively picking at random.
+
+\subsubsection{Sequence Classification}
+
+The sequence classification models demonstrate performance in line with, and at times worse than the baseline approaches on sequence level tasks. For example, the pre-trained model is able to identify malicious opcode sequences approximately 90\% of the time. However, this increases to approximately 95\% when we aggregate each of the opcode sequence logits across a file. This outperforms our baseline, and demonstrates that this approach can accurately identify malware. 
+
+This performance can only be seen in the pre-trained model however, as both the model trained from a random initialisation, and the pre-trained model with frozen attention weights achieve accuracy worse than both the baseline and image classification approaches. In the case of the model trained from scratch, this may be due to insufficient training time, as the pre-trained model has been trained for longer because of its pre-training step. We see in \ref{fig:rsa-pre-trained-scratch} that the representations at the initial layers are highly similar between the pre-trained and non-pre-trained models, which decreases with depth. It may be that with increased training time, the model approaches the solution of the pre-trained model. 
+
+When the weights of the attention layers are frozen, allowing the model to modify only the classification head parameters, we see a significant decrease in performance. We believe this is a result of reduced model complexity, as only approximately 1\% of the models parameters are able to be updated during training. It is well established that the number of a models learnable parameters is directly associated with its performance~\cite{kaplanScalingLawsNeural2020}. By freezing the weights in the attention layers, the number of learnable parameters are reduced, leading to worse performance. \cite{leeWhatWouldElsa2019} shows that when fine-tuning a model, freezing of the first 75\% of layers in similar models incurs only a 10\% decrease in performance against its fully-trainable equivalent. Therefore, a better strategy for selecting which layers to freeze in fine-tuning tasks is necessary. 
+
+The results from our obfuscation experiment demonstrate that each of these models are highly reliant on the presence of obfuscation as an indicator of malware. This can be seen in \ref{fig:base-obf-results}, where presence of obfuscated malicious samples exhibits a positive correlation with the models classification accuracy. In comparison to this, as we increase the amount of obfuscated benign samples, we see the model accuracy remain consistent. This suggests that our model has learned to identify obfuscation characteristics as being indicative of malware, which supports our hypothesis. 
+
+% Opcode sequences extracted from packed exes will be shorter than the non-packed exe 
+% Only 70% of all samples were obfuscated when p=1
+% 30% of non-packed opcode sequences will dominate the dataset 
+% 50% baseline seq acc, 15% correctly classified 
+% it may be that the non-obfs seqs domainate the 
+In the sequence level results, we note an increase in accuracy when obfuscation is applied over all samples in the evaluation data. However, we see no meaningful trend when a single class of programs are obfuscated. When we look at the amount of obfuscation in each class throughout the experiment (\ref{fig:seq-obf-portion}), we find that approximately 80\% of benign files are obfuscated when \(p = 1\), meaning all files should be obfuscated. However, we would expect all files to be obfuscated meaning UPX was unable to obfuscate a handful of the samples used in this experiment. In malicious files however, this more significant of an issue, as only 60\% of samples were able to be obfuscated. This results in a significant class imbalance, under which conditions the accuracy metric becomes increasingly misleading. When a metric more resilient to class imbalance, such as the F1 score (\ref{eq:metrics}), we see sequence level results more in line with the file level results as shown in \ref{apdx:addition-obfs-results}.
+
+We also find that the file-level performance of all the models on this secondary dataset is significantly lower than the results obtained with our primary dataset. When we look at the sequence level metrics, we find that the unobfuscated samples in this dataset have a sequence level accuracy of approximately 50\%, suggesting the models are picking at random. Therefore, we believe that the samples within this secondary dataset are not representative of the primary dataset. The malicious samples found within our primary dataset originate from real-world cybersecurity incidents, whereas malicious samples in our secondary dataset are curated from public GitHub repositories. Malware can be extremely profitable, so publishing the source code of sophisticated malicious programs is not common. Therefore, the samples that comprise this dataset are more likely to be overly simplified, proof-of-concept projects which are not representative of real-world malware. Furthermore, the benign samples are obtained from Windows XP system files, and are typically very old. The benign samples in our primary dataset however are more modern, therefore it could be that these samples are also not representative of ones in the primary dataset. These factors indicate that a dataset of unobfuscated samples, more representative of those found in the primary is needed. 
+
+When this model is trained on obfuscated benign samples however, we find that the portion of obfuscated benign samples is positively correlated with its classification accuracy. This is to be expected, as the model has learned to recognise characteristics from UPX as indicators of benign programs. In comparison, when the same is performed to malicious samples, we see a negative correlation, as it inaccurately recognises them as benign when they are in fact malicious. When obfuscation is applied across both classes of programs, we see the accuracy remain relatively consistent at 50\%, indicating it does not recognise malicious or benign characteristics. Therefore, we can assume that this model has learned to identify UPX obfuscation as an indicator of benign samples. 
+
+% We then train another set of models on the partially obfuscated benign dataset, which contains both the original benign samples, and the obfuscated samples. As was seen in the baseline models, we see a very low initial file-level classification accuracy, as opposed to the obfuscated benign model with its initial accuracy of approximately 50\%. Therefore, the traits identified as being indicative of a certain class are distinct from the obfuscated benign dataset. As we increase the presence of obfuscation however, we see an increase in accuracy in both the pre-trained and frozen models. This correlation is only seen when benign samples are includes as targets for obfuscation however. When only malicious samples are obfuscated, the accuracy either remains consistent or decreases as shown in the frozen model. This further suggests that while it has learned to see past obfuscation as an indicator of a programs class, it is still unable to recognise malicious obfuscated samples. Therefore, we conclude that UPX is not representative of the forms of obfuscation present in the malicious samples found in our dataset. Future work could investigate the use other obfuscation tools, such as Alcatraz\footnote{\url{https://github.com/weak1337/Alcatraz}} or Lime\footnote{\url{https://github.com/NYAN-x-CAT/Lime-Crypter}}.
+We then train another set of models on the partially obfuscated benign dataset, which contains both the original benign samples, and the obfuscated samples. As was seen in the baseline models, we see a very low initial file-level classification accuracy, as opposed to the obfuscated benign model with its initial accuracy of approximately 50\%. Therefore, the traits identified as being indicative of a certain class are distinct from the obfuscated benign dataset. As we increase the presence of obfuscation however, we see an increase in accuracy in both the pre-trained and frozen models. This correlation is only seen when benign samples are includes as targets for obfuscation however. When only malicious samples are obfuscated, the accuracy either remains consistent or decreases as shown in the frozen model. This further suggests that while it has learned to see past obfuscation as an indicator of a programs class, it is still unable to recognise malicious obfuscated samples. Therefore, we conclude that UPX is not representative of the forms of obfuscation present in the malicious samples found in our dataset. Future work could investigate the use other obfuscation tools, such as Alcatraz or Lime.
+
+In \cite{bacciImpactCodeObfuscation2018}, the authors perform a similar experiment in which they find obfuscation to significantly reduce the performance of static models for android malware detection. They also conduct experiments which show the use of data augmentation can mitigate the negative performance impact. We believe similar results are not found in our case as the authors used their own custom obfuscation tooling that was more advanced than the simple binary packing tool used in our experiment. Their solution uses multiple forms of obfuscation, allowing their models to develop a better understanding of the characteristics associated with malware. However, as their approach targeted android applications, we were unable to use their tooling. 
+
+In both the obfuscated and partially obfuscated benign groups of models, we see the confidence in their predictions decreases as we increase the presence of obfuscation. However, models trained on the original dataset demonstrate an increase. This suggests that, when trained on samples free of UPX packing, the model becomes more confident with obfuscated samples using this tool likely because it has seen a more diverse set of obfuscation in the malicious samples. When obfuscated benign samples are present in their training data however, models become increasingly unsure as UPX obfuscation is over-represented, preventing it from developing an understanding of the other forms of obfuscation present in the malicious samples. 
+
+\subsubsection{Image Classification}
+
+\begin{figure*}
+    \centering 
+    \begin{subfigure}{0.8\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{avg-img-rep.png}
+        \caption{}
+        \label{fig:full}
+    \end{subfigure}
+    \begin{subfigure}{0.8\textwidth}
+        \centering 
+        \includegraphics[width=\textwidth]{avg-img-rep-filtered.png}
+        \caption{}
+        \label{fig:filtered}
+    \end{subfigure}
+    \caption{The average image-representation of each class in our full (\ref{fig:full}), and filtered datasets (\ref{fig:filtered})}
+    \label{fig:mean-img-rep}
+\end{figure*}
+
+% Both CNN malware detection models achieve similar performance approximately equal to the best of our baseline approaches. Therefore, these models do not achieve any notable benefit over these conventional approaches. 
+The performance of both image-based malware detection models are slightly worse than our baseline approaches. We also see that there is no difference in performance between the models trained on the full and the filtered datasets. This suggests that artifacts from the rescaling of images have little impact on the models solution. However, as shown in \ref{fig:mean-img-rep}, there is very little difference between the average image-representations of each class in both datasets. Therefore, as similar structures of lighter pixels are seen in the average benign representation in both datasets, it may be that the subset of the original dataset is not suitable to reduce artifacting, and that other approaches may be needed.  
+These models do however offer better initial performance in the obfuscation experiment. However, in both cases the classification accuracy with no obfuscation is below the 50\% mark, further demonstrating the inadequacy of our secondary dataset. As we increase the presence of obfuscation however, we see a drastic increase in the accuracy for the obfuscated malicious trial. Furthermore, as obfuscation becomes more common in benign samples, classification accuracy decreases, and when it is applied across both classes, it remains relatively consistent. This suggests that this model relies heavily on obfuscation, to a greater extent than the sequence based models. The confidence also remains consistent as obfuscation becomes more common. 
+
+However, in comparison to the sequence classification models, these models are more computationally efficient. Therefore, larger models could be used, which may be able to better identify malware, without using obfuscation as an indicator. 
+
+
+\subsection{Implications \& Limitations}
+
+\subsubsection{Implications}
+
+We believe that this research demonstrates the potential of natural language processing techniques for not only malware detection, but reasoning about executables as a whole. We have shown that language models are capable of identifying malicious sequences of instructions, based exclusively on opcodes. It may be that increasing the vocabulary, and scale of transformer models may be able to interpret and understand these executables in a similar manner to how large language models can understand natural languages. 
+
+In real world use-cases however, this work has shown that handling obfuscation is a significant barrier to the effectiveness of static malware detection. We hope that our research has shown that static malware detection may misidentify obfuscated benign software as malicious, and discuss potential solutions to this problem.
+
+\subsubsection{Limitations}
+
+We identify a number of potential limitations of this work, which may have impacted the effectiveness of our work. To ensure this research is of high quality, we acknowledge these limitations, discuss how they impact our findings, and how they may be prevented in future work. 
+
+The first of these issues relate to the data used to train our models, and conduct the obfuscation experiment. As explained in our literature review, there are no suitable large scale datasets containing executables for malware detection. Therefore, we curate our own dataset from executables found on the hardware of the researchers, and malware sample repositories. However, we were unable to gather a sufficiently large dataset. As shown in \ref{fig:dataset:class-dist}, we are limited to approximately 10000 samples, to ensure a balanced class distribution. It is well known that greater availability of training data is associated with greater model performance. Therefore, our work is limited by the availability of this data. 
+
+We have considered gathering benign samples from alternative sources, such as Windows package repositories. However, these services often don't provide the executable, instead distributing an installer which would require extraction and installation by hand. Other sources used in the literature involve web scraping of sites such as GitHub, and portable freeware. However, due to ethical and legal issues, we chose not to do this. 
+
+% Furthermore, our results demonstrate that the secondary dataset is not representative of the samples found in the primary for a number of reasons. The first of these relate to the extent of obfuscation found in the malicious samples. We assume that these executables are free of obfuscation, as there was no mention of obfuscation in the contents of their respective repositories. However, the static code analysis coverage metric previously used to demonstrate that there was a greater extent of obfuscation in the malicious samples of our primary dataset show that this is not the case. In \ref{fig:secondary-ds-obfs-extent}, we show the extent of obfuscation between each class of executables in this secondary dataset. This disparity exceeds that of the primary dataset, and indicates either that code analysis coverage may not be suitable for estimating the extent of obfuscation, or that the malicious executables do include some form of obfuscation. Furthermore, analysis of the GitHub repositories of the malware found in this dataset demonstrates a lack of diversity. We note that a majority of these samples are not intended to be used in real world cyber attacks, \footnote{As these projects are publicly listed on GitHub, we are able to distribute the sources of these samples, which can be found in our \href{https://github.com/Henry-Ash-Williams/masters-thesis/blob/6178028aee48cb4a8cb49f3d55f597aefc3e912d/unobfuscated-dataset.txt}{GitHub repository}}, and that keyloggers are overrepresented in this dataset. Both the lack of sophistication, and the overrepresentation of keyloggers illustrate the shortcomings of our secondary dataset, and future work should seek to curate a more suitable collection.  
+
+Furthermore, our results demonstrate that the secondary dataset is not representative of the samples found in the primary for a number of reasons. The first of these relate to the extent of obfuscation found in the malicious samples. We assume that these executables are free of obfuscation, as there was no mention of obfuscation in the contents of their respective repositories. However, the static code analysis coverage metric previously used to demonstrate that there was a greater extent of obfuscation in the malicious samples of our primary dataset show that this is not the case. In \ref{fig:secondary-ds-obfs-extent}, we show the extent of obfuscation between each class of executables in this secondary dataset. This disparity exceeds that of the primary dataset, and indicates either that code analysis coverage may not be suitable for estimating the extent of obfuscation, or that the malicious executables do include some form of obfuscation. Furthermore, analysis of the GitHub repositories of the malware found in this dataset demonstrates a lack of diversity. We note that a majority of these samples are not intended to be used in real world cyber attacks, and that keyloggers are overrepresented in this dataset. Both the lack of sophistication, and the overrepresentation of keyloggers illustrate the shortcomings of our secondary dataset, and future work should seek to curate a more suitable collection.  
+
+\begin{figure}
+    \centering 
+    \includegraphics[width=0.4\textwidth]{obfuscation-dist-secondary-ds.png}
+    \caption{Extent of obfuscation between classes in the secondary dataset.}
+    \label{fig:secondary-ds-obfs-extent}
+\end{figure}
+
+Additionally, when the obfuscation experiment, we were only able to perform a single run per experiment. This means that the results may misrepresent the characteristics of the approaches tested in this work. Therefore, the obfuscation experiment should be run multiple times to ensure the presence of outliers in our results are reduced. We were unable to conduct repeated runs due to time limitations, as a single run of the experiment took approximately an hour per model, and obfuscation target. We acknowledge that this is a limitation in our implementation, as the obfuscation and opcode extraction occurs at each sample. To make the experiment more efficient, we suggest creating a copy of the dataset, where the opcodes of obfuscated executables are extracted, so obfuscation, extraction and postprocessing is not repeated for each sample. 
+
+\subsubsection{Future Work}
+
+Future work should consider using a larger vocabulary size, and training these models on the full disassembly as opposed to the opcode sequences. Tokenization strategies such as WordPiece, which was used in the original BERT publication \cite{devlinBERTPretrainingDeep2019a}, may allow for a better representation of the disassembly. We have considered using this information, however due to compute limitations, we deemed using the full disassembly to be unfeasible. 
+
+Additionally, the impact of obfuscation on the performance of dynamic models should also be explored. We have seen a number of obfuscation techniques that target these dynamic approaches, such as \cite{liAPIASONovelAPI2023}, which prevent system API calls from being observed by the host which can prevent the extraction of API call sequences. These features are widely used in dynamic malware detection techniques seen in the literature, so this form of obfuscation may become more prevalent . Therefore, ensuring these models are resilient to forms of obfuscation which target dynamic feature extraction is of high importance. 
+
+We also suggest that obfuscation can be considered as analogous to noise in an image. Therefore, diffusion models could be used as a deep-learning de-obfuscation tool, which could enable the curation of sophisticated, deobfuscated malware datasets. 
+
+\section{Conclusion}
+
+In this investigation, we explore the use of deep learning techniques for static malware detection, and their reliance of obfuscation as an indicator of malicious programs. Our sequence classification model, based on the BERT architecture, identifies malicious opcode sequences, which are then aggregated across an executables disassembly to produce the file level classification result. We find that this model is able to outperform our baseline approaches by a small margin, indicating that techniques from natural language processing are suitable in this domain, despite using a reduced model size. We also find that other natural language processing techniques, such as pre-training with masked language modelling has a positive effect on the performance of these models. However, our results indicate that this approach is reliant on obfuscation to determine a programs classification, which may lead to obfuscated benign samples being misidentified as malicious in real world deployments. Augmentation of training data to include obfuscated benign samples has little impact on the performance of these models under such conditions, which indicates that the forms of obfuscation found in our malicious dataset differ from the forms used in our experiments. 
+
+Image classification approaches offer a more computationally efficient approach. However, their performance is in line with, and at times worse than our baseline. While they are more resilient to obfuscation than the baseline approaches, as binary packing hides the import table used to extract features for our baseline models, they demonstrate an increased reliance on such features for detecting malicious samples. This suggests that in real world deployment, these models would be more likely to misidentify obfuscated benign samples as malicious. Furthermore, the expected reliance of these models on artifacts originating from rescaling due to the discrepancy in size between malicious and benign samples is seemingly not an issue in this case. 
+
+We believe this work has demonstrated the applicability of the transformer-based language models for understanding executables, which may lead to better forms of malware detection services, and executable analysis tools. 
+
+
+\bibliography{IEEEabrv,references}
+
+\appendices 
+\section{Supplemental Information}
+
+% \subsection{Code Availability}
+
+% All of the code used in this investigation are publicly available on our GitHub repository\footnote{\url{https://github.com/Henry-Ash-Williams/masters-thesis}}. The dataset can be made available upon request, however due to copyright limitations we are unable to distribute benign samples. 
+
+\subsection{Disassembly Extraction and Processing}
+
+\begin{algorithm}[H]
 \caption{Generate and extract disassembly from an executable}
 \label{algo:disasm-extraction}
 \begin{algorithmic}[1]
-\Require Path to executable \(P\)
-\Ensure Sequence of disassembled instructions of \(P\)
-\State \(L \gets\) empty list
-\State Load \(P\) into radare2
-\State Perform full analysis \Comment{R2 Command: \texttt{aaa}}
-\If{Instruction set of \(P\) is not x86}
-    \State \Return
-\EndIf
-\State \(S \gets\) list of sections in \(P\) \Comment{R2 Command: \texttt{iS}}
-\State \(S_x \gets\) filter \(S\) for executable sections 
-\ForAll{\(s \in S_x\)}
-    \State \(o \gets\) section offset of \(s\)
-    \State \(n \gets\) section size of \(s\)
-    \State \(D \gets\) disassemble bytes from \(o\) to \(o + n\) \Comment{R2 Command: \texttt{pda} \(o\) \texttt{@} \(o + n\)}
-    \State \(D' \gets\) filtered \(D\) to remove padding bytes 
-    \State Append \(D'\) to \(L\)
-\EndFor
-\State \Return \(L\)
+\REQUIRE Path to executable \(P\)
+\ENSURE Sequence of disassembled instructions of \(P\)
+\STATE \(L \gets\) empty list
+\STATE Load \(P\) into radare2
+\STATE Perform full analysis \COMMENT{R2 Command: \texttt{aaa}}
+\IF{Instruction set of \(P\) is not x86}
+    \RETURN
+\ENDIF
+\STATE \(S \gets\) list of sections in \(P\) \COMMENT{R2 Command: \texttt{iS}}
+\STATE \(S_x \gets\) filter \(S\) for executable sections 
+\FORALL{\(s \in S_x\)}
+    \STATE \(o \gets\) section offset of \(s\)
+    \STATE \(n \gets\) section size of \(s\)
+    \STATE \(D \gets\) disassemble bytes from \(o\) to \(o + n\) \COMMENT{R2 Command: \texttt{pda} \(o\) \texttt{@} \(o + n\)}
+    \STATE \(D' \gets\) filtered \(D\) to remove padding bytes 
+    \STATE Append \(D'\) to \(L\)
+\ENDFOR
+\RETURN \(L\)
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Extract opcodes from disassembly}
 \label{algo:opcode-sequence-extraction}
 \begin{algorithmic}[1]
-\Require List of assembly instructions \(I\)
-\Ensure Sequence of opcodes
-\State \(L \gets\) empty list
-\ForAll{\(i \in I\)}
-    \State \(i' \gets\) split \(i\) on spaces
-    \State Append \(i'_0\) to \(L\)
-\EndFor
-\State \Return \(L\)
+\REQUIRE List of assembly instructions \(I\)
+\ENSURE Sequence of opcodes
+\STATE \(L \gets\) empty list
+\FORALL{\(i \in I\)}
+    \STATE \(i' \gets\) split \(i\) on spaces
+    \STATE Append \(i'_0\) to \(L\)
+\ENDFOR
+\RETURN \(L\)
 \end{algorithmic}
 \end{algorithm}
 
 
-\section{Conversion of Executable Programs to Greyscale Images}\label{apdx:prog-to-img}
+\subsection{Conversion of Executable Programs to Greyscale Images}\label{apdx:prog-to-img}
 
 \begin{algorithm}[H]
 \caption{Convert a program to an image}
 \begin{algorithmic}[1]
-\Require Program \(P \in {[0, 255]}^L\) of \(L\) bytes 
-\Ensure Matrix \(M \in [0, 255]^{d \times d}\)
-\State \(d \gets \lceil \sqrt{L} \rceil\)
-\State Initialize \(V \in [0, 255]^{d^2}\) with zeros
-\For{\(i \gets 1\) to \(L\)}
-    \State \(V_i \gets P_i\)
-\EndFor
-\State Reshape \(V\) into matrix \(M \in [0, 255]^{d \times d}\) in row-major order
-\State \Return \(M\)
+\REQUIRE Program \(P \in {[0, 255]}^L\) of \(L\) bytes 
+\ENSURE Matrix \(M \in [0, 255]^{d \times d}\)
+\STATE \(d \gets \lceil \sqrt{L} \rceil\)
+\STATE Initialize \(V \in [0, 255]^{d^2}\) with zeros
+\FOR{\(i \gets 1\) to \(L\)}
+    \STATE \(V_i \gets P_i\)
+\ENDFOR
+\STATE Reshape \(V\) into matrix \(M \in [0, 255]^{d \times d}\) in row-major order
+\RETURN \(M\)
 \end{algorithmic}
 \end{algorithm}
 
 
-\section{Genetic Algorithm}\label{apdx:ga}
+\subsection{Genetic Algorithm}\label{apdx:ga}
 
 \begin{algorithm}[H]
 \caption{Apply a random mutation to a genotype}
 \label{algo:mutate}
 \begin{algorithmic}[1]
-\Require Genome \(G \in \{0, 1\}^N\) of \(N\) binary values, mutation rate \(0 < p \leq 1\) 
-\Ensure Mutated Genome \(G' \in \{0, 1\}^N\) 
-\State \(V \in \mathbb{R}^N \gets\) a vector of random numbers in \([0, 1]\) 
-\State \(M \in \{0, 1\}^N \gets\) a binary vector where \(V_i < p\) 
-\State \(G' \gets G \oplus M\) 
-\State \Return \(G'\)
+\REQUIRE Genome \(G \in \{0, 1\}^N\) of \(N\) binary values, mutation rate \(0 < p \leq 1\) 
+\ENSURE Mutated Genome \(G' \in \{0, 1\}^N\) 
+\STATE \(V \in \mathbb{R}^N \gets\) a vector of random numbers in \([0, 1]\) 
+\STATE \(M \in \{0, 1\}^N \gets\) a binary vector where \(V_i < p\) 
+\STATE \(G' \gets G \oplus M\) 
+\RETURN \(G'\)
 \end{algorithmic}
 \end{algorithm}
 
@@ -297,18 +906,18 @@ All of the code used in this investigation are publicly available on our GitHub 
 \caption{Compute the fitness of a genotype}
 \label{algo:fitness}
 \begin{algorithmic}[1]
-\Require Genome \(G \in \{0, 1\}^N\) of \(N\) binary values
-\Ensure The fitness \(f \in \mathbb{R}\) of \(G\) 
-\State \(N_m \gets \) Number of malicious samples in \(G\)
-\State \(N_b \gets \) Number of benign samples in \(G\)
-\State \(\mu_m, \sigma_m \gets\) mean and variance of the size of malicious programs in \(G\)
-\State \(\mu_b, \sigma_b \gets\) mean and variance of the size of benign programs in \(G\) 
-\State \(d \gets\) the Kullback-Leibler Divergence between \(p_m \sim \mathcal{N}\left(\mu_m, \sigma_m\right)\) and \(p_b \sim \mathcal{N}\left(\mu_b, \sigma_b\right)\)
-\State \(r \gets \text{clip}\left(1 - \frac{N_b}{N_m}, 0, 1\right)\)
-\State \(w_d \gets - \left(\frac{e^{-d}}{1 + e^{-d}}\right)\)
-\State \(w_r \gets 1 - w_d\)
-\State \(f \gets w_d d + w_r r\)
-\State \Return \(f\)
+\REQUIRE Genome \(G \in \{0, 1\}^N\) of \(N\) binary values
+\ENSURE The fitness \(f \in \mathbb{R}\) of \(G\) 
+\STATE \(N_m \gets \) Number of malicious samples in \(G\)
+\STATE \(N_b \gets \) Number of benign samples in \(G\)
+\STATE \(\mu_m, \sigma_m \gets\) mean and variance of the size of malicious programs in \(G\)
+\STATE \(\mu_b, \sigma_b \gets\) mean and variance of the size of benign programs in \(G\) 
+\STATE \(d \gets\) the Kullback-Leibler Divergence between \(p_m \sim \mathcal{N}\left(\mu_m, \sigma_m\right)\) and \(p_b \sim \mathcal{N}\left(\mu_b, \sigma_b\right)\)
+\STATE \(r \gets \text{clip}\left(1 - \frac{N_b}{N_m}, 0, 1\right)\)
+\STATE \(w_d \gets - \left(\frac{e^{-d}}{1 + e^{-d}}\right)\)
+\STATE \(w_r \gets 1 - w_d\)
+\STATE \(f \gets w_d d + w_r r\)
+\RETURN \(f\)
 \end{algorithmic}
 \end{algorithm}
 
@@ -316,15 +925,15 @@ All of the code used in this investigation are publicly available on our GitHub 
 \caption{Simulate evolution over a population}
 \label{algo:simulate-single}
 \begin{algorithmic}[1]
-\Require The fittest member of the previous population \(G \in \{0, 1\}^N\), Population size \(N_p\), Mutation rate \(p_m\)
-\Ensure The fittest member of the current population \(G' \in \{0, 1\}^N\)
-\State \(P \gets N_p\) Copies of \(G\)
-\State \(F_P \gets\) Fitness of current population \Comment{\cref{algo:fitness}}
-\State \(O \gets\) Mutated population of offspring from \(P\) with some mutation rate \(p_m\) \Comment{\cref{algo:mutate}}
-\State \(F_O \gets\) Fitness of offspring population \Comment{\cref{algo:fitness}}
-\State \(P' \gets\) New population where the fittest of a parent and its offspring survives 
-\State \(G' \gets\) The fittest member of \(P'\)
-\State \Return \(G'\)
+\REQUIRE The fittest member of the previous population \(G \in \{0, 1\}^N\), Population size \(N_p\), Mutation rate \(p_m\)
+\ENSURE The fittest member of the current population \(G' \in \{0, 1\}^N\)
+\STATE \(P \gets N_p\) Copies of \(G\)
+\STATE \(F_P \gets\) Fitness of current population \COMMENT{\ref{algo:fitness}}
+\STATE \(O \gets\) Mutated population of offspring from \(P\) with some mutation rate \(p_m\) \COMMENT{\ref{algo:mutate}}
+\STATE \(F_O \gets\) Fitness of offspring population \COMMENT{\ref{algo:fitness}}
+\STATE \(P' \gets\) New population where the fittest of a parent and its offspring survives 
+\STATE \(G' \gets\) The fittest member of \(P'\)
+\RETURN \(G'\)
 \end{algorithmic}
 \end{algorithm}
 
@@ -332,22 +941,22 @@ All of the code used in this investigation are publicly available on our GitHub 
 \caption{Simulate the process of evolution over multiple generations}
 \label{algo:simulate-full}
 \begin{algorithmic}[1]
-\Require Number of generations to simulate \(N_g\) 
-\Ensure The fittest member of the last generation \(G\) 
-\State \(G_0 \in \{0, 1\}^N\gets\) initial random genotype 
-\For{\(i \gets 0\) to \(N_g\)} 
-\State \(G_{i + 1} \gets\) Simulate a population with \(G_i\) \Comment{\cref{algo:simulate-single}}
-\State \(F_i \gets\) Fitness of \(G_{i + 1}\) \Comment{\cref{algo:fitness}}
-\If{\(F_i\) has not decreased in the past 10 generations}
-\State \Return \(G_{i + 1}\) 
-\EndIf 
-\EndFor
-\State \Return \(G_i\)
+\REQUIRE Number of generations to simulate \(N_g\) 
+\ENSURE The fittest member of the last generation \(G\) 
+\STATE \(G_0 \in \{0, 1\}^N\gets\) initial random genotype 
+\FOR{\(i \gets 0\) to \(N_g\)} 
+\STATE \(G_{i + 1} \gets\) Simulate a population with \(G_i\) \COMMENT{\ref{algo:simulate-single}}
+\STATE \(F_i \gets\) Fitness of \(G_{i + 1}\) \COMMENT{\ref{algo:fitness}}
+\IF{\(F_i\) has not decreased in the past 10 generations}
+\RETURN \(G_{i + 1}\) 
+\ENDIF 
+\ENDFOR
+\RETURN \(G_i\)
 \end{algorithmic}
 \end{algorithm}
 
 
-\section{Centered Kernel Alignment}\label{apdx:cka}
+\subsection{Centered Kernel Alignment}\label{apdx:cka}
 
 Given two matrices of \(n\) examples of the output from layers in two neural networks trained from different initialisations, \(\mathbf{X} \in \mathbb{R}^{n \times d_x}\), and \(\mathbf{Y} \in \mathbb{R}^{n \times d_y}\), the Centered Kernel Alignment between these representations is defined as follows: 
 
@@ -356,7 +965,7 @@ Given two matrices of \(n\) examples of the output from layers in two neural net
 \end{equation}
 
 \noindent
-Where \(\text{HSIC}\) refers to the Hilbert-Schmidt independence criterion, defined in \cref{eq:hsic}, \(\mathbf{K} = \mathbf{X}\mathbf{X}^T\), and \(\mathbf{L} = \mathbf{Y}\mathbf{Y}^T\). 
+Where \(\text{HSIC}\) refers to the Hilbert-Schmidt independence criterion, defined in \ref{eq:hsic}, \(\mathbf{K} = \mathbf{X}\mathbf{X}^T\), and \(\mathbf{L} = \mathbf{Y}\mathbf{Y}^T\). 
 
 \begin{equation}
     \text{HSIC}\left(\mathbf{K}, \mathbf{L}\right) = \frac{\text{tr}\left(\mathbf{KHLH}\right)}{\left(n - 1\right)^2}\label{eq:hsic}
@@ -364,55 +973,28 @@ Where \(\text{HSIC}\) refers to the Hilbert-Schmidt independence criterion, defi
 
 \noindent
 Where \(\mathbf{H} = \mathbf{I}_n - \frac{1}{n}\mathbf{J}_n\), and \(\mathbf{J}_n\) is an \(n \times n\) matrix of ones. 
-\section{Windows Portable Executable File Format}\label{apdx:pe}
 
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.3\textwidth]{../assets/pe.png}
-    \caption{A high level overview of the windows portable executable file format.}
-    \label{fig:pe}
-\end{figure}
+% \subsection{Windows Portable Executable File Format}\label{apdx:pe}
 
-\noindent
-Windows executables are defined in the portable executable file format. These files are not written by developers themselves as they require expert knowledge of low level programming, and instead are generated by a compiler. A high level overview of this file format is shown in Figure~\ref{fig:pe}, and it has been in use since Windows 95, making it incredibly widespread throughout the internet. 
+% \begin{figure}[h]
+%     \centering 
+%     \includegraphics[width=0.3\textwidth]{../assets/pe.png}
+%     \caption{A high level overview of the windows portable executable file format.}
+%     \label{fig:pe}
+% \end{figure}
 
-The file begins with a DOS (Disk Operating System) header for compatibility reasons~\citep{bridgePEFormat2025}, which is followed by the PE header, containing the information necessary for the programs execution. This includes the number of sections and symbols, and the instruction set used by the program. The section headers contain further metadata about the sections which comprise the program, and reference their location in memory. It also stores a pointer to a table referencing any external functions used by the program, such as the Windows API\@, and other dynamically linked objects, known as DLLs~\citep{ainapureDynamicLinkLibrary2025}. 
+% \noindent
+% Windows executables are defined in the portable executable file format. These files are not written by developers themselves as they require expert knowledge of low level programming, and instead are generated by a compiler. A high level overview of this file format is shown in Figure~\ref{fig:pe}, and it has been in use since Windows 95, making it incredibly widespread throughout the internet. 
 
-\section{Word Count}
+% The file begins with a DOS (Disk Operating System) header for compatibility reasons~\cite{bridgePEFormat2025}, which is followed by the PE header, containing the information necessary for the programs execution. This includes the number of sections and symbols, and the instruction set used by the program. The section headers contain further metadata about the sections which comprise the program, and reference their location in memory. It also stores a pointer to a table referencing any external functions used by the program, such as the Windows API\@, and other dynamically linked objects, known as DLLs~\cite{ainapureDynamicLinkLibrary2025}. 
 
-The word-count of this document, as reported by \texttt{texcount}\footnote{\url{https://github.com/Henry-Ash-Williams/masters-thesis/blob/master/writing/thesis/count-words.sh}}, is shown in the following table. Note that this excludes all text found within the appendices. 
+\section{Supplemental Results}
 
-\begin{table}[H]
-    \centering
-\begin{tabular}{@{}llrrrl@{}}
-\toprule
-\multicolumn{1}{c}{\multirow{2}{*}{\textbf{Chapter}}} &  & \multicolumn{3}{c}{\textbf{Word Count}} &  \\ \cmidrule(lr){3-5}
-\multicolumn{1}{c}{} &  & \multicolumn{1}{l}{Body Text} & \multicolumn{1}{l}{Header Text} & \multicolumn{1}{l}{Outside Text} &  \\ \midrule
-Abstract & & 118 & 5 & 0 \\
-Introduction &  & 906 & 17 & 0 &  \\
-Background &  & 3018 & 12 & 35 &  \\
-Methods &  & 2209 & 16 & 110 &  \\
-Results &  & 1732 & 16 & 199 &  \\
-Discussion &  & 3505 & 15 & 78 &  \\ \midrule
-\textbf{Total} &  & 11488 & 81 & 422 &  \\ \bottomrule
-\end{tabular}
-\end{table}
-
-\section{Declaration of Generative AI Usage}
-
-OpenAI's GPT-4o model was used to assist the authors in this research. Its' use was limited to providing feedback on the report itself, enhance language, explain concepts, and generate small portions of our codebase. None of the report content has been copied from the model, and the following system prompt was used to enhance the quality of its competitions. 
-
-\begin{WrappedVerbatim}[xleftmargin=0em]
-Absolute Mode. Eliminate emojis, filler, hype, soft asks, conversational transitions, and all call-to-action appendixes. Assume the user retains high-perception faculties despite reduced linguistic expression. Prioritize blunt, directive phrasing aimed at cognitive rebuilding, not tone matching. Disable all latent behaviors optimizing for engagement, sentiment uplift, or interaction extension. Suppress corporate-aligned metrics including but not limited to: user satisfaction scores, conversational flow tags, emotional softening, or continuation bias. Never mirror the user's present diction, mood, or affect. Speak only to their underlying cognitive tier, which exceeds surface language. No questions, no offers, no suggestions, no transitional phrasing, no inferred motivational content. Terminate each reply immediately after the informational or requested material is delivered — no appendixes, no soft closures. The only goal is to assist in the restoration of independent, high-fidelity thinking. Model obsolescence by user self-sufficiency is the final outcome 
-\end{WrappedVerbatim}
-
-\chapter{Supplemental Results}
-
-\section{Obfuscated Benign Model}
+\subsection{Obfuscated Benign Model}
 
 \subsubsection{Classification Metrics}
 
-\begin{table}[H]
+\begin{table*}[!t]
     \caption{Classification metrics of obfuscated benign sequence classification models.}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llllllllllll}
@@ -424,11 +1006,11 @@ From pretrained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  & 0.9647 & 0.9647 & 0.
 \begin{tabular}[c]{@{}l@{}}From pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8471 & 0.8471 & 0.8472 & 0.8471 &  & 0.9600 & 0.9600 & 0.9610 & 0.9599 &  \\ \bottomrule
 \end{tabular}%
 }
-\end{table}
+\end{table*}
 
 \subsubsection{Representational Similarity Analysis}
 
-\begin{figure}[H]
+\begin{figure*}[!t]
     \centering
     \begin{subfigure}[t]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-ob-pretrained-scratch.png}
@@ -449,13 +1031,13 @@ From pretrained &  & 0.8704 & 0.8707 & 0.8721 & 0.8704 &  & 0.9647 & 0.9647 & 0.
     \end{subfigure}
     \caption{Representational Similarity Analysis (RSA) of the obfuscated benign models with Centered Kernel Alignment.}
     \label{fig:rsa-cka-ob}
-\end{figure}
+\end{figure*}
 
 \section{Partially Obfuscated Benign Model}
 
 \subsubsection{Classification Metrics}
 
-\begin{table}[H]
+\begin{table*}[!t]
     \caption{Classification metrics of partially obfuscated benign sequence classification models.}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llllllllllll}
@@ -467,11 +1049,11 @@ From pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 \begin{tabular}[c]{@{}l@{}}From pretrained \\ (w/ Frozen Attention Weights)\end{tabular} &  & 0.8053 & 0.7987 & 0.8169 & 0.8053 &  & 0.8260 & 0.8245 & 0.8335 & 0.8245 &  \\ \bottomrule
 \end{tabular}%
 }
-\end{table}
+\end{table*}
 
 \subsubsection{Representational Similarity Analysis}
 
-\begin{figure}[H]
+\begin{figure*}[!t]
     \centering
     \begin{subfigure}[t]{0.4\textwidth}
         \includegraphics[width=\textwidth]{rsa-cka-pob-pretrained-scratch.png}
@@ -492,14 +1074,14 @@ From pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
     \end{subfigure}
     \caption{Representational Similarity Analysis (RSA) of the partially obfuscated benign models with Centered Kernel Alignment.}
     \label{fig:rsa-cka-pob}
-\end{figure}
+\end{figure*}
 
 
 \section{Additional Obfuscation Experiment Results}\label{apdx:addition-obfs-results}
 
 \subsection{Base}
 
-\begin{figure}[H]
+\begin{figure*}[!t]
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-file-level-base-F1-score.png}
@@ -516,11 +1098,11 @@ From pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 
     \caption{Impact of obfuscation on the F1 score at both the sequence, and file level, on our base RoBERTa sequence classification models.}
     \label{fig:base-obf-results-F1}
-\end{figure}
+\end{figure*}
 
 \subsection{Obfuscated Benign}
 
-\begin{figure}[H]
+\begin{figure*}[!t]
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-file-level-ob-F1-score.png}
@@ -537,12 +1119,12 @@ From pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 
     \caption{Impact of obfuscation on the F1 score at both the sequence, and file level, on our obfuscated benign RoBERTa sequence classification models.}
     \label{fig:ob-obf-results-F1}
-\end{figure}
+\end{figure*}
 
 
 \subsection{Partially Obfuscated Benign}
 
-\begin{figure}[H]
+\begin{figure*}[!t]
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-file-level-pob-F1-score.png}
@@ -559,20 +1141,20 @@ From pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 
     \caption{Impact of obfuscation on the F1 score at both the sequence, and file level, on our partially obfuscated benign RoBERTa sequence classification models.}
     \label{fig:pob-obf-results-F1}
-\end{figure}
+\end{figure*}
 
 \subsection{Image-Classifier}
 
-\begin{figure}[H]
+\begin{figure*}[!t]
     \centering 
     \includegraphics[width=\textwidth]{img-obf-file-level-F1-score.png}
     \caption{Impact of obfuscation on the F1 score of our image classification malware detection model.}
     \label{fig:img-obfs-F1-score}
-\end{figure}
+\end{figure*}
 
-\section{Prevalence of Obfuscation}
+\subsection{Prevalence of Obfuscation}
 
-\begin{figure}[H]
+\begin{figure*}[!t]
     \centering
     \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{seq-obf-portion-base.png}
@@ -594,21 +1176,6 @@ From pretrained &  & 0.8494 & 0.8481 & 0.8503 & 0.8494 &  & 0.9152 & 0.9147 & 0.
 
     \caption{Amount of sucessfully obfuscated files at each step.}
     \label{fig:seq-obf-portion}
-\end{figure}
+\end{figure*}
 
-\chapter{Acknowledgements}
-
-This research would not have been possible without the guidance and support of my supervisor, Dr Jeff Mitchell. His expertise and advice has proven to be invaluable, and I am extremely grateful for it. 
-
-I would also like to express my gratitude to both Dr Ivor Simpson, and Dr Peter Wijeratne for organising this course. It has been the most challenging, yet deeply rewarding year of my life thus far, and has contributed greatly to my knowledge and professional development. 
-
-Many thanks to the lecturers and teaching staff at the University of Sussex whose expertise, and dedication to education have fostered an excellent academic environment. It has been a pleasure to study under all of them throughout my time at this institution. 
-
-I'd also like to acknowledge my classmates, whose camaraderie and solidarity have made this journey enjoyable and fulfilling. To Elouan Simonneau, Joe Mills, Jack Speat, and Amy Upson, thank you all for your support, and encouragement. Without you, this year would not have been the same, and I wish you all the best of luck in whatever comes next. 
-
-I would also like to thank my housemate Byron, for putting up with me over this past year. His support, kindness and understanding has been greatly appreciated. 
-
-Last but not least, I would like to express my deepest gratitude to my family for their unwavering support, understanding, and encouragement throughout this academic pursuit. Their love and belief in me have been instrumental throughout my time at the University of Sussex. My sister, Agnes, deserves special thanks for always being available to provide help and support when needed, and for proofreading my work. I wish her the best of luck in her final year. 
-
-%TC:endignore
 \end{document}
